@@ -103,7 +103,7 @@ El formato acordado está en [`data/raw/compliance/README.md`](../../data/raw/co
 - `dato_caso` para cada fila de evidencia;
 - `inferencia` para la exposición.
 
-Audit deja pendientes las afirmaciones que no son normativas, así que el resultado normal es **WARN**. No está garantizado: un ítem con muchas citas normativas y pocos casos puede superar 85 y salir ALLOW. Todo lo que menciona ROS o UIF sale **ESCALATE**.
+Desde la política `aml-audit-v2`, el techo `exposicion_potencial` fija la decisión máxima en **WARN** cuando el candidato tiene afirmaciones `dato_caso` o el `use_case` es de compliance (`reporte_cumplimiento`). Un reporte de compliance **nunca sale ALLOW**. El techo solo restringe: todo lo que menciona ROS o UIF sigue saliendo **ESCALATE**, y un hallazgo crítico sigue dando **BLOCK**.
 
 ## Limitaciones
 
