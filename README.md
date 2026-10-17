@@ -195,6 +195,21 @@ npm run dev
 
 Vite abre `http://localhost:5173` y reenvía `/api` al backend en `http://127.0.0.1:8000`. Para publicar el frontend en otro origen, configura `VITE_API_URL` con la URL del backend y agrega el origen del frontend a `FRONTEND_ALLOWED_ORIGINS` en `.env`.
 
+#### Despliegue en Vercel (https://hackaton-nttdata.vercel.app)
+
+El workflow `.github/workflows/deploy-frontend.yml` despliega `frontend/` en Vercel (producción en `main`, preview en PRs).
+
+| Dónde | Nombre | Valor |
+|---|---|---|
+| GitHub → Settings → Secrets → Actions | `VERCEL_TOKEN` | token de https://vercel.com/account/tokens |
+| GitHub → Secrets | `VERCEL_ORG_ID` | `orgId` de `frontend/.vercel/project.json` (tras `vercel link`) |
+| GitHub → Secrets | `VERCEL_PROJECT_ID` | `projectId` del mismo archivo |
+| Vercel → Project → Environment Variables | `VITE_API_URL` | URL pública del backend, sin `/` final (p. ej. la `https://xxxx.trycloudflare.com` de `start_backend.py --cloudflare`) |
+| Vercel → Project → Settings → General | Root Directory | `frontend` |
+| `.env` del backend | `FRONTEND_ALLOWED_ORIGINS` | debe incluir `https://hackaton-nttdata.vercel.app` (ya es el valor por defecto) |
+
+`VITE_API_URL` se incrusta al compilar: si la URL del Quick Tunnel cambia, actualiza la variable en Vercel y vuelve a desplegar (Actions → *Deploy frontend* → *Run workflow*).
+
 ### Desde otro módulo (la única forma permitida)
 
 ```python
