@@ -26,3 +26,6 @@ Thumbs.db
 data/processed/*
 !data/processed/.gitkeep
 *.log
+
+# Logs de start_backend.py
+logs/
