@@ -1,0 +1,21 @@
+CODIGO: SINTETICO-ANEXO-INFRACCIONES-LAFT
+TITULO: ANEXO SINTÉTICO de infracciones LA/FT para demo — NO ES NORMATIVA REAL (sustituye a los anexos de la Res. SBS N° 2755-2018, no provistos)
+TIPO: anexo_sintetico
+FECHA_EMISION: 2026-10-01
+ESTADO: vigente
+VIGENCIA_DESDE: 2026-10-01
+---
+DOCUMENTO SINTÉTICO PARA DEMO. LA TIPIFICACIÓN Y LOS MONTOS SON INVENTADOS. NO USAR COMO FUENTE NORMATIVA.
+
+Artículo 1.- Infracciones leves sintéticas en materia de prevención del LA/FT
+1.1. No mantener actualizada anualmente la información sobre el nivel de capacitación recibido por los trabajadores. Sanción sintética: amonestación o multa de hasta 5 UIT.
+1.2. No remitir dentro del plazo el programa anual de trabajo del oficial de cumplimiento. Sanción sintética: amonestación o multa de hasta 5 UIT.
+
+Artículo 2.- Infracciones graves sintéticas en materia de prevención del LA/FT
+2.1. No cumplir con las capacitaciones especializadas anuales del oficial de cumplimiento. Sanción sintética: multa de 20 hasta 50 UIT.
+2.2. No contar con el registro de operaciones o no anotar en él las operaciones que igualan o superan el umbral. Sanción sintética: multa de 30 hasta 70 UIT.
+2.3. No conservar los documentos y registros por el plazo exigido por el Reglamento. Sanción sintética: multa de 20 hasta 60 UIT.
+
+Artículo 3.- Infracciones muy graves sintéticas en materia de prevención del LA/FT
+3.1. No comunicar a la UIF-Perú una operación calificada como sospechosa o comunicarla fuera del plazo máximo. Sanción sintética: multa de 80 hasta 150 UIT.
+3.2. Revelar a terceros que se ha comunicado una operación sospechosa a la UIF-Perú. Sanción sintética: multa de 100 hasta 200 UIT.

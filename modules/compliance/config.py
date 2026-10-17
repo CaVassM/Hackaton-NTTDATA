@@ -20,6 +20,8 @@ class ComplianceSettings(BaseAppSettings):
     extraction_think: bool = False
     # Articulos largos (p. ej. art. 49) + prompt: el contexto por defecto truncaria.
     extraction_num_ctx: int = 16384
+    # Numerales de infraccion (por categoria) que pasan al LLM tras el ranking por embeddings.
+    infraction_max_numerales: int = 3
 
     # --- plazos y exposicion ---
     evidence_csv: Path = PROJECT_ROOT / "data" / "raw" / "compliance" / "evidencia_sintetica.csv"

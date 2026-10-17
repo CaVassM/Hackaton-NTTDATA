@@ -1,7 +1,7 @@
 import shutil
 from datetime import date
 
-from modules.rag.tests.conftest import BASE, CAMBIO, MOD, PROY, SINTETICOS, make_facade
+from modules.rag.tests.conftest import BASE, CAMBIO, MOD, N_ARCHIVOS, N_VERSIONES, PROY, SINTETICOS, make_facade
 
 
 def test_ingesta_cierra_version_y_enlaza_reemplaza_a(rag, art2):
@@ -21,17 +21,17 @@ def test_articulos_no_modificados_siguen_abiertos(rag):
 
 def test_reporte(empty_rag):
     r = empty_rag.ingest(SINTETICOS)
-    assert r.archivos == 3 and len(r.normas_nuevas) == 3
+    assert r.archivos == N_ARCHIVOS and len(r.normas_nuevas) == N_ARCHIVOS
     assert r.versiones_cerradas == 1
-    assert r.versiones_creadas == 8  # 3 base + 2 modificatoria + 1 modificada + 2 proyecto
-    assert r.embebidas == 8
+    assert r.versiones_creadas == N_VERSIONES
+    assert r.embebidas == N_VERSIONES
     assert any(PROY in a for a in r.advertencias)
 
 
 def test_ingesta_idempotente(rag):
     antes = rag.health()["indices"]
     r = rag.ingest(SINTETICOS)
-    assert len(r.normas_omitidas) == 3 and r.versiones_creadas == 0 and r.embebidas == 0
+    assert len(r.normas_omitidas) == N_ARCHIVOS and r.versiones_creadas == 0 and r.embebidas == 0
     assert rag.health()["indices"] == antes
 
 
@@ -72,7 +72,7 @@ def test_reindex_repara_indices(rag):
     col = rag._ingestion.vectors._col
     col.delete(ids=["1"])
     assert rag.reindex() == 1
-    assert rag.health()["indices"]["vectores"] == 8
+    assert rag.health()["indices"]["vectores"] == N_VERSIONES
 
 
 def test_texto_vigente_respeta_fecha_de_proyecto(rag):
