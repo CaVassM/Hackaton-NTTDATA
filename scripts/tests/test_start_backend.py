@@ -31,6 +31,14 @@ def test_no_cloudflare_desactiva_el_tunnel_en_dry_run(tmp_path):
     assert "se expondria http://127.0.0.1:8000" not in r.stdout
 
 
+def test_alias_cloudfare_es_aceptado(tmp_path):
+    env = tmp_path / "ok.env"
+    env.write_text((PROJECT_ROOT / ".env.example").read_text(encoding="utf-8"), encoding="utf-8")
+    r = _run(env, "--cloudfare")
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "se expondria http://127.0.0.1:8000" in r.stdout
+
+
 def test_falla_clara_sin_uit_valor(tmp_path):
     env = tmp_path / "sin_uit.env"
     env.write_text("\n".join(l for l in (PROJECT_ROOT / ".env.example").read_text(encoding="utf-8").splitlines()

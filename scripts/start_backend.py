@@ -36,7 +36,7 @@ TOTAL = 8
 PLACEHOLDER_TOKEN = "cambia-este-token"
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True, write_through=True)
 
 
 class Falla(Exception):
@@ -378,8 +378,8 @@ def iniciar_cloudflare(port: int) -> tuple[subprocess.Popen, str]:
             contenido = ""
         if match := url_re.search(contenido):
             url = match.group(0)
-            ok(f"tunnel Cloudflare activo: {url}")
-            ok(f"documentacion publica: {url}/docs")
+            ok(f"URL Cloudflare (API): {url}")
+            ok(f"Documentacion publica: {url}/docs")
             ok(f"log del tunnel: {log.relative_to(ROOT)}")
             return proc, url
         time.sleep(1)
@@ -396,7 +396,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--reextract", action="store_true", help="relanzar la extraccion de compliance (background)")
     ap.add_argument("--dry-run", action="store_true", help="solo verificar: no instala, no ingiere, no levanta")
     tunnel = ap.add_mutually_exclusive_group()
-    tunnel.add_argument("--cloudflare", dest="cloudflare", action="store_true", help=argparse.SUPPRESS)
+    tunnel.add_argument("--cloudflare", "--cloudfare", dest="cloudflare", action="store_true", help=argparse.SUPPRESS)
     tunnel.add_argument("--no-cloudflare", dest="cloudflare", action="store_false",
                         help="no crear Cloudflare Tunnel; dejar el backend solo en localhost")
     ap.set_defaults(cloudflare=True)
