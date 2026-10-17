@@ -29,7 +29,9 @@ export type CaseResult = {
   publicable: boolean;
   sin_fundamento: boolean;
   advertencias: string[];
-  audit_result?: { decision?: string; audit_id?: string; razones?: string[] } | null;
+  claims?: Array<{ claim_id: string; text: string; type: string }>;
+  claims_rechazados?: Array<Record<string, unknown>>;
+  audit_result?: { decision?: string; audit_id?: string; razones?: string[]; score?: number; risk_level?: string; policy_version?: string; findings?: Array<{ validator: string; status: string; critical?: boolean; reason: string }> } | null;
   auditoria_error?: string | null;
   tiempos_ms: Record<string, number>;
   evaluado_en: string;
