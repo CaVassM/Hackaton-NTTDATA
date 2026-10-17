@@ -6,6 +6,7 @@
     python scripts/start_backend.py --reingest      # vuelve a preparar e ingerir la normativa
     python scripts/start_backend.py --reextract     # relanza la extraccion de compliance (background)
     python scripts/start_backend.py --port 8080
+    python scripts/start_backend.py --cloudflare    # publica la API con un Quick Tunnel temporal
 
 Pasos: 1 Python+deps · 2 .env · 3 Ollama+modelos · 4 bases · 5 normativa (rag)
        6 compliance · 7 servidores · 8 /health. Idempotente: si el backend ya
@@ -351,12 +352,50 @@ def paso8_health(port: int, vals: dict[str, str], dry: bool, procs: list[subproc
     print("=" * 64)
 
 
+def iniciar_cloudflare(port: int) -> tuple[subprocess.Popen, str]:
+    """Inicia un Quick Tunnel temporal y devuelve su proceso y URL publica."""
+    cloudflared = shutil.which("cloudflared")
+    if not cloudflared:
+        raise Falla("no se encontro 'cloudflared'", "instala cloudflared y vuelve a ejecutar con --cloudflare")
+
+    LOGS.mkdir(exist_ok=True)
+    log = LOGS / "cloudflared.log"
+    with open(log, "ab") as salida:
+        proc = subprocess.Popen(
+            [cloudflared, "tunnel", "--no-autoupdate", "--url", f"http://127.0.0.1:{port}"],
+            cwd=ROOT, stdout=salida, stderr=subprocess.STDOUT,
+            creationflags=getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0),
+        )
+
+    url_re = re.compile(r"https://[a-z0-9-]+\.trycloudflare\.com", re.IGNORECASE)
+    for _ in range(60):
+        if proc.poll() is not None:
+            raise Falla(f"cloudflared termino al iniciar (revisa {log.relative_to(ROOT)})",
+                        "verifica tu conexion a internet e instalacion de cloudflared")
+        try:
+            contenido = log.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            contenido = ""
+        if match := url_re.search(contenido):
+            url = match.group(0)
+            ok(f"tunnel Cloudflare activo: {url}")
+            ok(f"documentacion publica: {url}/docs")
+            ok(f"log del tunnel: {log.relative_to(ROOT)}")
+            return proc, url
+        time.sleep(1)
+
+    proc.terminate()
+    raise Falla(f"no se obtuvo URL de Cloudflare en 60 s (revisa {log.relative_to(ROOT)})",
+                "verifica la conexion a internet y el log de cloudflared")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Levanta el backend completo")
     ap.add_argument("--port", type=int, default=int(os.environ.get("API_PORT", 8000)))
     ap.add_argument("--reingest", action="store_true", help="volver a preparar e ingerir la normativa")
     ap.add_argument("--reextract", action="store_true", help="relanzar la extraccion de compliance (background)")
     ap.add_argument("--dry-run", action="store_true", help="solo verificar: no instala, no ingiere, no levanta")
+    ap.add_argument("--cloudflare", action="store_true", help="exponer la API con un Cloudflare Quick Tunnel temporal")
     ap.add_argument("--env-file", type=Path, default=ROOT / ".env")
     ap.add_argument("--no-warmup", action="store_true", help="no precalentar el LLM")
     a = ap.parse_args(argv)
@@ -372,6 +411,11 @@ def main(argv: list[str] | None = None) -> int:
         paso6_compliance(a.dry_run, a.reextract)
         procs = paso7_servidores(vals, a.port, a.dry_run)
         paso8_health(a.port, vals, a.dry_run, procs)
+        if a.cloudflare and not a.dry_run:
+            tunnel, _ = iniciar_cloudflare(a.port)
+            procs.append(tunnel)
+        elif a.cloudflare:
+            info(f"se expondria http://127.0.0.1:{a.port} con 'cloudflared tunnel --url'")
     except Falla as f:
         print(f"\n   FALLA  {f.motivo}\n   Para corregir: {f.arreglo}")
         for p in procs:
@@ -385,12 +429,16 @@ def main(argv: list[str] | None = None) -> int:
     try:
         while all(p.poll() is None for p in procs):
             time.sleep(1)
-        print("\nUn servidor se detuvo; revisa logs/backend.log / logs/nanda.log")
+        print("\nUn servicio se detuvo; revisa logs/backend.log, logs/nanda.log y logs/cloudflared.log")
+        for p in procs:
+            if p.poll() is None:
+                p.terminate()
         return 1
     except KeyboardInterrupt:
-        print("\nDeteniendo servidores...")
+        print("\nDeteniendo servicios...")
         for p in procs:
-            p.terminate()
+            if p.poll() is None:
+                p.terminate()
         return 0
 
 
