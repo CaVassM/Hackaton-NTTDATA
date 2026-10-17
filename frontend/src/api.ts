@@ -12,6 +12,8 @@ export type Citation = {
 };
 
 export type CaseSummary = { case_id: string; tipo_evento: string; decision: string | null; evaluado_en: string };
+export type ExpedienteSummary = { id_caso: string; resultado_esperado: string; decision_auditoria: string | null; evaluado_en: string };
+export type ExpedienteResult = { fila: Record<string, unknown>; audit_result?: Record<string, unknown> | null; auditoria_error?: string | null; tiempos_ms?: Record<string, number> };
 export type CaseSchema = {
   tipos_evento: Record<string, { categoria: string; descripcion: string; fecha_evento_significa: string; obligaciones: string[] }>;
 };
@@ -68,6 +70,8 @@ async function uploadCsv<T>(path: string, file: File): Promise<T> {
 export const api = {
   health: () => request<Health>("/health"),
   cases: () => request<CaseSummary[]>("/cases"),
+  expedientes: () => request<ExpedienteSummary[]>("/cases/expedientes?limit=1000"),
+  expediente: (id: string) => request<ExpedienteResult>(`/cases/expedientes/${encodeURIComponent(id)}`),
   caseSchema: () => request<CaseSchema>("/cases/schema"),
   case: (id: string) => request<CaseResult>(`/cases/${encodeURIComponent(id)}`),
   evaluateCase: (payload: unknown) => request<CaseResult>("/cases/evaluate", { method: "POST", body: JSON.stringify(payload) }),

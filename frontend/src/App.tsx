@@ -1,8 +1,8 @@
-import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
-import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, Health, SearchResult } from "./api";
+import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useState } from "react";
+import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, Health, SearchResult } from "./api";
 import "./import.css";
 
-type View = "dashboard" | "cases" | "rag" | "alerts" | "detail";
+type View = "dashboard" | "cases" | "rag" | "alerts" | "detail" | "expediente-detail";
 type Notice = { kind: "error" | "success"; text: string } | null;
 
 const menu: Array<{ id: View; icon: string; label: string }> = [
@@ -116,16 +116,20 @@ export default function App() {
   const [view, setView] = useState<View>("dashboard");
   const [health, setHealth] = useState<Health | null>(null);
   const [cases, setCases] = useState<CaseSummary[]>([]);
+  const [expedientes, setExpedientes] = useState<ExpedienteSummary[]>([]);
   const [selected, setSelected] = useState<CaseResult | null>(null);
+  const [selectedExpediente, setSelectedExpediente] = useState<ExpedienteResult | null>(null);
   const [notice, setNotice] = useState<Notice>(null);
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
     setLoading(true);
-    const [healthResult, caseResult] = await Promise.allSettled([api.health(), api.cases()]);
+    const [healthResult, caseResult, expedienteResult] = await Promise.allSettled([api.health(), api.cases(), api.expedientes()]);
     if (healthResult.status === "fulfilled") setHealth(healthResult.value);
     if (caseResult.status === "fulfilled") setCases(caseResult.value);
-    const failure = healthResult.status === "rejected" ? healthResult.reason : caseResult.status === "rejected" ? caseResult.reason : null;
+    if (expedienteResult.status === "fulfilled") setExpedientes(expedienteResult.value);
+    const failed = [healthResult, caseResult, expedienteResult].find((result) => result.status === "rejected");
+    const failure = failed?.status === "rejected" ? failed.reason : null;
     if (failure) setNotice({ kind: "error", text: `No se pudo conectar al backend: ${failure.message}. Inícialo en el puerto 8000.` });
     setLoading(false);
   };
@@ -141,6 +145,15 @@ export default function App() {
     finally { setLoading(false); }
   };
 
+  const openExpediente = async (id: string) => {
+    try {
+      setLoading(true);
+      setSelectedExpediente(await api.expediente(id));
+      setView("expediente-detail");
+    } catch (error) { setNotice({ kind: "error", text: (error as Error).message }); }
+    finally { setLoading(false); }
+  };
+
   const navigate = (next: View) => { setView(next); setNotice(null); };
 
   return <div className="app-shell">
@@ -148,7 +161,7 @@ export default function App() {
       <div className="brand"><div className="brand-mark">R</div><div><strong>RAG Compliance</strong><small>IA & vigilancia normativa</small></div></div>
       <div className="sidebar-rule" />
       <nav aria-label="Navegación principal">
-        {menu.map((item) => <button key={item.id} onClick={() => navigate(item.id)} className={view === item.id || (item.id === "cases" && view === "detail") ? "nav-item active" : "nav-item"}><span>{item.icon}</span>{item.label}</button>)}
+        {menu.map((item) => <button key={item.id} onClick={() => navigate(item.id)} className={view === item.id || (item.id === "cases" && (view === "detail" || view === "expediente-detail")) ? "nav-item active" : "nav-item"}><span>{item.icon}</span>{item.label}</button>)}
       </nav>
       <div className="sidebar-bottom">
         <div className="side-status"><span className={health?.status === "ok" ? "online" : "offline"} />{health?.status === "ok" ? "Servicios operativos" : "Estado por verificar"}</div>
@@ -160,9 +173,10 @@ export default function App() {
       <main>
         {notice && <div className={`notice ${notice.kind}`} role="status"><span>{notice.kind === "error" ? "!" : "✓"}</span>{notice.text}<button aria-label="Cerrar" onClick={() => setNotice(null)}>×</button></div>}
         {loading && <div className="loading-line" />}
-        {view === "dashboard" && <Dashboard health={health} cases={cases} openCase={openCase} go={navigate} />}
-        {view === "cases" && <CasesPage cases={cases} onOpen={openCase} onImported={() => { void refresh(); }} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
+        {view === "dashboard" && <Dashboard health={health} cases={cases} expedientes={expedientes} openCase={openCase} go={navigate} />}
+        {view === "cases" && <CasesPage cases={cases} expedientes={expedientes} onOpen={openCase} onOpenExpediente={openExpediente} onImported={refresh} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
         {view === "detail" && <CaseDetail result={selected} onBack={() => setView("cases")} />}
+        {view === "expediente-detail" && <ExpedienteDetail result={selectedExpediente} onBack={() => setView("cases")} />}
         {view === "rag" && <RagPage />}
         {view === "alerts" && <AlertsPage />}
       </main>
@@ -170,13 +184,13 @@ export default function App() {
   </div>;
 }
 
-function Dashboard({ health, cases, openCase, go }: { health: Health | null; cases: CaseSummary[]; openCase: (id: string) => void; go: (view: View) => void }) {
+function Dashboard({ health, cases, expedientes, openCase, go }: { health: Health | null; cases: CaseSummary[]; expedientes: ExpedienteSummary[]; openCase: (id: string) => void; go: (view: View) => void }) {
   const indexed = health?.bases.rag?.versiones_sql ?? 0;
   return <section className="page"><div className="page-heading"><div><span className="eyebrow">PANEL DE CONTROL</span><h1>Inteligencia de cumplimiento</h1><p>Vigilancia regulatoria, evaluación trazable de expedientes y respuestas sustentadas en normativa SBS.</p></div><button className="primary" onClick={() => go("cases")}>+ Evaluar caso</button></div>
     <div className="metrics">
       <Metric label="Estado del backend" value={health ? health.status : "Conectando"} detail={health ? `API v${health.version}` : "Verificando servicios"} tone={health?.status === "ok" ? "good" : "warn"} />
       <Metric label="Versiones RAG indexadas" value={String(indexed)} detail="Base normativa disponible" />
-      <Metric label="Casos evaluados" value={String(cases.length)} detail="Últimos registros persistidos" />
+      <Metric label="Registros evaluados" value={String(cases.length + expedientes.length)} detail="Casos individuales e importados" />
       <Metric label="Política de auditoría" value={health?.policy_version ?? "—"} detail={`Modo: ${health?.audit_mode ?? "—"}`} />
     </div>
     <div className="two-col"><article className="panel"><div className="panel-title"><div><h2>Actividad reciente</h2><p>Resultados recuperados desde la API de casos.</p></div><button className="text-button" onClick={() => go("cases")}>Ver todos →</button></div>{cases.length ? <CaseTable cases={cases.slice(0, 6)} onOpen={openCase} /> : <Empty>Aún no hay casos evaluados. Crea el primero desde Gestión de casos.</Empty>}</article>
@@ -189,7 +203,13 @@ function HealthRow({ label, value, ok }: { label: string; value: string; ok: boo
 
 function CaseTable({ cases, onOpen }: { cases: CaseSummary[]; onOpen: (id: string) => void }) { return <div className="table-wrap"><table><thead><tr><th>Identificador</th><th>Evento</th><th>Decisión</th><th>Evaluado</th><th /></tr></thead><tbody>{cases.map((item) => <tr key={item.case_id}><td><code>{item.case_id}</code></td><td>{stateLabel(item.tipo_evento)}</td><td><Pill value={item.decision} /></td><td>{new Date(item.evaluado_en).toLocaleDateString("es-PE")}</td><td><button className="row-button" onClick={() => void onOpen(item.case_id)}>Revisar</button></td></tr>)}</tbody></table></div>; }
 
-function CasesPage({ cases, onOpen, onCreated, onImported }: { cases: CaseSummary[]; onOpen: (id: string) => void; onCreated: (result: CaseResult) => void; onImported: () => void }) {
+function ExpedienteTable({ expedientes, onOpen }: { expedientes: ExpedienteSummary[]; onOpen: (id: string) => void }) {
+  const labelFor = (result: string) => result === "POSIBLE_INCUMPLIMIENTO" ? "Posible incumplimiento" : result === "SIN_INCUMPLIMIENTO_DETECTADO" ? "Sin indicios detectados" : "Informaci\u00f3n insuficiente";
+  const toneFor = (result: string) => result === "POSIBLE_INCUMPLIMIENTO" ? "danger" : result === "SIN_INCUMPLIMIENTO_DETECTADO" ? "good" : "warn";
+  return <div className="table-wrap batch-table"><table><thead><tr><th>Identificador</th><th>Resultado</th><th>Auditoría</th><th>Evaluado</th><th /></tr></thead><tbody>{expedientes.map((item) => <tr key={item.id_caso}><td><code>{item.id_caso}</code></td><td><Pill value={labelFor(item.resultado_esperado)} tone={toneFor(item.resultado_esperado)} /></td><td><Pill value={item.decision_auditoria ?? "SIN_AUDITORIA"} /></td><td>{new Date(item.evaluado_en).toLocaleDateString("es-PE")}</td><td><button className="row-button" onClick={() => void onOpen(item.id_caso)}>Revisar</button></td></tr>)}</tbody></table></div>;
+}
+
+function CasesPage({ cases, expedientes, onOpen, onOpenExpediente, onCreated, onImported }: { cases: CaseSummary[]; expedientes: ExpedienteSummary[]; onOpen: (id: string) => void; onOpenExpediente: (id: string) => void; onCreated: (result: CaseResult) => void; onImported: () => Promise<void> }) {
   const [showForm, setShowForm] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [schema, setSchema] = useState<CaseSchema | null>(null);
@@ -200,11 +220,16 @@ function CasesPage({ cases, onOpen, onCreated, onImported }: { cases: CaseSummar
     {schemaError && <div className="notice error">No se pudo cargar el catálogo de eventos: {schemaError}</div>}
     {showImport && <ExpedienteImport onImported={onImported} />}
     {showForm && <CaseForm eventTypes={schema?.tipos_evento ?? {}} onSuccess={onCreated} />}
-    <article className="panel"><div className="panel-title"><div><h2>Registro central</h2><p>Última evaluación por caso.</p></div><span className="counter">{cases.length} casos</span></div>{cases.length ? <CaseTable cases={cases} onOpen={onOpen} /> : <Empty>No hay expedientes en la base todavia.</Empty>}</article>
+    <article className="panel">
+      <div className="panel-title"><div><h2>Registro central</h2><p>Casos individuales y expedientes importados.</p></div><span className="counter">{cases.length + expedientes.length} registros</span></div>
+      {cases.length > 0 && <><div className="panel-title"><h2>Casos individuales</h2><span className="counter">{cases.length}</span></div><CaseTable cases={cases} onOpen={onOpen} /></>}
+      {expedientes.length > 0 && <><div className="panel-title"><div><h2>Expedientes importados</h2><p>Última evaluación por identificador.</p></div><span className="counter">{expedientes.length}</span></div><ExpedienteTable expedientes={expedientes} onOpen={onOpenExpediente} /></>}
+      {!cases.length && !expedientes.length && <Empty>No hay casos ni expedientes importados todavía.</Empty>}
+    </article>
   </section>;
 }
 
-function ExpedienteImport({ onImported }: { onImported: () => void }) {
+function ExpedienteImport({ onImported }: { onImported: () => Promise<void> }) {
   const [file, setFile] = useState<File | null>(null);
   const [results, setResults] = useState<ExpedienteBatchItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -233,10 +258,10 @@ function ExpedienteImport({ onImported }: { onImported: () => void }) {
         completed += chunk.length;
         setProgress({ done: completed, total: records.length });
       }
-      onImported();
+      await onImported();
     } catch (reason) {
       setError(`${completed ? `Se procesaron ${completed} casos antes del error. ` : ""}${(reason as Error).message}`);
-      if (completed) onImported();
+      if (completed) await onImported();
     } finally { setImporting(false); }
   };
 
@@ -267,6 +292,37 @@ function CaseForm({ eventTypes, onSuccess }: { eventTypes: CaseSchema["tipos_eve
   const [error, setError] = useState<string | null>(null);
   const submit = async (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); setSubmitting(true); setError(null); const data = new FormData(event.currentTarget); const payload = { case_id: String(data.get("case_id")), user_id: String(data.get("user_id")), rol: String(data.get("rol")), tipo_evento: String(data.get("tipo_evento")), fecha_evento: String(data.get("fecha_evento")), fecha_cumplimiento: String(data.get("fecha_cumplimiento")) || null, monto: data.get("monto") ? Number(data.get("monto")) : null, moneda: "PEN", descripcion: String(data.get("descripcion")) || null }; try { onSuccess(await api.evaluateCase(payload)); } catch (reason) { setError((reason as Error).message); } finally { setSubmitting(false); } };
   return <form className="case-form panel" onSubmit={submit}><div className="panel-title"><div><h2>Nuevo evento de cumplimiento</h2><p>Los campos se validan contra el contrato de <code>/cases/evaluate</code>.</p></div></div>{error && <p className="form-error">{error}</p>}<div className="form-grid"><label>ID del caso<input required name="case_id" placeholder="ROS-2026-0115" pattern="[A-Za-z0-9._-]+" /></label><label>Usuario responsable<input required name="user_id" defaultValue="analista.01" /></label><label>Rol<select name="rol" defaultValue="analista"><option value="analista">Analista</option><option value="oficial_cumplimiento">Oficial de cumplimiento</option></select></label><label>Tipo de evento<select required name="tipo_evento" defaultValue="" disabled={!Object.keys(eventTypes).length}><option value="" disabled>Selecciona un evento</option>{Object.entries(eventTypes).map(([type, info]) => <option key={type} value={type}>{type.replaceAll("_", " ")} — {info.descripcion}</option>)}</select></label><label>Fecha del evento<input required type="date" name="fecha_evento" defaultValue={today} /></label><label>Fecha de cumplimiento<input type="date" name="fecha_cumplimiento" /></label><label>Monto (PEN)<input type="number" min="0" step="0.01" name="monto" placeholder="185000" /></label><label className="wide">Descripción<textarea name="descripcion" maxLength={2000} placeholder="Describe los hechos relevantes y la evidencia disponible." /></label></div><div className="form-actions"><span>{Object.keys(eventTypes).length ? "Eventos y roles disponibles desde /cases/schema." : "Cargando catálogo de eventos…"}</span><button className="primary" disabled={submitting || !Object.keys(eventTypes).length}>{submitting ? "Evaluando…" : "Evaluar con RAG"}</button></div></form>;
+}
+
+function displayValue(value: unknown): string {
+  if (value == null || value === "") return "";
+  if (Array.isArray(value)) return value.map(displayValue).filter(Boolean).join(", ");
+  if (typeof value === "object") return JSON.stringify(value);
+  return String(value);
+}
+
+function ExpedienteFields({ row, fields }: { row: Record<string, unknown>; fields: Array<[string, string]> }) {
+  const values = fields.map(([key, label]) => [label, displayValue(row[key])] as const).filter(([, value]) => value);
+  if (!values.length) return <Empty>Este expediente no contiene datos en esta sección.</Empty>;
+  return <dl className="data-list">{values.map(([label, value]) => <Fragment key={label}><dt>{label}</dt><dd>{value}</dd></Fragment>)}</dl>;
+}
+
+function ExpedienteDetail({ result, onBack }: { result: ExpedienteResult | null; onBack: () => void }) {
+  if (!result) return <section className="page"><button className="text-button back" onClick={onBack}>← Volver al registro</button><Empty>Selecciona un expediente importado para consultar su evaluación.</Empty></section>;
+  const row = result.fila;
+  const outcome = String(row.resultado_esperado ?? "INFORMACION_INSUFICIENTE");
+  const label = outcome === "POSIBLE_INCUMPLIMIENTO" ? "Posible incumplimiento" : outcome === "SIN_INCUMPLIMIENTO_DETECTADO" ? "Sin indicios detectados" : "Información insuficiente";
+  const tone = outcome === "POSIBLE_INCUMPLIMIENTO" ? "danger" : outcome === "SIN_INCUMPLIMIENTO_DETECTADO" ? "good" : "warn";
+  const sections: Array<{ title: string; fields: Array<[string, string]> }> = [
+    { title: "Hechos y evidencia", fields: [["hechos_relevantes_del_caso", "Hechos relevantes"], ["evidencia_o_faltantes", "Evidencia y faltantes"], ["cumple_segun_evidencia", "Evaluación según evidencia"], ["por_que_si_o_no", "Fundamento de la evaluación"]] },
+    { title: "Norma y fundamento", fields: [["norma_a_consultar", "Norma consultada"], ["razon_de_aplicacion_normativa", "Aplicación al caso"], ["fuente_legal", "Fuente legal"], ["version_id_citada", "Versión citada"], ["sancion_aplicable", "Sanción aplicable"]] },
+    { title: "Fechas y alertas internas", fields: [["fecha_registro", "Fecha de registro"], ["fecha_limite_interna", "Fecha límite interna"], ["fecha_atencion", "Fecha de atención"], ["dias_de_retraso_interno", "Días de retraso"], ["explicacion_plazo", "Explicación del plazo"], ["prioridad", "Prioridad"], ["alerta_normativa_esperada", "Alerta normativa"], ["alerta_plazo_interno_esperada", "Alerta de plazo interno"], ["tipo_alerta_esperada", "Tipo de alerta"]] },
+    { title: "Auditoría y revisión humana", fields: [["decision_auditoria", "Decisión de auditoría"], ["revision_humana", "Estado de revisión humana"], ["audit_id", "Identificador de auditoría"], ["senales_detectadas", "Señales detectadas"], ["reglas_version", "Versión de reglas"], ["modalidad_analisis", "Modalidad de análisis"], ["fuente_patron", "Fuente del patrón"], ["limitacion_de_la_evaluacion", "Limitaciones"]] },
+  ];
+  return <section className="page"><button className="text-button back" onClick={onBack}>← Gestión de casos</button><div className="page-heading compact"><div><span className="eyebrow">EXPEDIENTE IMPORTADO</span><h1>{displayValue(row.id_caso) || "Sin identificador"}</h1><p>Resultado de revisión del CSV con evidencia, norma y trazabilidad.</p></div><div className="decision"><Pill value={label} tone={tone} /><Pill value={displayValue(row.decision_auditoria) || "SIN_AUDITORIA"} /><small>La clasificación requiere revisión humana.</small></div></div>
+    <div className="detail-grid"><article className="panel highlight"><div className="panel-title"><h2>Conclusión</h2><Pill value={displayValue(row.revision_humana) || "PENDIENTE_REVISION"} /></div><p className="summary">{displayValue(row.por_que_si_o_no) || "No se guardó una explicación para este resultado."}</p>{displayValue(row.limitacion_de_la_evaluacion) && <p className="case-description">Limitación: {displayValue(row.limitacion_de_la_evaluacion)}</p>}</article><article className="panel"><div className="panel-title"><h2>Identificación</h2></div><ExpedienteFields row={row} fields={[["id_caso", "ID del expediente"], ["resultado_esperado", "Resultado"], ["prioridad", "Prioridad"], ["revision_humana", "Revisión humana"]]} /></article></div>
+    <div className="two-col wide-left">{sections.map((section) => <article className="panel" key={section.title}><div className="panel-title"><h2>{section.title}</h2></div><ExpedienteFields row={row} fields={section.fields} /></article>)}</div>
+  </section>;
 }
 
 function CaseDetail({ result, onBack }: { result: CaseResult | null; onBack: () => void }) {

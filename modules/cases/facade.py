@@ -142,6 +142,9 @@ class CasesFacade:
             raise CaseNotFound(id_caso)
         return r
 
+    def listar_expedientes(self, limit: int = 1000) -> list[dict]:
+        return self._repo.list_expedientes(limit)
+
     # ------------------------------------------------------------- preguntas
     def question(self, q: QuestionInput | dict[str, Any]) -> QuestionResult:
         inp = q if isinstance(q, QuestionInput) else QuestionInput.model_validate(q)

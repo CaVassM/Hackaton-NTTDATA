@@ -124,6 +124,12 @@ def create_cases_router(get_facade: Callable[..., CasesFacade]) -> APIRouter:
         except CaseNotFound as exc:
             raise HTTPException(404, f"Expediente no encontrado: {id_caso}") from exc
 
+    @router.get("/expedientes")
+    def listar_expedientes(limit: int = Query(1000, ge=1, le=1000),
+                           facade: CasesFacade = Depends(get_facade)) -> list[dict]:
+        """Ultima evaluacion de cada expediente importado."""
+        return facade.listar_expedientes(limit)
+
     @router.get("")
     def listar(limit: int = Query(100, ge=1, le=1000), facade: CasesFacade = Depends(get_facade)) -> list[dict]:
         """Ultima evaluacion de cada caso (case_id, tipo_evento, decision, fecha)."""

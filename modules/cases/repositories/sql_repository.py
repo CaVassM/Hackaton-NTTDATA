@@ -83,6 +83,15 @@ class SqliteCasesRepository:
             "SELECT result_json FROM expediente_run WHERE id_caso = ? ORDER BY id DESC LIMIT 1", (id_caso,)).fetchone()
         return ExpedienteResult.model_validate_json(row[0]) if row else None
 
+    def list_expedientes(self, limit: int = 1000) -> list[dict]:
+        """Ultima evaluacion por id_caso, en orden de importacion reciente."""
+        rows = self._conn.execute(
+            """SELECT e.id_caso, e.resultado, e.decision, e.created_at FROM expediente_run e
+               JOIN (SELECT id_caso, MAX(id) AS id FROM expediente_run GROUP BY id_caso) u ON u.id = e.id
+               ORDER BY e.id DESC LIMIT ?""", (limit,)).fetchall()
+        return [{"id_caso": r[0], "resultado_esperado": r[1], "decision_auditoria": r[2], "evaluado_en": r[3]}
+                for r in rows]
+
     def count_expedientes(self) -> dict[str, int]:
         rows = self._conn.execute(
             """SELECT e.resultado, COUNT(*) FROM expediente_run e
