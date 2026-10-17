@@ -50,3 +50,17 @@
 .oblig .text-toggle { margin-top: 10px; }
 
 @media (max-width: 800px) { .decision { justify-items: start; } .flow-ms { display: none; } }
+
+/* Registro central: pestañas, filtros y paginación */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid #e5eeff; margin: 4px 0 16px; overflow-x: auto; }
+.tabs button { display: inline-flex; align-items: center; gap: 8px; border: 0; background: none; font: inherit; font-weight: 650; font-size: 13.5px; color: #5b6b85; padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.tabs button:hover { color: #0b1c30; background: #f8faff; }
+.tabs button.active { color: #2c2e9c; border-bottom-color: #4648d4; }
+.registry-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.registry-filters input, .registry-filters select { border: 1px solid #c4c6ce; border-radius: 7px; min-height: 36px; padding: 6px 10px; font: inherit; font-size: 13px; background: #fff; color: #0b1c30; }
+.registry-filters input { flex: 1 1 240px; max-width: 360px; }
+.registry-tabs-body .batch-table { max-height: none; }
+.pager { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 14px; font-size: 12.5px; color: #44474d; }
+.pager .secondary:disabled { opacity: .45; cursor: not-allowed; }
+.registry-tabs-body .batch-table table { min-width: 0; width: 100%; }
+.registry-tabs-body td:last-child { white-space: nowrap; text-align: right; }

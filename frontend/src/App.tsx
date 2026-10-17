@@ -1,7 +1,7 @@
 import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useState } from "react";
 import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, Health, SearchResult } from "./api";
 import { ClampedText, FragmentCard } from "./ResultCards";
-import { AgentFlow, ObligationList } from "./CaseParts";
+import { AgentFlow, ExpedienteFlow, ObligationList } from "./CaseParts";
 import "./import.css";
 import "./results.css";
 import "./case.css";
@@ -229,6 +229,13 @@ function CasesPage({ cases, expedientes, onOpen, onOpenExpediente, onClearImport
   const [showImport, setShowImport] = useState(false);
   const [schema, setSchema] = useState<CaseSchema | null>(null);
   const [schemaError, setSchemaError] = useState<string | null>(null);
+  const [tab, setTab] = useState<"cases" | "expedientes">(cases.length || !expedientes.length ? "cases" : "expedientes");
+  const [search, setSearch] = useState(""); const [outcomeFilter, setOutcomeFilter] = useState(""); const [page, setPage] = useState(0);
+  const PAGE_SIZE = 15;
+  const filtered = useMemo(() => expedientes.filter((item) => (!outcomeFilter || item.resultado_esperado === outcomeFilter) && item.id_caso.toLowerCase().includes(search.trim().toLowerCase())), [expedientes, search, outcomeFilter]);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const pageItems = filtered.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
   useEffect(() => { void api.caseSchema().then(setSchema).catch((reason) => setSchemaError((reason as Error).message)); }, []);
   return <section className="page">
     <div className="page-heading"><div><span className="eyebrow">EXPEDIENTES OFICIALES</span><h1>Gestión integral de casos</h1><p>Registra eventos, evalúa obligaciones y conserva la trazabilidad de la auditoría.</p></div><div className="page-actions"><button className="secondary" onClick={() => setShowImport((visible) => !visible)}>{showImport ? "Cerrar importación" : "Importar CSV"}</button><button className="primary" onClick={() => setShowForm((visible) => !visible)}>{showForm ? "Cerrar formulario" : "+ Nuevo caso"}</button></div></div>
@@ -236,10 +243,28 @@ function CasesPage({ cases, expedientes, onOpen, onOpenExpediente, onClearImport
     {showImport && <ExpedienteImport onImported={onImported} />}
     {showForm && <CaseForm eventTypes={schema?.tipos_evento ?? {}} onSuccess={onCreated} />}
     <article className="panel">
-      <div className="panel-title"><div><h2>Registro central</h2><p>Casos individuales y expedientes importados.</p></div><div className="registry-actions"><span className="counter">{cases.length + expedientes.length} registros</span><button className="danger-button" type="button" disabled={!expedientes.length} onClick={() => onClearImported(expedientes.length)}>Borrar importados</button></div></div>
-      {cases.length > 0 && <><div className="panel-title"><h2>Casos individuales</h2><span className="counter">{cases.length}</span></div><CaseTable cases={cases} onOpen={onOpen} /></>}
-      {expedientes.length > 0 && <><div className="panel-title"><div><h2>Expedientes importados</h2><p>Última evaluación por identificador.</p></div><span className="counter">{expedientes.length}</span></div><ExpedienteTable expedientes={expedientes} onOpen={onOpenExpediente} /></>}
-      {!cases.length && !expedientes.length && <Empty>No hay casos ni expedientes importados todavía.</Empty>}
+      <div className="panel-title"><div><h2>Registro central</h2><p>Casos individuales y expedientes importados, por separado.</p></div><div className="registry-actions"><span className="counter">{cases.length + expedientes.length} registros</span><button className="danger-button" type="button" disabled={!expedientes.length} onClick={() => onClearImported(expedientes.length)}>Borrar importados</button></div></div>
+      <div className="tabs" role="tablist">
+        <button type="button" role="tab" aria-selected={tab === "cases"} className={tab === "cases" ? "active" : ""} onClick={() => setTab("cases")}>Casos individuales <span className="counter">{cases.length}</span></button>
+        <button type="button" role="tab" aria-selected={tab === "expedientes"} className={tab === "expedientes" ? "active" : ""} onClick={() => setTab("expedientes")}>Expedientes importados <span className="counter">{expedientes.length}</span></button>
+      </div>
+      <div className="registry-tabs-body">
+        {tab === "cases" && (cases.length ? <CaseTable cases={cases} onOpen={onOpen} /> : <Empty>No hay casos individuales. Crea uno con “+ Nuevo caso”.</Empty>)}
+        {tab === "expedientes" && (expedientes.length ? <>
+          <div className="registry-filters">
+            <input type="search" placeholder="Buscar por identificador (ej. SYN-0159)" value={search} onChange={(event) => { setSearch(event.target.value); setPage(0); }} aria-label="Buscar expediente" />
+            <select value={outcomeFilter} onChange={(event) => { setOutcomeFilter(event.target.value); setPage(0); }} aria-label="Filtrar por resultado">
+              <option value="">Todos los resultados</option>
+              <option value="POSIBLE_INCUMPLIMIENTO">Posible incumplimiento</option>
+              <option value="INFORMACION_INSUFICIENTE">Información insuficiente</option>
+              <option value="SIN_INCUMPLIMIENTO_DETECTADO">Sin indicios detectados</option>
+            </select>
+            <span className="muted">{filtered.length} de {expedientes.length}</span>
+          </div>
+          {filtered.length ? <ExpedienteTable expedientes={pageItems} onOpen={onOpenExpediente} /> : <Empty>Ningún expediente coincide con el filtro.</Empty>}
+          {pageCount > 1 && <div className="pager"><button type="button" className="secondary small" disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>← Anterior</button><span>Página {safePage + 1} de {pageCount}</span><button type="button" className="secondary small" disabled={safePage >= pageCount - 1} onClick={() => setPage(safePage + 1)}>Siguiente →</button></div>}
+        </> : <Empty>No hay expedientes importados. Usa “Importar CSV”.</Empty>)}
+      </div>
     </article>
   </section>;
 }
@@ -336,6 +361,7 @@ function ExpedienteDetail({ result, onBack }: { result: ExpedienteResult | null;
   ];
   return <section className="page"><button className="text-button back" onClick={onBack}>← Gestión de casos</button><div className="page-heading compact"><div><span className="eyebrow">EXPEDIENTE IMPORTADO</span><h1>{displayValue(row.id_caso) || "Sin identificador"}</h1><p>Resultado de revisión del CSV con evidencia, norma y trazabilidad.</p></div><div className="decision"><Pill value={label} tone={tone} /><Pill value={displayValue(row.decision_auditoria) || "SIN_AUDITORIA"} /><small>La clasificación requiere revisión humana.</small></div></div>
     <div className="detail-grid"><article className="panel highlight"><div className="panel-title"><h2>Conclusión</h2><Pill value={displayValue(row.revision_humana) || "PENDIENTE_REVISION"} /></div><p className="summary">{displayValue(row.por_que_si_o_no) || "No se guardó una explicación para este resultado."}</p>{displayValue(row.limitacion_de_la_evaluacion) && <p className="case-description">Limitación: {displayValue(row.limitacion_de_la_evaluacion)}</p>}</article><article className="panel"><div className="panel-title"><h2>Identificación</h2></div><ExpedienteFields row={row} fields={[["id_caso", "ID del expediente"], ["resultado_esperado", "Resultado"], ["prioridad", "Prioridad"], ["revision_humana", "Revisión humana"]]} /></article></div>
+    <ExpedienteFlow result={result} />
     <div className="two-col wide-left">{sections.map((section) => <article className="panel" key={section.title}><div className="panel-title"><h2>{section.title}</h2></div><ExpedienteFields row={row} fields={section.fields} /></article>)}</div>
   </section>;
 }

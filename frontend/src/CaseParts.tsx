@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { CaseResult } from "./api";
+import type { CaseResult, ExpedienteResult } from "./api";
 
 type StepState = "ok" | "warn" | "fail";
-type Step = { key: string; title: string; ms: number; state: StepState; headline: string; details: string[] };
+export type Step = { key: string; title: string; ms?: number; state: StepState; headline: string; details: string[] };
 
 const label = (value?: string | null) => (value ?? "").replaceAll("_", " ");
 const fmtMs = (ms: number) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.round(ms)} ms`);
@@ -38,17 +38,16 @@ function buildSteps(r: CaseResult): Step[] {
   return all.filter((step) => step.ms != null);
 }
 
-export function AgentFlow({ result }: { result: CaseResult }) {
-  const steps = buildSteps(result);
+export function FlowTimeline({ steps, totalMs, subtitle }: { steps: Step[]; totalMs?: number; subtitle: string }) {
   const [open, setOpen] = useState<Set<string>>(new Set());
   if (!steps.length) return null;
-  const total = result.tiempos_ms.total_ms ?? steps.reduce((sum, s) => sum + s.ms, 0);
-  const longest = Math.max(...steps.map((s) => s.ms), 1);
+  const timed = steps.filter((s) => s.ms != null);
+  const longest = Math.max(...timed.map((s) => s.ms as number), 1);
   const toggle = (key: string) => setOpen((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); return next; });
   const allOpen = open.size === steps.length;
   return <article className="panel flow-panel">
     <div className="panel-title">
-      <div><h2>Flujo del agente</h2><p>Pasos que ejecutó la evaluación, en orden, con su duración. Tiempo total: <strong>{fmtMs(total)}</strong></p></div>
+      <div><h2>Flujo del agente</h2><p>{subtitle}{totalMs != null && <> Tiempo total: <strong>{fmtMs(totalMs)}</strong></>}</p></div>
       <button type="button" className="secondary small" onClick={() => setOpen(allOpen ? new Set() : new Set(steps.map((s) => s.key)))}>{allOpen ? "Contraer todo" : "Expandir todo"}</button>
     </div>
     <ol className="flow">
@@ -60,9 +59,9 @@ export function AgentFlow({ result }: { result: CaseResult }) {
             <span className="flow-main">
               <span className="flow-title"><span className="flow-index">{index + 1}</span>{step.title}</span>
               <span className="flow-headline">{step.headline}</span>
-              <span className="flow-bar"><span style={{ width: `${Math.max(4, (step.ms / longest) * 100)}%` }} /></span>
+              {step.ms != null && <span className="flow-bar"><span style={{ width: `${Math.max(4, (step.ms / longest) * 100)}%` }} /></span>}
             </span>
-            <span className="flow-ms">{fmtMs(step.ms)}</span>
+            {step.ms != null && <span className="flow-ms">{fmtMs(step.ms)}</span>}
             <span className={`chev big ${isOpen ? "up" : ""}`} aria-hidden>▾</span>
           </button>
           {isOpen && <div className="flow-detail">{step.details.length ? step.details.map((line, i) => <p key={i}>{line}</p>) : <p className="muted">Sin detalle adicional.</p>}</div>}
@@ -70,6 +69,48 @@ export function AgentFlow({ result }: { result: CaseResult }) {
       })}
     </ol>
   </article>;
+}
+
+export function AgentFlow({ result }: { result: CaseResult }) {
+  const steps = buildSteps(result);
+  const total = result.tiempos_ms.total_ms ?? steps.reduce((sum, s) => sum + (s.ms ?? 0), 0);
+  return <FlowTimeline steps={steps} totalMs={total} subtitle="Pasos que ejecutó la evaluación, en orden, con su duración." />;
+}
+
+const txt = (value: unknown) => (value == null ? "" : String(value).replaceAll("_", " "));
+
+function buildExpedienteSteps(r: ExpedienteResult): Step[] {
+  const f = r.fila;
+  const outcome = String(f.resultado_esperado ?? "");
+  const senales = String(f.senales_detectadas ?? "").split("|").filter(Boolean);
+  const audit = r.audit_result as { decision?: string; score?: number; risk_level?: string; findings?: Array<{ validator: string; status: string; reason: string }> } | null | undefined;
+  const decision = String(audit?.decision ?? f.decision_auditoria ?? "SIN_AUDITORIA");
+  const auditState: StepState = r.auditoria_error || /block|escalate/i.test(decision) ? "fail" : decision === "ALLOW" ? "ok" : "warn";
+  const dias = f.dias_de_retraso_interno;
+  const plazoState: StepState = f.alerta_plazo_interno_esperada === "SI" ? "warn" : f.alerta_plazo_interno_esperada === "NO_DETERMINABLE" ? "warn" : "ok";
+  const sinCorpus = String(f.fuente_legal ?? "").includes("NO_DISPONIBLE");
+  return [
+    { key: "lectura", title: "Lectura del expediente", state: "ok", headline: `Expediente ${f.id_caso ?? ""}`, details: [String(f.hechos_relevantes_del_caso ?? "Sin hechos registrados.")] },
+    { key: "clasificacion", title: "Clasificación por señales (reglas deterministas)", state: outcome === "POSIBLE_INCUMPLIMIENTO" ? "fail" : outcome === "SIN_INCUMPLIMIENTO_DETECTADO" ? "ok" : "warn",
+      headline: `${txt(outcome) || "Sin resultado"} · ${senales.length} ${senales.length === 1 ? "señal" : "señales"}`,
+      details: [String(f.por_que_si_o_no ?? ""), senales.length ? `Señales: ${senales.map(txt).join(", ")}` : "", f.reglas_version ? `Versión de reglas: ${f.reglas_version}` : ""].filter(Boolean) },
+    { key: "norma", title: "Contraste con la norma", state: sinCorpus ? "warn" : "ok",
+      headline: String(f.norma_a_consultar ?? "Sin norma consultada"),
+      details: [String(f.razon_de_aplicacion_normativa ?? ""), f.fuente_legal ? `Fuente: ${f.fuente_legal}` : "", f.modalidad_analisis ? `Modalidad: ${txt(f.modalidad_analisis)}` : ""].filter(Boolean) },
+    { key: "plazo", title: "Plazo interno", state: plazoState,
+      headline: dias == null ? "No determinable" : Number(dias) > 0 ? `Atraso de ${dias} días` : "Dentro del plazo",
+      details: [String(f.explicacion_plazo ?? ""), f.tipo_alerta_esperada ? `Tipo de alerta: ${txt(f.tipo_alerta_esperada)}` : ""].filter(Boolean) },
+    { key: "auditoria", title: "Auditoría independiente", state: auditState,
+      headline: r.auditoria_error ? "Error al auditar" : `${decision}${audit?.score != null ? ` · score ${audit.score}` : ""}${audit?.risk_level ? ` · riesgo ${audit.risk_level}` : ""}`,
+      details: r.auditoria_error ? [r.auditoria_error] : (audit?.findings ?? []).map((x) => `${x.status} · ${x.validator}: ${x.reason}`).concat(f.audit_id ? [`ID de auditoría: ${f.audit_id}`] : []) },
+    { key: "revision", title: "Revisión humana", state: String(f.revision_humana ?? "PENDIENTE") === "PENDIENTE" ? "warn" : "ok",
+      headline: txt(f.revision_humana ?? "PENDIENTE"), details: [String(f.limitacion_de_la_evaluacion ?? "")].filter(Boolean) },
+  ];
+}
+
+export function ExpedienteFlow({ result }: { result: ExpedienteResult }) {
+  return <FlowTimeline steps={buildExpedienteSteps(result)} totalMs={result.tiempos_ms?.total_ms}
+    subtitle="Etapas del análisis del expediente importado. Las reglas son deterministas, por eso solo se mide el tiempo total." />;
 }
 
 const STATE_ORDER = ["validada", "propuesta", "no_encontrada", "rechazada"];
