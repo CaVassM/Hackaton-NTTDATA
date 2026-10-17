@@ -1,0 +1,12 @@
+[project]
+name = "hackaton-nttdata"
+version = "0.1.0"
+description = "Monorepo modular: RAG temporal sobre normativa SBS y modulos consumidores."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["modules", "shared"]
+markers = [
+    "ollama: requiere Ollama corriendo con los modelos configurados",
+]

@@ -1,0 +1,28 @@
+# Variables de entorno
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Artefactos generados por la ingesta: se reconstruyen con `cli ingest`.
+# Los .txt/.pdf de data/raw SI se versionan.
+data/processed/*
+!data/processed/.gitkeep
+*.log
