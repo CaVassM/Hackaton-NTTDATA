@@ -1,0 +1,28 @@
+CODIGO: Resolución SBS N° 1234-2025
+TITULO: Reglamento de Atención de Reclamos de Usuarios del Sistema Financiero (SINTÉTICO)
+TIPO: resolucion
+FECHA_EMISION: 2025-03-10
+ESTADO: vigente
+VIGENCIA_DESDE: 2025-04-01
+---
+DOCUMENTO SINTÉTICO PARA PRUEBAS. NO ES NORMATIVA REAL.
+
+Lima, 10 de marzo de 2025
+
+RESOLUCIÓN SBS N° 1234-2025
+
+LA SUPERINTENDENTA DE BANCA, SEGUROS Y ADMINISTRADORAS PRIVADAS DE FONDOS DE PENSIONES
+
+CONSIDERANDO:
+Que resulta necesario establecer reglas uniformes para la atención de los reclamos que presentan los usuarios de las empresas del sistema financiero;
+
+RESUELVE:
+
+Artículo 1.- Objeto y ámbito de aplicación
+El presente Reglamento establece las disposiciones que deben observar las empresas del sistema financiero para la atención de los reclamos presentados por sus usuarios, a través de cualquiera de los canales de atención habilitados, sean presenciales o virtuales.
+
+Artículo 2.- Plazo de atención de reclamos
+Las empresas deben resolver y comunicar al usuario la respuesta a su reclamo en un plazo máximo de treinta (30) días calendario, contado desde la fecha de su presentación. Dicho plazo puede ser prorrogado por única vez, por un periodo igual, cuando la naturaleza del reclamo lo justifique, lo que debe ser informado al usuario antes del vencimiento del plazo inicial.
+
+Artículo 3.- Información al usuario
+Al momento de la presentación del reclamo, las empresas deben entregar al usuario un código de registro que permita hacer seguimiento a su atención, e informarle el plazo máximo de respuesta y los canales disponibles para recibirla.

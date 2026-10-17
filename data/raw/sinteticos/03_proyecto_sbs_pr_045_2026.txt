@@ -1,0 +1,20 @@
+CODIGO: Proyecto de Resolución SBS PR-045-2026
+TITULO: Proyecto que modifica el plazo de atención de reclamos — prepublicación para comentarios (SINTÉTICO)
+TIPO: proyecto_resolucion
+FECHA_EMISION: 2026-09-15
+ESTADO: proyecto
+VIGENCIA_DESDE: 2026-09-15
+---
+DOCUMENTO SINTÉTICO PARA PRUEBAS. NO ES NORMATIVA REAL.
+
+PROYECTO DE RESOLUCIÓN — PREPUBLICACIÓN PARA COMENTARIOS
+
+Lima, 15 de setiembre de 2026
+
+Artículo 1.- Modificar el artículo 2 del Reglamento de Atención de Reclamos de Usuarios del Sistema Financiero, aprobado por Resolución SBS N° 1234-2025, conforme al texto siguiente:
+
+“Artículo 2.- Plazo de atención de reclamos
+Las empresas deben resolver y comunicar al usuario la respuesta a su reclamo en un plazo máximo de diez (10) días calendario, contado desde la fecha de su presentación.”
+
+Artículo 2.- Comentarios
+Los interesados pueden remitir sus comentarios sobre el presente proyecto hasta el 15 de octubre de 2026.
