@@ -1,0 +1,30 @@
+# Catalogo de eventos de caso -> categoria BAN (mapeo DETERMINISTA, sin LLM).
+# `obligaciones` (opcional): restringe a esos codigos de obligacion. Si no se
+# indica, aplican TODAS las obligaciones VALIDADAS de la categoria.
+# `fecha_evento`: que fecha debe enviar el equipo en el campo fecha_evento.
+version: 1
+eventos:
+  operacion_calificada_sospechosa:
+    categoria: BAN-004
+    obligaciones: [BAN-004-05]   # art. 58: ROS a la UIF-Peru en max. 24 horas
+    descripcion: Operacion calificada como sospechosa por el oficial de cumplimiento (dispara el ROS).
+    fecha_evento: Fecha en que la operacion fue CALIFICADA como sospechosa (no la de la alerta).
+  senal_alerta_detectada:
+    categoria: BAN-003
+    descripcion: Senal de alerta detectada en el monitoreo (debida diligencia; aun no es un ROS).
+    fecha_evento: Fecha de deteccion de la senal de alerta.
+  operacion_registrable:
+    categoria: BAN-005
+    obligaciones: [BAN-005-04, BAN-005-05]   # art. 49: crear el registro y anotar la operacion (sin plazo explicito)
+    descripcion: Operacion que iguala o supera el umbral y debe anotarse en el registro de operaciones.
+    fecha_evento: Fecha en que se realizo la operacion.
+  requerimiento_sbs:
+    categoria: BAN-005
+    obligaciones: [BAN-005-03]   # art. 54: copia a disposicion de la SBS/Ministerio Publico en 48 horas
+    descripcion: Requerimiento de la SBS o del Ministerio Publico de la informacion del registro.
+    fecha_evento: Fecha de recepcion del requerimiento.
+  ingreso_empleado:
+    categoria: BAN-007
+    obligaciones: [BAN-007-07]   # art. 41: capacitacion de nuevos ingresos en 30 dias
+    descripcion: Ingreso de un nuevo director, gerente o trabajador (capacitacion LA/FT de induccion).
+    fecha_evento: Fecha de ingreso de la persona.

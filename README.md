@@ -1,6 +1,8 @@
 # Hackaton NTTDATA — RAG temporal sobre normativa SBS
 
-Monorepo modular, 100 % local (Ollama, sin APIs externas). Módulos actuales: **`rag`** (abajo) y **`audit`**, el auditor de respuestas expuesto como agente A2A ([modules/audit/README.md](modules/audit/README.md)), con su cliente y registro de agentes en `nanda/`.
+Monorepo modular, 100 % local (Ollama, sin APIs externas). Módulos actuales: **`rag`** (abajo); **`audit`**, el auditor de respuestas expuesto como agente A2A ([modules/audit/README.md](modules/audit/README.md)), con su cliente y registro de agentes en `nanda/`; y **`compliance`**, que extrae obligaciones e infracciones LA/FT, calcula plazos y estima la exposición potencial ([modules/compliance/README.md](modules/compliance/README.md)).
+
+> **Corpus normativo:** el corpus del repo **no garantiza estar completo**. El PDF de la Res. SBS 2660-2015 es un texto concordado que solo incluye hasta la Res. SBS 4705-2017; la Res. SBS 1743-2020 (que modifica el art. 49) todavía no está incorporada, y la SBS reporta versiones consolidadas posteriores. Los anexos de tipificación de la Res. SBS 2755-2018 no vienen en el PDF provisto. **La versión consolidada oficial vigente debe validarse contra el portal de la SBS.** Los PDFs se preparan con `python scripts/prepare_sbs.py` (ver [modules/compliance/README.md](modules/compliance/README.md)).
 
 El módulo **`rag`** ofrece: búsqueda sobre normativa bancaria peruana (SBS) que
 

@@ -78,3 +78,19 @@ def test_errores_explicitos(rag):
         rag.get_version(9999)
     with pytest.raises(RagError):
         rag.vigente_en(1, "31/12/2026")
+
+
+# --- listar_versiones (lo usa modules/compliance) ---
+def test_listar_versiones_vigentes_por_fecha(rag, art2):
+    old, new = art2
+    antes = {v.articulo_numero: v.version_id for v in rag.listar_versiones(BASE, CAMBIO - timedelta(days=1))}
+    despues = {v.articulo_numero: v.version_id for v in rag.listar_versiones("Res. SBS 1234-2025", CAMBIO)}
+    assert set(antes) == set(despues) == {"1", "2", "3"}  # una version por articulo
+    assert antes["2"] == old.version_id and despues["2"] == new.version_id
+    assert rag.listar_versiones(BASE, date(2025, 3, 1)) == []  # antes de la vigencia
+
+
+def test_listar_versiones_excluye_proyectos_y_valida_norma(rag):
+    assert rag.listar_versiones(PROY) == []
+    with pytest.raises(NormaNoEncontrada):
+        rag.listar_versiones("Resolución SBS N° 1-1990")

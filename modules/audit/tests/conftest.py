@@ -55,7 +55,8 @@ def rag(tmp_path_factory) -> RagFacade:
 
 @pytest.fixture
 def settings(tmp_path) -> AuditSettings:
-    return AuditSettings(log_dir=tmp_path / "logs", a2a_agent_tokens=TOKENS, a2a_allowed_agents=["copilot"])
+    return AuditSettings(log_dir=tmp_path / "logs", audit_dir=tmp_path / "audit", a2a_agent_tokens=TOKENS,
+                         a2a_allowed_agents=["copilot"])
 
 
 @pytest.fixture

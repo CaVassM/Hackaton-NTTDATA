@@ -79,3 +79,39 @@ class AuditResult(BaseModel):
     findings: list[Finding]
     safe_response: str
     policy_version: str
+
+
+class HumanReview(BaseModel):
+    review_id: int
+    audit_id: str
+    reviewer: str
+    decision: str  # aprobada | rechazada
+    comment: str | None = None
+    created_at: str
+
+
+class AuditRecord(BaseModel):
+    """Auditoria guardada + revisiones humanas (append-only)."""
+
+    result: AuditResult
+    reviews: list[HumanReview] = Field(default_factory=list)
+    revision_final: str | None = None  # ultima decision humana, si la hubo
+
+
+class AuditEvent(BaseModel):
+    id: int
+    ts: str
+    actor: str
+    action: str
+    payload: dict[str, Any]
+    prev_hash: str
+    hash: str
+
+
+class ChainReport(BaseModel):
+    ok: bool
+    eventos: int
+    auditorias: int
+    primer_error_id: int | None = None
+    motivo: str | None = None
+    ultimo_hash: str | None = None

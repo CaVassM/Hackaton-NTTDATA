@@ -4,3 +4,11 @@ class AuditError(Exception):
 
 class PolicyError(AuditError):
     """La politica YAML es invalida o no existe."""
+
+
+class AuditNotFound(AuditError):
+    pass
+
+
+class PersistenceNotConfigured(AuditError):
+    pass

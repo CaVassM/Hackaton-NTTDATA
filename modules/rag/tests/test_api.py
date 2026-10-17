@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from modules.rag.api.app import create_app
-from modules.rag.tests.conftest import BASE, CAMBIO
+from modules.rag.tests.conftest import BASE, CAMBIO, N_ARCHIVOS
 
 
 @pytest.fixture
@@ -54,4 +54,10 @@ def test_endpoints_de_version(client, art2):
 def test_ingest_rechaza_rutas_fuera_de_raw(client):
     assert client.post("/rag/ingest", json={"ruta": "../../"}).status_code == 400
     r = client.post("/rag/ingest", json={"ruta": "sinteticos"})
-    assert r.status_code == 200 and len(r.json()["normas_omitidas"]) == 3
+    assert r.status_code == 200 and len(r.json()["normas_omitidas"]) == N_ARCHIVOS
+
+
+def test_search_con_filtro_de_norma(client):
+    r = client.post("/rag/search", json={"query": "plazo de reclamos", "norma": BASE, "top_k": 5})
+    assert r.status_code == 200 and all(f["cita"]["norma"] == BASE for f in r.json()["fragmentos"])
+    assert client.post("/rag/search", json={"query": "plazo", "norma": "Res SBS 1-1990"}).status_code == 404

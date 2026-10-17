@@ -55,9 +55,10 @@ def search(
     fecha: Optional[str] = typer.Option(None, help="AAAA-MM-DD; default hoy"),
     top_k: int = typer.Option(5, "--top-k"),
     proyectos: bool = typer.Option(False, "--proyectos", help="Incluir proyectos normativos"),
+    norma: Optional[str] = typer.Option(None, help="Restringir a una norma, p. ej. 'Res. SBS 2660-2015'"),
 ):
     """Busqueda hibrida filtrada por vigencia."""
-    res = _rag().search(pregunta, _fecha(fecha), top_k, proyectos)
+    res = _rag().search(pregunta, _fecha(fecha), top_k, proyectos, norma=norma)
     origen = " (hoy, por defecto)" if res.fecha_por_defecto else ""
     typer.echo(f"Vigencia al {res.fecha}{origen} - {len(res.fragmentos)} resultado(s)\n")
     for i, f in enumerate(res.fragmentos, 1):

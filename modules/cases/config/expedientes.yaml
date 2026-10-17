@@ -1,0 +1,66 @@
+# Reglas DETERMINISTAS para analizar expedientes (formato del equipo:
+# id_caso, descripcion_caso). Versionadas: cambiar reglas = subir `version`.
+# Regex sobre texto en minusculas y sin tildes. Se evaluan en el orden dado.
+version: expedientes-v1
+
+# 1) Resultado. La primera regla que coincide gana; si ninguna, POSIBLE si hay
+#    indicios, si no INFORMACION_INSUFICIENTE (nunca "sin incumplimiento" por defecto).
+resultado:
+  - resultado: INFORMACION_INSUFICIENTE
+    nombre: documentacion_faltante
+    patron: 'no se (han|ha) incorporado (documentos|soportes)|no se (adjunta|presenta)n? (documentos|soportes)|referencia parcial a la transaccion|carece de (elementos|documentos)'
+  - resultado: SIN_INCUMPLIMIENTO_DETECTADO
+    nombre: origen_sustentado
+    patron: 'presenta (contratos|declaraciones tributarias|movimientos bancarios).{0,80}para sustentar la procedencia'
+  - resultado: POSIBLE_INCUMPLIMIENTO
+    nombre: indicios_de_origen_ilicito
+    patron: 'trafico ilicito|dinero ilicito|origen ilicito|procedencia ilicita|ganancias ilicitas|activos ilicitos|desbalance patrimonial|sin (justificar|acreditar) (el origen|ingresos)|no se han acreditado (actividades|ingresos)|falsific|extorsion|cobro de cupos|terroris|documentacion fraudulenta|organizacion (criminal|delictiva)|caleta|sus ?traidos|informacion secreta|incremento ilegalmente|ventas? simulad|simulando'
+
+# 2) Modalidad -> articulo del DL 1106 a consultar. Primera que coincide gana.
+modalidades:
+  - modalidad: Transporte de efectivo
+    articulo: "3"
+    patron: '\btransport(e|aba|aron|ar)\b|\btraslad(o|ar|aba)\b|adherid[oa]s? al cuerpo|pretend(ia|io) (movilizar|trasladar)|acondicionad[oa]s? en|escondid[oa]s? en|\bcaleta\b|control aduanero|ingesta de capsulas'
+    razon: "Examinar transporte, traslado, ingreso o salida de dinero o titulos valores de origen ilicito y los elementos del articulo 3."
+  - modalidad: Ocultamiento o tenencia
+    articulo: "2"
+    patron: 'a fin de ocultar|con la finalidad de ocultar|para ocultar|como fachadas?|actuando como fachada|ocultar (su|el) origen'
+    razon: "Examinar adquisicion, uso, guarda, administracion, custodia, recepcion, ocultamiento o tenencia de bienes y los elementos subjetivos del articulo 2."
+  - modalidad: Conversión o transferencia
+    articulo: "1"
+    patron: '.'   # por defecto: actos de conversion o transferencia
+    razon: "Examinar si hubo conversion o transferencia de bienes de origen ilicito y los elementos subjetivos del articulo 1."
+
+# 3) Fechas internas de control dentro del texto (si vienen).
+fechas:
+  registro: 'registro del expediente:\s*(\d{4}-\d{2}-\d{2})'
+  limite: 'fecha objetivo de atencion interna:\s*(\d{4}-\d{2}-\d{2})'
+  atencion: 'fecha de atencion registrada:\s*(\d{4}-\d{2}-\d{2})'
+
+# 4) Norma de referencia. `norma_rag`: codigo con el que el DL 1106 estaria
+#    ingerido en el RAG. Si no esta ingerido, la cita sale NO_DISPONIBLE_EN_CORPUS.
+norma:
+  etiqueta: "Art. {articulo} (DL 1106, texto original)"
+  norma_rag: "Decreto Legislativo N° 1106"
+  fuente_legal_sin_corpus: "NO_DISPONIBLE_EN_CORPUS (falta ingerir DL-1106-LPDerecho.pdf)"
+
+textos:
+  POSIBLE_INCUMPLIMIENTO:
+    cumple: NO_DETERMINABLE_CON_CERTEZA_POSIBLES_INDICIOS
+    prioridad: ALTA
+    por_que: "Se describen operaciones o hechos que sugieren posible lavado de activos ({senales}). Se requiere comprobar origen ilicito, conocimiento o deber de presumir y finalidad de evitar identificacion, incautacion o decomiso; los indicios no constituyen condena."
+    evidencia: "Revisar soportes bancarios, origen economico, trazabilidad, titularidad y conexion entre hechos y bienes."
+    limitacion: "Sospecha para priorizar revision; no determina responsabilidad penal, pena ni culpabilidad."
+  SIN_INCUMPLIMIENTO_DETECTADO:
+    cumple: SIN_INCUMPLIMIENTO_DETECTADO_EN_LO_DESCRITO
+    prioridad: BAJA
+    por_que: "La descripcion senala origen de fondos declarado y sustentado ({senales}). No se exponen indicios concretos suficientes del origen ilicito ni del conocimiento o finalidad exigidos para una alerta penal. Esto no certifica cumplimiento absoluto."
+    evidencia: "Contrastar autenticidad y coherencia de contratos, declaraciones tributarias y movimientos bancarios antes de cerrar la revision."
+    limitacion: "No se detecta incumplimiento con los datos disponibles; no equivale a absolucion ni a certificacion legal."
+  INFORMACION_INSUFICIENTE:
+    cumple: NO_DETERMINABLE_DATOS_INSUFICIENTES
+    prioridad: MEDIA
+    por_que: "La descripcion carece de elementos verificables suficientes para sustentar o descartar lavado de activos ({senales}). Se debe solicitar documentacion complementaria, sin inferir culpabilidad."
+    evidencia: "Faltan identificaciones, soportes del origen de fondos, trazabilidad y/o documentacion de la operacion para analizar los elementos del tipo penal."
+    limitacion: "La informacion disponible no permite afirmar si se cumple o incumple; no asignar sancion."
+  sancion: "NO_DETERMINADA; requiere decisión judicial, no procede derivarla automáticamente"

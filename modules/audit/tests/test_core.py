@@ -35,7 +35,7 @@ def test_decisiones(audit, nombre, claims, query, fecha, esperada):
     kw = {"query": query} if query else {}
     res = audit.evaluate(audit_request(claims, effective_date=fecha, **kw))
     assert res.decision == esperada, res.checks["decision_reason"]
-    assert res.policy_version == "aml-audit-v1"
+    assert res.policy_version == "aml-audit-v2"
 
 
 def test_ros_tiene_score_alto_pero_escala(audit):

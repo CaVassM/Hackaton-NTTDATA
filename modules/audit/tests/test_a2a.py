@@ -35,7 +35,7 @@ def test_t1_agent_card_en_ruta_well_known(client):
     (itf,) = card["supportedInterfaces"]
     assert itf["url"].endswith("/a2a") and itf["protocolBinding"] == "JSONRPC" and itf["protocolVersion"] == "1.0"
     assert card["securitySchemes"]["bearer"]["httpAuthSecurityScheme"]["scheme"] == "bearer"
-    assert "aml-audit-v1" in card["description"]
+    assert "aml-audit-v2" in card["description"]
 
 
 # ------------------------------------------------------------------- T2
@@ -48,7 +48,7 @@ def test_t2_token_valido_evalua_y_devuelve_audit_result(client, spy):
     msg = body["result"]["message"]
     assert msg["role"] == "ROLE_AGENT" and msg["metadata"]["skill"] == "audit_candidate_response"
     result = AuditResult.model_validate(next(p["data"] for p in msg["parts"] if "data" in p))
-    assert result.decision == Decision.ALLOW and result.policy_version == "aml-audit-v1"
+    assert result.decision == Decision.ALLOW and result.policy_version == "aml-audit-v2"
     assert spy.calls == 1
 
 
@@ -79,7 +79,7 @@ def test_t4_sin_token_o_invalido_401_sin_evaluar(client, spy, headers):
 
 
 def test_t4_sin_tokens_configurados_nadie_entra(spy, tmp_path):
-    s = AuditSettings(log_dir=tmp_path, a2a_agent_tokens={}, a2a_allowed_agents=["copilot"])
+    s = AuditSettings(log_dir=tmp_path, audit_dir=tmp_path / "audit", a2a_agent_tokens={}, a2a_allowed_agents=["copilot"])
     with TestClient(create_app(spy, s)) as c:
         assert c.post("/a2a", json=send_message(ok_request()), headers={"Authorization": "Bearer x"}).status_code == 401
     assert spy.calls == 0

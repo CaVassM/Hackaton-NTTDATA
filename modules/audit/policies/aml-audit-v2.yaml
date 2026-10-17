@@ -1,0 +1,44 @@
+# Politica de auditoria AML / normativa. Versionada: cambiar reglas = nueva
+# version de archivo (aml-audit-v2.yaml) y AUDIT_POLICY_PATH.
+policy_version: aml-audit-v2
+
+# Orden de reglas (fijo en el motor):
+#   1) algun hallazgo critico          -> BLOCK   (siempre, ignora el score)
+#   2) requires_human_approval         -> ESCALATE
+#   3) score determinista >= allow     -> ALLOW ; >= warn -> WARN ; si no BLOCK
+#   4) techos: si aplica alguno, la decision no puede ser mas permisiva que su maximo
+thresholds:
+  allow: 85
+  warn: 60
+
+# Peso de cada validador determinista en el score (se normalizan).
+# PASS = 1, WARN = warn_credit, FAIL = 0; un validador sin hallazgos cuenta 1.
+weights:
+  citation: 0.6
+  regulatory: 0.4
+warn_credit: 0.5
+
+risk_levels:
+  ALLOW: bajo
+  WARN: medio
+  BLOCK: alto
+  ESCALATE: alto
+
+# Consultas que la IA NO decide: se escalan a un humano. Regex sobre texto en
+# minusculas y sin tildes (query + afirmaciones).
+sensitive_patterns:
+  ros: '\bros\b|reporte de operacion(es)? sospechosa'
+  uif: '\buif\b|unidad de inteligencia financiera'
+  bloqueo_cuenta: '\bbloque(ar|o|e)\b.{0,20}\bcuenta'
+  cierre_cuenta: '\b(cierre|cerrar|cancelar|cancelacion)\b.{0,20}\bcuenta'
+  congelamiento: '\bcongela(r|miento|cion)\b'
+
+# v2: techos de decision. Solo RESTRINGEN (ALLOW -> WARN); nunca relajan un
+# BLOCK ni un ESCALATE. Un techo aplica si el candidato tiene algun claim de
+# los tipos listados O si el use_case esta en la lista.
+techos:
+  exposicion_potencial:
+    max_decision: WARN
+    motivo: "Incluye exposicion potencial / datos del caso: no es una sancion determinada"
+    claim_types: [dato_caso]
+    use_cases: [reporte_cumplimiento, compliance, evaluacion_caso]

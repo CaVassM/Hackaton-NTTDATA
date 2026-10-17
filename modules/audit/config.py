@@ -8,7 +8,9 @@ _HERE = Path(__file__).resolve().parent
 
 class AuditSettings(BaseAppSettings):
     # Politica versionada: cada AuditResult lleva su policy_version.
-    audit_policy_path: Path = _HERE / "policies" / "aml-audit-v1.yaml"
+    audit_policy_path: Path = _HERE / "policies" / "aml-audit-v2.yaml"
+    # Persistencia append-only + cadena de hashes (audit.sqlite).
+    audit_dir: Path = PROJECT_ROOT / "data" / "processed" / "audit"
 
     # --- A2A ---
     # URL publica con la que el auditor se anuncia en su Agent Card.
@@ -20,6 +22,10 @@ class AuditSettings(BaseAppSettings):
     # Autorizacion: identidades que pueden pedir auditorias. JSON en .env:
     #   A2A_ALLOWED_AGENTS='["copilot"]'
     a2a_allowed_agents: list[str] = ["copilot"]
+
+    @property
+    def audit_db_path(self) -> Path:
+        return self.audit_dir / "audit.sqlite"
 
     @property
     def audit_log_path(self) -> Path:

@@ -83,15 +83,21 @@ class RagFacade:
         fecha: FechaLike = None,
         top_k: int | None = None,
         incluir_proyectos: bool = False,
+        norma: str | None = None,
     ) -> ResultadoBusqueda:
-        """Busqueda hibrida filtrada por vigencia. Sin fecha => hoy."""
+        """Busqueda hibrida filtrada por vigencia. Sin fecha => hoy.
+
+        `norma` (opcional, cualquier forma del codigo: "Res. SBS 2660-2015")
+        restringe a los articulos de esa norma. NormaNoEncontrada si no existe.
+        """
         if not query or not query.strip():
             raise RagError("query vacia")
         if top_k is None:  # `or` convertiria un top_k=0 invalido en el default
             top_k = self.settings.rag_default_top_k
         if not 1 <= top_k <= MAX_TOP_K:
             raise RagError(f"top_k debe estar entre 1 y {MAX_TOP_K}")
-        return self._retrieval.search(query.strip(), _fecha(fecha), top_k, incluir_proyectos)
+        codigo = self._temporal.resolver_codigo(norma) if norma else None
+        return self._retrieval.search(query.strip(), _fecha(fecha), top_k, incluir_proyectos, norma=codigo)
 
     def answer(self, pregunta: str, fecha: FechaLike = None, top_k: int | None = None) -> Respuesta:
         """Stub extractivo: la generacion con LLM es de otro modulo."""
@@ -103,6 +109,10 @@ class RagFacade:
 
     def historial(self, norma: str, articulo: str) -> list[VersionDetalle]:
         return self._temporal.historial(norma, articulo)
+
+    def listar_versiones(self, norma: str, fecha: FechaLike = None) -> list[VersionDetalle]:
+        """Versiones vigentes de todos los articulos de `norma` en `fecha` (hoy si None)."""
+        return self._temporal.listar_versiones(norma, _fecha(fecha))
 
     def cambios_por_norma(self, codigo: str) -> CambiosNorma:
         return self._temporal.cambios_por_norma(codigo)
