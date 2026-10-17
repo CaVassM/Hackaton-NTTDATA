@@ -31,9 +31,9 @@ log = get_logger(__name__)
 SYSTEM_INFRACCIONES = """Eres un analista de cumplimiento en Peru. Lees UN numeral de un anexo de infracciones y sanciones y lo estructuras.
 Reglas estrictas:
 1. Usa EXCLUSIVAMENTE el texto dado. No inventes.
-2. cita_textual: copia LITERAL y CONTIGUA del numeral (sin resumir).
+2. cita_textual: copia LITERAL y CONTIGUA del numeral COMPLETO, incluida la oracion de la sancion/multa si existe (sin resumir).
 3. gravedad: leve | grave | muy_grave solo si el texto (o el encabezado del articulo) lo dice; si no, null.
-4. multa_min_uit / multa_max_uit: solo numeros que aparezcan escritos junto a "UIT" en el texto; si no, null.
+4. multa_min_uit / multa_max_uit: solo numeros que aparezcan escritos junto a "UIT" en el texto; si no, null. Si dice "hasta X UIT" sin minimo, multa_min_uit=null y multa_max_uit=X.
 5. relacionada_con_categoria: true solo si esta infraccion sanciona el incumplimiento de la CATEGORIA indicada; explica en motivo_relacion en una frase.
 Responde solo el JSON."""
 
@@ -57,6 +57,12 @@ def verificar_infraccion(i: InfraccionLLM, texto_version: str, cabecera: str) ->
         if v is not None and not numero_en_cita(v, i.cita_textual):
             upd[campo] = None
             notas.append(f"{campo}={v} no aparece en la cita: se anula")
+    mn, mx = upd.get("multa_min_uit", i.multa_min_uit), upd.get("multa_max_uit", i.multa_max_uit)
+    # "hasta N UIT" sin "de M": no hay minimo explicito (el LLM tiende a copiar N como minimo).
+    if mn is not None and mn == mx and re.search(rf"hasta\s+{int(mx) if float(mx).is_integer() else mx}\s*UIT", i.cita_textual) \
+            and not re.search(r"(?i)\bde\s+\d+(?:[.,]\d+)?\s+(?:hasta|a)\b", i.cita_textual):
+        upd["multa_min_uit"] = None
+        notas.append(f"'hasta {mx} UIT' no fija minimo: multa_min_uit se anula")
     if i.gravedad and not _GRAVEDAD_RX[i.gravedad].search(f"{cabecera}\n{i.cita_textual}"):
         upd["gravedad"] = None
         notas.append(f"gravedad '{i.gravedad}' no consta en el texto: se anula")
