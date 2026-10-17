@@ -25,6 +25,17 @@ def test_health(client):
     assert "reachable" in h["ollama"] and h["status"] in ("ok", "degradado")
 
 
+def test_cors_permite_origenes_del_frontend(client):
+    r = client.options("/health", headers={
+        "Origin": "http://localhost:5173",
+        "Access-Control-Request-Method": "GET",
+        "Access-Control-Request-Headers": "content-type",
+    })
+    assert r.status_code == 200
+    assert r.headers["access-control-allow-origin"] == "http://localhost:5173"
+    assert "GET" in r.headers["access-control-allow-methods"]
+
+
 def test_schema_para_los_equipos(client):
     s = client.get("/cases/schema").json()
     assert {"operacion_calificada_sospechosa", "ingreso_empleado"} <= set(s["tipos_evento"])

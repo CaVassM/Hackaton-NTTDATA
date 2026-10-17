@@ -12,6 +12,7 @@ from typing import Any
 
 import httpx
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.schemas import HealthOut
@@ -33,6 +34,7 @@ class AppSettings(BaseAppSettings):
     # Agente auditor A2A (proceso aparte, ver scripts/start_backend.py).
     nanda_enabled: bool = False
     a2a_public_url: str = "http://localhost:8100"
+    frontend_allowed_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 
 @dataclass
@@ -111,6 +113,13 @@ def create_app(container: Container | None = None) -> FastAPI:
         description="RAG temporal SBS, auditor de respuestas, obligaciones/plazos/exposicion y evaluacion de casos. "
                     "Todo local (Ollama). Datos de demo: ver /cases/schema y docs/CASOS.md.",
         lifespan=lifespan,
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=(container.settings.frontend_allowed_origins if container else AppSettings().frontend_allowed_origins),
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["Content-Type"],
     )
     app.state.container = container
 

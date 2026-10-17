@@ -183,6 +183,18 @@ El script muestra la URL pública y la documentación en `/docs`. El Quick Tunne
 | GET | `/rag/version/{id}` · `/vigente?fecha` · `/posteriores` | Consultas por versión |
 | GET | `/rag/health` | Ollama + conteo de índices |
 
+### Frontend React
+
+Con el backend iniciado en otra terminal, ejecuta:
+
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
+
+Vite abre `http://localhost:5173` y reenvía `/api` al backend en `http://127.0.0.1:8000`. Para publicar el frontend en otro origen, configura `VITE_API_URL` con la URL del backend y agrega el origen del frontend a `FRONTEND_ALLOWED_ORIGINS` en `.env`.
+
 ### Desde otro módulo (la única forma permitida)
 
 ```python
