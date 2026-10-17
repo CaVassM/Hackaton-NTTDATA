@@ -27,7 +27,7 @@ def server(spy, settings):
 def test_copiloto_pide_auditoria_y_recibe_resultado(server, registry, spy):
     client = AuditClient(token=TOKENS["copilot"], registry=registry, http=server)
     result = client.request_audit(ok_request())
-    assert result["decision"] == "ALLOW" and result["policy_version"] == "aml-audit-v1"
+    assert result["decision"] == "ALLOW" and result["policy_version"] == "aml-audit-v2"
     # Los enteros llegan como enteros (no 6.0) aunque viajen por A2A.
     assert any(f["details"].get("version_id") == V_ART2_VIGENTE for f in result["findings"])
     assert spy.calls == 1

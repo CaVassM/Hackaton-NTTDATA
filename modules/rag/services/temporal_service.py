@@ -41,6 +41,17 @@ class TemporalService:
         cod, num = self._articulo(norma, articulo)
         return self.sql.version_en_fecha(cod, num, fecha or self.today())
 
+    def listar_versiones(self, norma: str, fecha: date | None = None) -> list[VersionDetalle]:
+        """Versiones de los articulos de `norma` que regian en `fecha` (hoy si None),
+        una por articulo, incluidas las creadas por modificatorias."""
+        cod = self._norma(norma)
+        f = fecha or self.today()
+        return [d for d in self.sql.versiones_de_norma(cod) if d.vigente_en(f)]
+
+    def resolver_codigo(self, norma: str) -> str:
+        """Codigo canonico de una norma existente (NormaNoEncontrada si no existe)."""
+        return self._norma(norma)
+
     def historial(self, norma: str, articulo: str) -> list[VersionDetalle]:
         cod, num = self._articulo(norma, articulo)
         return self.sql.historial(cod, num)

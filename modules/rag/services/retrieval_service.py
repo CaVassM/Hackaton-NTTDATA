@@ -62,7 +62,10 @@ class RetrievalService:
         fecha: date | None = None,
         top_k: int = 5,
         incluir_proyectos: bool = False,
+        norma: str | None = None,
     ) -> ResultadoBusqueda:
+        """`norma` (codigo ya normalizado) restringe a los articulos de esa norma,
+        incluidas las versiones que le crearon sus modificatorias."""
         t0 = time.perf_counter()
         tiempos: dict[str, float] = {}
 
@@ -90,6 +93,9 @@ class RetrievalService:
             fused = rrf([[v for v, _ in dense], [v for v, _ in lex]], self.rrf_k)
             ordered = sorted(fused, key=fused.get, reverse=True)
             vigentes = self.sql.filtrar_vigentes(ordered, fecha, incluir_proyectos)
+            if norma is not None:
+                de_norma = {d.version_id for d in self.sql.get_detalles(ordered) if d.norma_codigo == norma}
+                vigentes &= de_norma
             kept = [v for v in ordered if v in vigentes]
             saturado = len(dense) >= k or len(lex) >= k
             if len(kept) >= top_k or not saturado or k >= total:
@@ -119,6 +125,7 @@ class RetrievalService:
                     "fecha": fecha,
                     "fecha_por_defecto": fecha_por_defecto,
                     "incluir_proyectos": incluir_proyectos,
+                    "norma": norma,
                     "top_k": top_k,
                     "candidatos_denso": [v for v, _ in dense],
                     "candidatos_lexico": [v for v, _ in lex],

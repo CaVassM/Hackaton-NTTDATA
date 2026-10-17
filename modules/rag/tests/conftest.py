@@ -16,6 +16,10 @@ CAMBIO = date(2026, 7, 1)  # entrada en vigencia de la modificatoria
 BASE = "Resolución SBS N° 1234-2025"
 MOD = "Resolución SBS N° 567-2026"
 PROY = "Proyecto de Resolución SBS PR-045-2026"
+# Corpus sintetico: 01 base, 02 modificatoria, 03 proyecto (rag) + 04 anexo SINTETICO de
+# infracciones (lo usa compliance; emitido despues, asi sus version_id van al final).
+N_ARCHIVOS = 4
+N_VERSIONES = 8 + 3  # 3 base + 2 modificatoria + 1 modificada + 2 proyecto + 3 anexo sintetico
 
 
 class FakeEmbeddingClient(EmbeddingClient):

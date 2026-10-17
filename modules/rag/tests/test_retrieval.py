@@ -105,3 +105,22 @@ def test_reranker_inyectado_reordena(tmp_path):
     base = _ids(rag.search(Q, top_k=3))
     rag._retrieval.reranker = Invertido()
     assert _ids(rag.search(Q, top_k=3)) != base
+
+
+# --- filtro por norma (lo usa modules/compliance) ---
+def test_search_filtra_por_norma(rag, art2):
+    from modules.rag.tests.conftest import MOD
+
+    res = rag.search(Q, top_k=10, norma="Res. SBS N.° 567-2026")  # cualquier forma del codigo
+    assert res.fragmentos and all(f.cita.norma == MOD for f in res.fragmentos)
+    # El art. 2 modificado pertenece a la norma BASE aunque lo creara la modificatoria.
+    res_base = rag.search(Q, top_k=10, norma=BASE)
+    assert all(f.cita.norma == BASE for f in res_base.fragmentos)
+    assert art2[1].version_id in _ids(res_base)
+
+
+def test_search_norma_inexistente_es_error(rag):
+    from modules.rag import NormaNoEncontrada
+
+    with pytest.raises(NormaNoEncontrada):
+        rag.search(Q, norma="Resolución SBS N° 1-1990")

@@ -72,7 +72,7 @@ class AuditFacade:
                 findings.append(Finding(validator=v.name, status=FindingStatus.FAIL, critical=True,
                                         reason=f"Error interno del validador: {type(exc).__name__}"))
 
-        outcome = self._engine.decide(findings)
+        outcome = self._engine.decide(findings, req)
         checks: dict[str, Any] = {
             v.name: {
                 "status": max((f.status for f in findings if f.validator == v.name),

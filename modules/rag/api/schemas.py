@@ -13,6 +13,7 @@ class SearchRequest(BaseModel):
     fecha: date | None = Field(None, description="Fecha de vigencia a consultar. Omitida = hoy.")
     top_k: int = Field(5, ge=1, le=50)
     incluir_proyectos: bool = False
+    norma: str | None = Field(None, description="Restringe a una norma, p. ej. 'Resolución SBS N° 2660-2015'.")
 
 
 class IngestRequest(BaseModel):

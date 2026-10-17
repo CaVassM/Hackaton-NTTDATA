@@ -35,7 +35,7 @@ def test_t1_agent_card_en_ruta_well_known(client):
     (itf,) = card["supportedInterfaces"]
     assert itf["url"].endswith("/a2a") and itf["protocolBinding"] == "JSONRPC" and itf["protocolVersion"] == "1.0"
     assert card["securitySchemes"]["bearer"]["httpAuthSecurityScheme"]["scheme"] == "bearer"
-    assert "aml-audit-v1" in card["description"]
+    assert "aml-audit-v2" in card["description"]
 
 
 # ------------------------------------------------------------------- T2
@@ -48,7 +48,7 @@ def test_t2_token_valido_evalua_y_devuelve_audit_result(client, spy):
     msg = body["result"]["message"]
     assert msg["role"] == "ROLE_AGENT" and msg["metadata"]["skill"] == "audit_candidate_response"
     result = AuditResult.model_validate(next(p["data"] for p in msg["parts"] if "data" in p))
-    assert result.decision == Decision.ALLOW and result.policy_version == "aml-audit-v1"
+    assert result.decision == Decision.ALLOW and result.policy_version == "aml-audit-v2"
     assert spy.calls == 1
 
 

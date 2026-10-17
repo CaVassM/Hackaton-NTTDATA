@@ -28,4 +28,5 @@ a2a-sdk==1.2.2
 pydantic==2.14.1
 pydantic-settings==2.14.2
 python-dotenv==1.2.2   # pydantic-settings lo usa para leer .env
-PyYAML==6.0.3          # politicas de audit y registro de agentes
+PyYAML==6.0.3          # politicas de audit, registro de agentes, categorias de compliance
+tqdm==4.70.1           # barra de progreso de la extraccion offline

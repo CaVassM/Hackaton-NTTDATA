@@ -8,7 +8,7 @@ _HERE = Path(__file__).resolve().parent
 
 class AuditSettings(BaseAppSettings):
     # Politica versionada: cada AuditResult lleva su policy_version.
-    audit_policy_path: Path = _HERE / "policies" / "aml-audit-v1.yaml"
+    audit_policy_path: Path = _HERE / "policies" / "aml-audit-v2.yaml"
 
     # --- A2A ---
     # URL publica con la que el auditor se anuncia en su Agent Card.

@@ -13,7 +13,7 @@ flowchart LR
     SCH --> F[AuditFacade.evaluate]
     F --> V1[CitationValidator] & V2[RegulatoryValidator] & V3[SensitiveQueryDetector]
     V1 & V2 -- "RagFacade (API publica)" --> RAG[(rag)]
-    V1 & V2 & V3 --> E["DecisionEngine<br/>aml-audit-v1.yaml<br/>critico→BLOCK · humano→ESCALATE · score"]
+    V1 & V2 & V3 --> E["DecisionEngine<br/>aml-audit-v2.yaml<br/>critico→BLOCK · humano→ESCALATE · score"]
     E --> S[SafeResponseBuilder<br/>sin LLM] --> COP
 ```
 
