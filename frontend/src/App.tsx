@@ -1,7 +1,7 @@
 import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useState } from "react";
 import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, Health, SearchResult } from "./api";
 import { ClampedText, FragmentCard } from "./ResultCards";
-import { AgentFlow, ExpedienteFlow, ObligationList } from "./CaseParts";
+import { AgentFlow, ExpedienteFlow, ExpedienteSections, ObligationList, pretty } from "./CaseParts";
 import ProposalPage from "./Proposal";
 import "./import.css";
 import "./results.css";
@@ -346,7 +346,7 @@ function displayValue(value: unknown): string {
 }
 
 function ExpedienteFields({ row, fields }: { row: Record<string, unknown>; fields: Array<[string, string]> }) {
-  const values = fields.map(([key, label]) => [label, displayValue(row[key])] as const).filter(([, value]) => value);
+  const values = fields.map(([key, label]) => [label, pretty(displayValue(row[key]))] as const).filter(([, value]) => value);
   if (!values.length) return <Empty>Este expediente no contiene datos en esta sección.</Empty>;
   return <dl className="data-list">{values.map(([label, value]) => <Fragment key={label}><dt>{label}</dt><dd>{value}</dd></Fragment>)}</dl>;
 }
@@ -357,16 +357,10 @@ function ExpedienteDetail({ result, onBack }: { result: ExpedienteResult | null;
   const outcome = String(row.resultado_esperado ?? "INFORMACION_INSUFICIENTE");
   const label = outcome === "POSIBLE_INCUMPLIMIENTO" ? "Posible incumplimiento" : outcome === "SIN_INCUMPLIMIENTO_DETECTADO" ? "Sin indicios detectados" : "Información insuficiente";
   const tone = outcome === "POSIBLE_INCUMPLIMIENTO" ? "danger" : outcome === "SIN_INCUMPLIMIENTO_DETECTADO" ? "good" : "warn";
-  const sections: Array<{ title: string; fields: Array<[string, string]> }> = [
-    { title: "Hechos y evidencia", fields: [["hechos_relevantes_del_caso", "Hechos relevantes"], ["evidencia_o_faltantes", "Evidencia y faltantes"], ["cumple_segun_evidencia", "Evaluación según evidencia"], ["por_que_si_o_no", "Fundamento de la evaluación"]] },
-    { title: "Norma y fundamento", fields: [["norma_a_consultar", "Norma consultada"], ["razon_de_aplicacion_normativa", "Aplicación al caso"], ["fuente_legal", "Fuente legal"], ["version_id_citada", "Versión citada"], ["sancion_aplicable", "Sanción aplicable"]] },
-    { title: "Fechas y alertas internas", fields: [["fecha_registro", "Fecha de registro"], ["fecha_limite_interna", "Fecha límite interna"], ["fecha_atencion", "Fecha de atención"], ["dias_de_retraso_interno", "Días de retraso"], ["explicacion_plazo", "Explicación del plazo"], ["prioridad", "Prioridad"], ["alerta_normativa_esperada", "Alerta normativa"], ["alerta_plazo_interno_esperada", "Alerta de plazo interno"], ["tipo_alerta_esperada", "Tipo de alerta"]] },
-    { title: "Auditoría y revisión humana", fields: [["decision_auditoria", "Decisión de auditoría"], ["revision_humana", "Estado de revisión humana"], ["audit_id", "Identificador de auditoría"], ["senales_detectadas", "Señales detectadas"], ["reglas_version", "Versión de reglas"], ["modalidad_analisis", "Modalidad de análisis"], ["fuente_patron", "Fuente del patrón"], ["limitacion_de_la_evaluacion", "Limitaciones"]] },
-  ];
   return <section className="page"><button className="text-button back" onClick={onBack}>← Gestión de casos</button><div className="page-heading compact"><div><span className="eyebrow">EXPEDIENTE IMPORTADO</span><h1>{displayValue(row.id_caso) || "Sin identificador"}</h1><p>Resultado de revisión del CSV con evidencia, norma y trazabilidad.</p></div><div className="decision"><Pill value={label} tone={tone} /><Pill value={displayValue(row.decision_auditoria) || "SIN_AUDITORIA"} /><small>La clasificación requiere revisión humana.</small></div></div>
     <div className="detail-grid"><article className="panel highlight"><div className="panel-title"><h2>Conclusión</h2><Pill value={displayValue(row.revision_humana) || "PENDIENTE_REVISION"} /></div><p className="summary">{displayValue(row.por_que_si_o_no) || "No se guardó una explicación para este resultado."}</p>{displayValue(row.limitacion_de_la_evaluacion) && <p className="case-description">Limitación: {displayValue(row.limitacion_de_la_evaluacion)}</p>}</article><article className="panel"><div className="panel-title"><h2>Identificación</h2></div><ExpedienteFields row={row} fields={[["id_caso", "ID del expediente"], ["resultado_esperado", "Resultado"], ["prioridad", "Prioridad"], ["revision_humana", "Revisión humana"]]} /></article></div>
     <ExpedienteFlow result={result} />
-    <div className="two-col wide-left">{sections.map((section) => <article className="panel" key={section.title}><div className="panel-title"><h2>{section.title}</h2></div><ExpedienteFields row={row} fields={section.fields} /></article>)}</div>
+    <ExpedienteSections result={result} />
   </section>;
 }
 
