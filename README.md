@@ -12,25 +12,135 @@ Los demás módulos (orquestador, contradicciones, políticas internas, UI) se a
 
 ---
 
-## Instalación
+## Cómo correr todo, paso a paso (Windows)
 
-Requisitos: Python 3.11, [Ollama](https://ollama.com) corriendo, GPU opcional (los modelos caben en ~5 GB de VRAM).
+Los comandos son para **PowerShell** (o Anaconda Prompt) y se ejecutan **desde la carpeta raíz del repo**. Si usas Git Bash, cambia `Copy-Item` por `cp` y `curl.exe` por `curl`.
 
-```bash
-# 1. Entorno
+### 0. Requisitos (una sola vez)
+
+| Herramienta | Para qué | Cómo obtenerla |
+|---|---|---|
+| Git | clonar el repo | https://git-scm.com |
+| Anaconda o Miniconda | crear el entorno de Python 3.11 | https://www.anaconda.com/download |
+| Ollama | correr los modelos en tu PC (LLM y embeddings) | https://ollama.com/download. Al instalarlo queda corriendo en segundo plano (ícono de la llama en la barra de tareas) |
+
+GPU opcional. Los dos modelos caben en unos 5 GB de VRAM y sin GPU corren más lento.
+
+### 1. Clonar y crear el entorno
+
+```powershell
+git clone https://github.com/CaVassM/Hackaton-NTTDATA.git
+cd Hackaton-NTTDATA
 conda create -n hackaton-ntt python=3.11 -y
 conda activate hackaton-ntt
-pip install -r requirements-dev.txt        # o requirements.txt sin tests
-
-# 2. Modelos locales
-ollama pull qwen3.5:4b                     # LLM (LLM_MODEL)
-ollama pull qwen3-embedding:0.6b-q8_0      # embeddings cuantizados Q8_0 (~640 MB)
-
-# 3. Configuración
-cp .env.example .env                       # ajustar si hace falta
+pip install -r requirements-dev.txt
 ```
 
-Comprobar: `python -m modules.rag.cli health`
+> Si PowerShell responde `conda : no se reconoce...`, abre **Anaconda Prompt**, o ejecuta una vez `conda init powershell` y vuelve a abrir la terminal.
+
+### 2. Descargar los modelos
+
+```powershell
+ollama pull qwen3.5:4b
+ollama pull qwen3-embedding:0.6b-q8_0
+ollama list            # deben aparecer los dos
+```
+
+### 3. Crear el archivo `.env`
+
+**Qué es:** un archivo de texto con la configuración local (qué modelos usar, puertos y tokens de acceso entre agentes). El código lo lee al arrancar.
+
+**Por qué no viene en el repo:** contiene **secretos** (los tokens), así que está en `.gitignore` y cada persona crea el suyo. En el repo solo está la plantilla **`.env.example`**, con todas las variables y valores por defecto.
+
+**Cómo crearlo:**
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Con eso ya tienes un `.env` que funciona. Lo único que conviene cambiar son los **tokens**, que son las contraseñas entre agentes:
+
+1. Genera un token aleatorio:
+   ```powershell
+   python -c "import secrets; print(secrets.token_urlsafe(32))"
+   ```
+2. Abre `.env` (con VS Code, Bloc de notas, etc.) y pega **el mismo** token en estas dos líneas:
+   ```ini
+   A2A_AGENT_TOKENS={"copilot": "PEGA-AQUI-EL-TOKEN"}
+   NANDA_AGENT_TOKEN=PEGA-AQUI-EL-TOKEN
+   ```
+
+Son dos líneas porque cada una la lee un lado distinto. `A2A_AGENT_TOKENS` la usa el **auditor**: es la lista de llaves que acepta y a qué agente pertenece cada una. `NANDA_AGENT_TOKEN` la usa el **copiloto**: es la llave que presenta al pedir una auditoría. Si no coinciden, el auditor responde **401**.
+
+Qué significa cada variable:
+
+| Variable | Valor por defecto | ¿Tocarla? |
+|---|---|---|
+| `OLLAMA_HOST` | `http://localhost:11434` | No, salvo que Ollama corra en otra máquina |
+| `LLM_MODEL` / `EMBED_MODEL` | `qwen3.5:4b` / `qwen3-embedding:0.6b-q8_0` | No (si cambias `EMBED_MODEL`, vuelve a ingestar) |
+| `LLM_THINK`, `LLM_TEMPERATURE`, `LLM_NUM_CTX` | `false`, `0.0`, `8192` | No |
+| `RAG_RRF_K`, `RAG_CANDIDATES_K`, `USE_RERANKER` | `60`, `30`, `false` | No |
+| `A2A_AGENT_TOKENS` | `{"copilot": "cambia-este-token"}` | **Sí**: pon tu token |
+| `A2A_ALLOWED_AGENTS` | `["copilot"]` | No (agentes autorizados a pedir auditorías) |
+| `A2A_PUBLIC_URL` | `http://localhost:8100` | Solo si cambias el puerto del auditor |
+| `NANDA_AGENT_ID` / `NANDA_AGENT_TOKEN` | `copilot` / `cambia-este-token` | **Sí** el token: el mismo de arriba |
+
+> Si no existe `.env`, todo usa los valores por defecto, salvo los tokens: quedan vacíos y el auditor rechaza todo con 401.
+> El `.env` se lee **al arrancar**. Si lo editas, reinicia el servidor.
+
+### 4. Cargar la normativa (ingesta)
+
+```powershell
+python -m modules.rag.cli ingest data/raw/sinteticos
+python -m modules.rag.cli health            # "ok": true y 8 versiones en los índices
+```
+
+La ingesta lee las normas, guarda las versiones en `data/processed/` y calcula los embeddings con Ollama. Solo hay que repetirla si agregas normas.
+
+### 5. Levantar los servicios (una terminal para cada uno)
+
+En cada terminal nueva, primero `conda activate hackaton-ntt` y luego `cd` a la raíz del repo.
+
+```powershell
+# Terminal 1: auditor (agente A2A). Es el que usa el copiloto.
+uvicorn modules.audit.api.app:app --port 8100
+
+# Terminal 2 (opcional): API del RAG. Documentación interactiva en http://localhost:8000/docs
+uvicorn modules.rag.api.app:app --port 8000
+```
+
+### 6. Probar que todo responde
+
+Con el auditor corriendo (terminal 1), en otra terminal:
+
+```powershell
+# a) Agent Card (también puedes abrir esta URL en el navegador)
+curl.exe http://localhost:8100/.well-known/agent-card.json
+
+# b) Lo que hará el copiloto: pedir una auditoría con el cliente nanda (usa el .env)
+python scripts/demo_audit_client.py
+```
+
+Lo esperado en (b): una respuesta correcta → `ALLOW`, y el caso demo de la UIF → `BLOCK`, con el motivo por afirmación. Para probar con curl, mira [modules/audit/README.md](modules/audit/README.md).
+
+### 7. Correr los tests
+
+```powershell
+pytest -q            # no necesita los servidores levantados; con Ollama apagado, 3 tests se saltan
+```
+
+### Problemas frecuentes
+
+| Síntoma | Causa y solución |
+|---|---|
+| `401` del auditor | Falta el token en `.env`, `A2A_AGENT_TOKENS` y `NANDA_AGENT_TOKEN` no coinciden, o no reiniciaste uvicorn después de editar `.env` |
+| `403` del auditor | El agente no está en `A2A_ALLOWED_AGENTS` |
+| `Ollama no esta corriendo` / `Failed to connect` | Abre la app de Ollama o ejecuta `ollama serve` |
+| `"ok": false` en `health` con un modelo en `false` | Falta descargarlo: `ollama pull <modelo>` |
+| El auditor dice que una versión no existe | No hiciste la ingesta (paso 4) |
+| `400` al usar curl con tildes en el JSON | Manda el JSON desde un archivo: `--data-binary @archivo.json` |
+| En PowerShell, `curl` se comporta raro | `curl` es un alias de `Invoke-WebRequest`; usa `curl.exe` |
+| `address already in use` | El puerto está ocupado: usa otro con `--port`, y en el auditor también cambia `A2A_PUBLIC_URL` |
 
 ## Uso
 
