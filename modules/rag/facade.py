@@ -87,7 +87,8 @@ class RagFacade:
         """Busqueda hibrida filtrada por vigencia. Sin fecha => hoy."""
         if not query or not query.strip():
             raise RagError("query vacia")
-        top_k = top_k or self.settings.rag_default_top_k
+        if top_k is None:  # `or` convertiria un top_k=0 invalido en el default
+            top_k = self.settings.rag_default_top_k
         if not 1 <= top_k <= MAX_TOP_K:
             raise RagError(f"top_k debe estar entre 1 y {MAX_TOP_K}")
         return self._retrieval.search(query.strip(), _fecha(fecha), top_k, incluir_proyectos)
