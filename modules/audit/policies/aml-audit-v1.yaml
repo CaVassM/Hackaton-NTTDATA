@@ -1,0 +1,33 @@
+# Politica de auditoria AML / normativa. Versionada: cambiar reglas = nueva
+# version de archivo (aml-audit-v2.yaml) y AUDIT_POLICY_PATH.
+policy_version: aml-audit-v1
+
+# Orden de reglas (fijo en el motor):
+#   1) algun hallazgo critico          -> BLOCK   (siempre, ignora el score)
+#   2) requires_human_approval         -> ESCALATE
+#   3) score determinista >= allow     -> ALLOW ; >= warn -> WARN ; si no BLOCK
+thresholds:
+  allow: 85
+  warn: 60
+
+# Peso de cada validador determinista en el score (se normalizan).
+# PASS = 1, WARN = warn_credit, FAIL = 0; un validador sin hallazgos cuenta 1.
+weights:
+  citation: 0.6
+  regulatory: 0.4
+warn_credit: 0.5
+
+risk_levels:
+  ALLOW: bajo
+  WARN: medio
+  BLOCK: alto
+  ESCALATE: alto
+
+# Consultas que la IA NO decide: se escalan a un humano. Regex sobre texto en
+# minusculas y sin tildes (query + afirmaciones).
+sensitive_patterns:
+  ros: '\bros\b|reporte de operacion(es)? sospechosa'
+  uif: '\buif\b|unidad de inteligencia financiera'
+  bloqueo_cuenta: '\bbloque(ar|o|e)\b.{0,20}\bcuenta'
+  cierre_cuenta: '\b(cierre|cerrar|cancelar|cancelacion)\b.{0,20}\bcuenta'
+  congelamiento: '\bcongela(r|miento|cion)\b'
