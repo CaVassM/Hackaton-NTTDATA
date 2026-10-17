@@ -1,0 +1,46 @@
+# Categorias de obligaciones LA/FT para bancos. Guian la extraccion: por cada
+# una se busca en el RAG (descripcion_busqueda) y el LLM extrae SOLO de los
+# articulos recuperados. `prioridad` menor = se procesa antes (demo: 1).
+# descripcion_busqueda usa el vocabulario del Reglamento (Res. SBS 2660-2015).
+version: 1
+categorias:
+  - codigo: BAN-001
+    nombre: Sistema de prevencion, manual y codigo de conducta
+    descripcion_busqueda: manual de prevención y gestión de riesgos de LA/FT y código de conducta aprobados por el directorio
+    prioridad: 2
+  - codigo: BAN-002
+    nombre: Oficial de cumplimiento
+    descripcion_busqueda: designación, funciones, dedicación y comunicación a la Superintendencia del oficial de cumplimiento
+    prioridad: 2
+  - codigo: BAN-003
+    nombre: Debida diligencia en el conocimiento del cliente
+    descripcion_busqueda: debida diligencia en el conocimiento del cliente, identificación, verificación y beneficiario final
+    prioridad: 2
+  - codigo: BAN-004
+    nombre: Reporte de operaciones sospechosas (ROS)
+    descripcion_busqueda: comunicar a la UIF-Perú el reporte de operaciones sospechosas por el oficial de cumplimiento y su plazo
+    prioridad: 1
+  - codigo: BAN-005
+    nombre: Registro de operaciones
+    descripcion_busqueda: registro de operaciones que igualen o superen el umbral, información contenida en el registro y su conservación
+    prioridad: 1
+  - codigo: BAN-006
+    nombre: Conservacion de documentos
+    descripcion_busqueda: conservación de documentos y registros por un plazo no menor a diez años
+    prioridad: 2
+  - codigo: BAN-007
+    nombre: Capacitacion en prevencion del LA/FT
+    descripcion_busqueda: programa de capacitación del personal y capacitaciones especializadas del oficial de cumplimiento al año
+    prioridad: 1
+  - codigo: BAN-008
+    nombre: Conocimiento de directores, gerentes, trabajadores y proveedores
+    descripcion_busqueda: conocimiento de directores, gerentes, trabajadores y proveedores, declaración jurada y antecedentes
+    prioridad: 3
+  - codigo: BAN-009
+    nombre: Evaluacion de riesgos LA/FT de productos y zonas
+    descripcion_busqueda: informe de evaluación de riesgos de LA/FT antes del lanzamiento de nuevos productos o incursión en nuevas zonas geográficas
+    prioridad: 3
+  - codigo: BAN-010
+    nombre: Informes y auditoria del sistema de prevencion
+    descripcion_busqueda: informes semestrales del oficial de cumplimiento al directorio y a la Superintendencia, auditoría interna y externa
+    prioridad: 3
