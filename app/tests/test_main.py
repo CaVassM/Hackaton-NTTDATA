@@ -36,6 +36,16 @@ def test_cors_permite_origenes_del_frontend(client):
     assert "GET" in r.headers["access-control-allow-methods"]
 
 
+def test_cors_permite_el_frontend_en_vercel(client):
+    r = client.options("/cases", headers={
+        "Origin": "https://hackaton-nttdata.vercel.app",
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "content-type",
+    })
+    assert r.status_code == 200
+    assert r.headers["access-control-allow-origin"] == "https://hackaton-nttdata.vercel.app"
+
+
 def test_schema_para_los_equipos(client):
     s = client.get("/cases/schema").json()
     assert {"operacion_calificada_sospechosa", "ingreso_empleado"} <= set(s["tipos_evento"])

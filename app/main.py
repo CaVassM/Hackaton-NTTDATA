@@ -34,7 +34,11 @@ class AppSettings(BaseAppSettings):
     # Agente auditor A2A (proceso aparte, ver scripts/start_backend.py).
     nanda_enabled: bool = False
     a2a_public_url: str = "http://localhost:8100"
-    frontend_allowed_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
+    frontend_allowed_origins: list[str] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://hackaton-nttdata.vercel.app",
+    ]
 
 
 @dataclass
