@@ -165,13 +165,13 @@ python -m modules.rag.cli historial "Resolución SBS N° 1234-2025" 2
 uvicorn modules.rag.api.app:app --reload     # docs en http://localhost:8000/docs
 ```
 
-Para levantar el backend completo y publicar temporalmente su API con Cloudflare Tunnel, instala `cloudflared` y ejecuta:
+El comando normal levanta el backend y publica temporalmente su API con Cloudflare Tunnel. Requiere `cloudflared` instalado:
 
 ```powershell
-python scripts/start_backend.py --cloudflare
+python scripts/start_backend.py
 ```
 
-El script muestra la URL pública y la documentación en `/docs`. El Quick Tunnel dura mientras corre el script y se cierra con `Ctrl+C`; cualquier persona con la URL puede acceder a la API durante ese tiempo.
+El script muestra la URL pública y la documentación en `/docs`. El Quick Tunnel dura mientras corre el script y se cierra con `Ctrl+C`; cualquier persona con la URL puede acceder a la API durante ese tiempo. Para dejar el backend solo en tu equipo, usa `python scripts/start_backend.py --no-cloudflare`.
 
 | Método | Ruta | Qué hace |
 |---|---|---|

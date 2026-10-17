@@ -7,8 +7,8 @@ from shared.config import PROJECT_ROOT
 SCRIPT = PROJECT_ROOT / "scripts" / "start_backend.py"
 
 
-def _run(env_file):
-    return subprocess.run([sys.executable, str(SCRIPT), "--dry-run", "--env-file", str(env_file)],
+def _run(env_file, *args):
+    return subprocess.run([sys.executable, str(SCRIPT), *args, "--dry-run", "--env-file", str(env_file)],
                           capture_output=True, text=True, encoding="utf-8", timeout=120, cwd=PROJECT_ROOT)
 
 
@@ -20,6 +20,15 @@ def test_dry_run_recorre_los_8_pasos(tmp_path):
     for n in range(1, 9):
         assert f"[{n}/8]" in r.stdout
     assert "Dry-run completo" in r.stdout and "se lanzaria backend" in r.stdout
+    assert "se expondria http://127.0.0.1:8000" in r.stdout
+
+
+def test_no_cloudflare_desactiva_el_tunnel_en_dry_run(tmp_path):
+    env = tmp_path / "ok.env"
+    env.write_text((PROJECT_ROOT / ".env.example").read_text(encoding="utf-8"), encoding="utf-8")
+    r = _run(env, "--no-cloudflare")
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "se expondria http://127.0.0.1:8000" not in r.stdout
 
 
 def test_falla_clara_sin_uit_valor(tmp_path):

@@ -1,12 +1,12 @@
 """Levanta TODO el backend con un solo comando (Windows / Linux / macOS).
 
     conda activate hackaton-ntt
-    python scripts/start_backend.py                 # verifica, prepara y levanta
+    python scripts/start_backend.py                 # verifica, levanta y abre Cloudflare Tunnel
+    python scripts/start_backend.py --no-cloudflare # levanta solo en local
     python scripts/start_backend.py --dry-run       # solo verifica (no instala, no levanta)
     python scripts/start_backend.py --reingest      # vuelve a preparar e ingerir la normativa
     python scripts/start_backend.py --reextract     # relanza la extraccion de compliance (background)
     python scripts/start_backend.py --port 8080
-    python scripts/start_backend.py --cloudflare    # publica la API con un Quick Tunnel temporal
 
 Pasos: 1 Python+deps · 2 .env · 3 Ollama+modelos · 4 bases · 5 normativa (rag)
        6 compliance · 7 servidores · 8 /health. Idempotente: si el backend ya
@@ -356,11 +356,11 @@ def iniciar_cloudflare(port: int) -> tuple[subprocess.Popen, str]:
     """Inicia un Quick Tunnel temporal y devuelve su proceso y URL publica."""
     cloudflared = shutil.which("cloudflared")
     if not cloudflared:
-        raise Falla("no se encontro 'cloudflared'", "instala cloudflared y vuelve a ejecutar con --cloudflare")
+        raise Falla("no se encontro 'cloudflared'", "instala cloudflared o ejecuta con --no-cloudflare")
 
     LOGS.mkdir(exist_ok=True)
     log = LOGS / "cloudflared.log"
-    with open(log, "ab") as salida:
+    with open(log, "wb") as salida:
         proc = subprocess.Popen(
             [cloudflared, "tunnel", "--no-autoupdate", "--url", f"http://127.0.0.1:{port}"],
             cwd=ROOT, stdout=salida, stderr=subprocess.STDOUT,
@@ -395,7 +395,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--reingest", action="store_true", help="volver a preparar e ingerir la normativa")
     ap.add_argument("--reextract", action="store_true", help="relanzar la extraccion de compliance (background)")
     ap.add_argument("--dry-run", action="store_true", help="solo verificar: no instala, no ingiere, no levanta")
-    ap.add_argument("--cloudflare", action="store_true", help="exponer la API con un Cloudflare Quick Tunnel temporal")
+    tunnel = ap.add_mutually_exclusive_group()
+    tunnel.add_argument("--cloudflare", dest="cloudflare", action="store_true", help=argparse.SUPPRESS)
+    tunnel.add_argument("--no-cloudflare", dest="cloudflare", action="store_false",
+                        help="no crear Cloudflare Tunnel; dejar el backend solo en localhost")
+    ap.set_defaults(cloudflare=True)
     ap.add_argument("--env-file", type=Path, default=ROOT / ".env")
     ap.add_argument("--no-warmup", action="store_true", help="no precalentar el LLM")
     a = ap.parse_args(argv)
