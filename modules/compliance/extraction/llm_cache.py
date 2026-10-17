@@ -40,7 +40,10 @@ class CachedStructuredLLM:
     def extract(self, version_id: int, messages: Sequence[ChatMessage], schema: type[T]) -> tuple[T | None, dict]:
         """Devuelve (resultado o None, meta {cached, ms, intentos, error})."""
         ph = self.prompt_hash(messages, schema)
-        key = hashlib.sha256(f"{version_id}|{self.model_name}|{ph}".encode()).hexdigest()
+        # think cambia la respuesta: va en la clave. Solo cuando es True, para no
+        # invalidar la cache existente (generada con el default think=False).
+        modo = "|think" if self.think else ""
+        key = hashlib.sha256(f"{version_id}|{self.model_name}|{ph}{modo}".encode()).hexdigest()
         if (hit := self.repo.cache_get(key)) is not None:
             return schema.model_validate_json(hit), {"cached": True, "ms": 0, "intentos": 0}
 
