@@ -17,3 +17,14 @@ CREATE TABLE IF NOT EXISTS question_run (
     result_json TEXT NOT NULL,
     created_at  TEXT NOT NULL
 );
+
+-- Expedientes (formato del equipo). GET devuelve la ultima por id_caso.
+CREATE TABLE IF NOT EXISTS expediente_run (
+    id          INTEGER PRIMARY KEY,
+    id_caso     TEXT NOT NULL,
+    resultado   TEXT NOT NULL,
+    decision    TEXT,
+    result_json TEXT NOT NULL,
+    created_at  TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ix_expediente_run ON expediente_run (id_caso, id);

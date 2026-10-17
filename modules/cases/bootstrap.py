@@ -6,6 +6,7 @@ from modules.cases.ports import A2AAuditGateway, AuditGateway, ComplianceGateway
 from modules.cases.repositories import SqliteCasesRepository
 from modules.cases.services.case_service import CaseService
 from modules.cases.services.eventos import CatalogoEventos
+from modules.cases.services.expediente_service import ExpedienteService, ReglasExpediente
 from modules.cases.services.question_service import QuestionService
 from modules.cases.services.summarizer import Summarizer
 from shared.llm import LLMClient, OllamaLLMClient
@@ -49,4 +50,5 @@ def build_cases_facade(
         catalogo=catalogo,
         repo=repo,
         audit=audit_gateway,
+        expedientes=ExpedienteService(rag, audit_gateway, ReglasExpediente(settings.expedientes_path)),
     )

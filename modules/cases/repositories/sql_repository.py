@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from modules.cases.domain import CaseResult, QuestionResult
+from modules.cases.domain.expediente import ExpedienteResult
 
 _SCHEMA = Path(__file__).with_name("schema.sql")
 
@@ -67,3 +68,24 @@ class SqliteCasesRepository:
                  datetime.now(timezone.utc).isoformat()),
             )
             self._conn.commit()
+
+    def save_expediente(self, r: ExpedienteResult) -> None:
+        with self._lock:
+            self._conn.execute(
+                "INSERT INTO expediente_run (id_caso, resultado, decision, result_json, created_at) VALUES (?,?,?,?,?)",
+                (r.fila["id_caso"], r.fila["resultado_esperado"], r.fila["decision_auditoria"], r.model_dump_json(),
+                 datetime.now(timezone.utc).isoformat()),
+            )
+            self._conn.commit()
+
+    def get_expediente(self, id_caso: str) -> ExpedienteResult | None:
+        row = self._conn.execute(
+            "SELECT result_json FROM expediente_run WHERE id_caso = ? ORDER BY id DESC LIMIT 1", (id_caso,)).fetchone()
+        return ExpedienteResult.model_validate_json(row[0]) if row else None
+
+    def count_expedientes(self) -> dict[str, int]:
+        rows = self._conn.execute(
+            """SELECT e.resultado, COUNT(*) FROM expediente_run e
+               JOIN (SELECT id_caso, MAX(id) AS id FROM expediente_run GROUP BY id_caso) u ON u.id = e.id
+               GROUP BY 1""").fetchall()
+        return dict(rows)

@@ -338,7 +338,7 @@ def paso8_health(port: int, vals: dict[str, str], dry: bool, procs: list[subproc
     ok(f"Ollama: {'OK' if h['ollama']['reachable'] else 'NO RESPONDE'} {h['ollama']['models']}")
     ok(f"rag: {b['rag']['versiones_sql']} versiones | compliance: {obl.get('validada', 0)} validadas / "
        f"{obl.get('propuesta', 0)} propuestas | audit: {b['audit'].get('auditorias', 0)} auditorias, "
-       f"cadena {'OK' if b['audit'].get('cadena_ok') else 'ROTA'} | casos: {sum(b['cases'].values())}")
+       f"cadena {'OK' if b['audit'].get('cadena_ok') else 'ROTA'} | casos: {sum(b['cases'].get('casos', {}).values())}, expedientes: {sum(b['cases'].get('expedientes', {}).values())}")
     print("\n" + "=" * 64)
     print("  BACKEND LISTO")
     print(f"  API + docs (OpenAPI):  {base}/docs")
