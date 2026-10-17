@@ -106,3 +106,20 @@ class Fragmento:
 
     texto: str
     cita: Cita
+
+
+@dataclass(frozen=True, slots=True)
+class ResultadoBusqueda:
+    query: str
+    fecha: date  # fecha efectivamente usada para el filtro de vigencia
+    fecha_por_defecto: bool  # True si no se paso fecha y el codigo uso "hoy"
+    fragmentos: list[Fragmento]
+
+
+@dataclass(frozen=True, slots=True)
+class CambiosNorma:
+    codigo: str
+    # Versiones que ESTA norma creo sobre articulos de otras normas (lo que modifico).
+    introducidos: list[VersionDetalle]
+    # Versiones de los articulos de ESTA norma creadas por otras (lo que le modificaron).
+    recibidos: list[VersionDetalle]

@@ -193,6 +193,14 @@ class SqliteRepository:
         ).fetchall()
         return [_detalle(r) for r in rows]
 
+    def versiones_de_norma(self, norma_codigo: str) -> list[VersionDetalle]:
+        """Todas las versiones de los articulos de una norma, sea quien sea su creadora."""
+        rows = self._conn.execute(
+            _DETALLE_SELECT + " WHERE n.codigo = ? ORDER BY a.numero, v.vigente_desde",
+            (norma_codigo,),
+        ).fetchall()
+        return [_detalle(r) for r in rows]
+
     def versiones_posteriores(self, version_id: int) -> list[VersionDetalle]:
         # Sigue la cadena reemplaza_a hacia adelante: v -> la que la reemplaza -> ...
         rows = self._conn.execute(

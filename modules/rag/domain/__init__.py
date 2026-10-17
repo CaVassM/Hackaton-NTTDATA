@@ -1,9 +1,11 @@
 from modules.rag.domain.entities import (
     Articulo,
+    CambiosNorma,
     Cita,
     EstadoNorma,
     Fragmento,
     Norma,
+    ResultadoBusqueda,
     Version,
     VersionDetalle,
     en_intervalo,
@@ -19,6 +21,7 @@ from modules.rag.domain.errors import (
 __all__ = [
     "Articulo",
     "ArticuloNoEncontrado",
+    "CambiosNorma",
     "Cita",
     "EstadoNorma",
     "Fragmento",
@@ -26,6 +29,7 @@ __all__ = [
     "Norma",
     "NormaNoEncontrada",
     "RagError",
+    "ResultadoBusqueda",
     "Version",
     "VersionDetalle",
     "VersionNoEncontrada",
