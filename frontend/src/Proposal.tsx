@@ -25,7 +25,7 @@ const SMALL = [
 
 const QUEUE = [
   { id: "CAS-2024-0941", tone: "red", type: "Normativa material", norm: "Ley 29733 Art. 12 (Supresión de datos)", agent: "Lic. Marcos Benítez", conf: "96.1%", state: ["En revisión", "amber"], action: "Evaluar" },
-  { id: "CAS-2024-0938", tone: "amber", type: "Vencimiento término", norm: "SBS Circular G-184 (+2 días)", agent: "Dra. Gabriela Soto", conf: "N/A (algorítmico)", state: ["Vencido", "red"], action: "Intimar" },
+  { id: "CAS-2024-0938", tone: "amber", type: "Vencimiento término", norm: "SBS Circular G-184 (+2 días)", agent: "Dra. Gabriela Soto", conf: "N/A (algorítmico)", state: ["Vencido", "red"], action: "Notificar" },
   { id: "CAS-2024-0925", tone: "red", type: "Normativa material", norm: "Res. BCRP 019-2021 (Encaje mínimo)", agent: "Dra. Claudia Medina", conf: "91.4%", state: ["Subsanando", "blue"], action: "Inspeccionar" },
   { id: "CAS-2024-0917", tone: "red", type: "Normativa material", norm: "Res. SBS N° 2660-2015 Art. 49 (Registro de operaciones)", agent: "Ing. Carlos Paredes", conf: "93.8%", state: ["En revisión", "amber"], action: "Evaluar" },
 ];
@@ -109,7 +109,7 @@ export default function ProposalPage() {
       </div>
       <div className="pr-foot">
         <span>🔔 Notificaciones emitidas al agente: <b>3 recordatorios</b></span>
-        <div className="pr-actions"><button className="pr-btn ghost" type="button">✎ Registrar justificación</button><button className="pr-btn ghost" type="button">✉ Intimar al agente</button><button className="pr-btn dark" type="button">⚑ Elevar a Comité de Sanciones</button></div>
+        <div className="pr-actions"><button className="pr-btn ghost" type="button">✎ Registrar justificación</button><button className="pr-btn ghost" type="button">✉ Notificar al agente</button><button className="pr-btn dark" type="button">⚑ Elevar a Comité de Sanciones</button></div>
       </div>
     </article>
 
