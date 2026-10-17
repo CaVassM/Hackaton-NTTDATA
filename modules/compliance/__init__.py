@@ -24,7 +24,7 @@ from modules.compliance.domain import (
 )
 from modules.compliance.evidence import CsvEvidenceSource, EvidenceSource
 from modules.compliance.facade import ComplianceFacade
-from modules.compliance.reporting import ComplianceReport, ItemReporte
+from modules.compliance.reporting import ComplianceReport, EvaluacionCaso, InfraccionReporte, ItemReporte
 
 __all__ = [
     "MONTO_NO_DETERMINADO",
@@ -43,6 +43,8 @@ __all__ = [
     "EvidenciaInvalida",
     "Exposicion",
     "Infraccion",
+    "EvaluacionCaso",
+    "InfraccionReporte",
     "ItemReporte",
     "Obligacion",
     "PropuestaNoEncontrada",

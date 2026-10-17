@@ -107,6 +107,19 @@ class ComplianceReport:
         }
 
 
+@dataclass(frozen=True)
+class EvaluacionCaso:
+    """Resultado de ComplianceFacade.evaluar_caso (lo consume modules/cases)."""
+
+    categoria: str
+    fecha_corte: date
+    items: list[ItemReporte]  # obligaciones VALIDADAS con plazos, infracciones y exposicion
+    sin_validar: list[Obligacion]  # aplicarian, pero aun son propuestas: no se calcula nada
+    no_encontradas: list[str]  # codigos pedidos que no existen
+    pendientes_categoria: int = 0
+    rotulo: str = ROTULO_EXPOSICION
+
+
 def _rango_txt(it: ItemReporte) -> str:
     mn, mx = it.rango_uit
     if mn is None and mx is None:
@@ -143,8 +156,29 @@ class ReportBuilder:
         }
         return ComplianceReport(fecha_corte, datetime.now(timezone.utc), items, pendientes, advertencias)
 
-    def _item(self, o: Obligacion, enlaces, fecha_corte: date) -> ItemReporte:
-        casos = self.deadlines.evaluar(o, self.evidence.para(o), fecha_corte)
+    def evaluar_caso(self, categoria: str, evidencias: list, fecha_corte: date,
+                     codigos: list[str] | None = None) -> "EvaluacionCaso":
+        """Un caso puntual (evidencia en memoria, no el CSV) contra las obligaciones
+        de la categoria. Solo las VALIDADAS se calculan; el resto se informa aparte."""
+        categoria = categoria.upper()
+        todas = self.repo.list_obligaciones(categoria=categoria)
+        if codigos:
+            pedidos = [c.upper() for c in codigos]
+            por_codigo = {o.codigo: o for o in todas}
+            candidatas = [por_codigo[c] for c in pedidos if c in por_codigo]
+            no_encontradas = [c for c in pedidos if c not in por_codigo]
+        else:
+            candidatas, no_encontradas = todas, []
+        validadas = [o for o in candidatas if o.revision.estado == EstadoPropuesta.VALIDADA]
+        sin_validar = [o for o in candidatas if o.revision.estado == EstadoPropuesta.PROPUESTA]
+        enlaces = [e for e in self.repo.list_enlaces(EstadoPropuesta.VALIDADA, categoria) if e.relacionada]
+        items = [self._item(o, enlaces, fecha_corte, evidencias) for o in validadas]
+        return EvaluacionCaso(categoria, fecha_corte, items, sin_validar, no_encontradas,
+                              pendientes_categoria=sum(o.revision.estado == EstadoPropuesta.PROPUESTA for o in todas))
+
+    def _item(self, o: Obligacion, enlaces, fecha_corte: date, evidencias: list | None = None) -> ItemReporte:
+        filas = self.evidence.para(o) if evidencias is None else evidencias
+        casos = self.deadlines.evaluar(o, filas, fecha_corte)
         estado = max((c.estado for c in casos), key=GRAVEDAD_ESTADO.get)
         infr = []
         for e in enlaces:

@@ -112,3 +112,25 @@ def test_api_extract_background_proposals_review_report(rag, tmp_path):
         assert c.post("/compliance/proposals/obl-9999/review", json={"aprobar": True, "revisor": "a"}).status_code == 404
         rep = c.post("/compliance/report", json={"fecha_corte": "2026-10-17"}).json()["reporte"]
         assert len(rep["items"]) == 1 and rep["rotulo"] == ROTULO_EXPOSICION
+
+
+# --- evaluar_caso (lo consume modules/cases) ---
+def test_evaluar_caso_solo_calcula_validadas(poblada):
+    from datetime import date as _d
+
+    from modules.compliance import EvidenciaInterna
+
+    ros = next(o for o in poblada.proposals()["obligaciones"] if o.plazo_valor == 24)
+    ev = [EvidenciaInterna("BAN-004", "CASO-1", _d(2026, 9, 10), _d(2026, 9, 15))]
+    antes = poblada.evaluar_caso("BAN-004", ev, HOY)
+    assert antes.items == [] and ros.codigo in {o.codigo for o in antes.sin_validar}
+
+    poblada.review(ros.proposal_id, True, "ana")
+    caso = poblada.evaluar_caso("BAN-004", ev, HOY, codigos=[ros.codigo, "BAN-004-99"])
+    (item,) = caso.items
+    (c,) = item.casos
+    assert c.estado == EstadoPlazo.ATRASADO and c.dias_atraso == 4 and c.sujeto_id == "CASO-1"
+    assert caso.no_encontradas == ["BAN-004-99"] and caso.sin_validar == []
+    with pytest.raises(ComplianceError):
+        poblada.evaluar_caso("BAN-999", ev, HOY)
+    assert poblada.conteos()["obligaciones"]["validada"] == 1

@@ -106,6 +106,26 @@ class ComplianceFacade:
         self._repo.review(tipo, id_, estado, revisor.strip(), comentario)
         log.info("Revision %s -> %s por %s", proposal_id, estado, revisor)
 
+    # ------------------------------------------------------------ caso puntual
+    def evaluar_caso(self, categoria: str, evidencias: list, fecha_corte: date | None = None,
+                     codigos: list[str] | None = None):
+        """Evalua un caso (filas EvidenciaInterna en memoria) contra las obligaciones de
+        `categoria` (o solo `codigos`). Solo VALIDADAS calculan plazo/exposicion."""
+        self.categorias_validas([categoria])
+        return self._reports.evaluar_caso(categoria, evidencias, fecha_corte or self.hoy(), codigos)
+
+    def obligacion(self, codigo: str):
+        """Obligacion por codigo (cualquier estado) o None."""
+        return next((o for o in self._repo.list_obligaciones() if o.codigo == codigo.upper()), None)
+
+    def conteos(self) -> dict[str, dict[str, int]]:
+        """Propuestas por tipo y estado (para /health)."""
+        out = {}
+        for tipo, fn in (("obligaciones", self._repo.list_obligaciones), ("infracciones", self._repo.list_infracciones),
+                         ("enlaces", self._repo.list_enlaces)):
+            out[tipo] = {e.value: len(fn(e)) for e in EstadoPropuesta}
+        return out
+
     # --------------------------------------------------------------- reporte
     def report(self, fecha_corte: date | None = None, categorias: list[str] | None = None, *,
                auditar: bool = False, user_id: str = "compliance", role: str = "oficial_cumplimiento"):
