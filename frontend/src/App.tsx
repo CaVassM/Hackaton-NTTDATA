@@ -2,11 +2,13 @@ import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useState } from "re
 import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, Health, SearchResult } from "./api";
 import { ClampedText, FragmentCard } from "./ResultCards";
 import { AgentFlow, ExpedienteFlow, ObligationList } from "./CaseParts";
+import ProposalPage from "./Proposal";
 import "./import.css";
 import "./results.css";
 import "./case.css";
+import "./proposal.css";
 
-type View = "dashboard" | "cases" | "rag" | "alerts" | "detail" | "expediente-detail";
+type View = "dashboard" | "cases" | "rag" | "alerts" | "proposal" | "detail" | "expediente-detail";
 type Notice = { kind: "error" | "success"; text: string } | null;
 
 const menu: Array<{ id: View; icon: string; label: string }> = [
@@ -14,6 +16,7 @@ const menu: Array<{ id: View; icon: string; label: string }> = [
   { id: "cases", icon: "✓", label: "Gestión de casos" },
   { id: "rag", icon: "⌘", label: "Motor RAG y evaluación IA" },
   { id: "alerts", icon: "◉", label: "Centro de alertas" },
+  { id: "proposal", icon: "★", label: "Propuesta" },
 ];
 
 const today = (() => {
@@ -194,6 +197,7 @@ export default function App() {
         {view === "expediente-detail" && <ExpedienteDetail result={selectedExpediente} onBack={() => setView("cases")} />}
         {view === "rag" && <RagPage />}
         {view === "alerts" && <AlertsPage />}
+        {view === "proposal" && <ProposalPage />}
       </main>
     </div>
   </div>;
