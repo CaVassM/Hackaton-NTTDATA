@@ -5,6 +5,7 @@ from datetime import date
 from modules.audit.config import AuditSettings
 from modules.audit.facade import AuditFacade
 from modules.audit.policy import DecisionEngine, Policy, SafeResponseBuilder
+from modules.audit.repositories import SqlAuditRepository
 from modules.audit.validators import CitationValidator, RegulatoryValidator, SensitiveQueryDetector
 from modules.rag import RagFacade
 from shared.logging import JsonlWriter
@@ -26,11 +27,14 @@ def build_audit_facade(
         RegulatoryValidator(rag),
         SensitiveQueryDetector(policy.sensitive_patterns),
     ]
+    repo = SqlAuditRepository(settings.audit_db_path)
+    repo.init_schema()
     return AuditFacade(
         validators=validators,
         engine=DecisionEngine(policy),
         safe_response=SafeResponseBuilder(),
         event_log=JsonlWriter(settings.audit_log_path),
+        repo=repo,
         # Mismo "hoy" que rag: fechas coherentes entre modulos.
         today=today or rag.hoy,
     )

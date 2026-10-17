@@ -1,4 +1,8 @@
 from modules.audit.domain.entities import (
+    AuditEvent,
+    AuditRecord,
+    ChainReport,
+    HumanReview,
     AuditRequest,
     AuditResult,
     CandidateResponse,
@@ -8,9 +12,15 @@ from modules.audit.domain.entities import (
     Finding,
     FindingStatus,
 )
-from modules.audit.domain.errors import AuditError, PolicyError
+from modules.audit.domain.errors import AuditError, AuditNotFound, PersistenceNotConfigured, PolicyError
 
 __all__ = [
+    "AuditEvent",
+    "AuditNotFound",
+    "AuditRecord",
+    "ChainReport",
+    "HumanReview",
+    "PersistenceNotConfigured",
     "AuditError",
     "AuditRequest",
     "AuditResult",

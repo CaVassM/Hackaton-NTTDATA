@@ -11,12 +11,23 @@ from datetime import date
 from typing import TYPE_CHECKING, Any
 
 from modules.audit.config import AuditSettings
-from modules.audit.domain import AuditRequest, AuditResult, Finding, FindingStatus
+from modules.audit.domain import (
+    AuditEvent,
+    AuditRecord,
+    AuditRequest,
+    AuditResult,
+    ChainReport,
+    Finding,
+    FindingStatus,
+    HumanReview,
+    PersistenceNotConfigured,
+)
 from modules.audit.policy import DecisionEngine, SafeResponseBuilder
 from modules.audit.validators import Validator
 from shared.logging import JsonlWriter, get_logger
 
 if TYPE_CHECKING:
+    from modules.audit.repositories import SqlAuditRepository
     from modules.rag import RagFacade
 
 log = get_logger(__name__)
@@ -31,12 +42,14 @@ class AuditFacade:
         engine: DecisionEngine,
         safe_response: SafeResponseBuilder,
         event_log: JsonlWriter | None = None,
+        repo: "SqlAuditRepository | None" = None,
         today: Callable[[], date] = date.today,
     ):
         self._validators = list(validators)
         self._engine = engine
         self._safe = safe_response
         self._event_log = event_log
+        self._repo = repo
         self._today = today
 
     @classmethod
@@ -106,4 +119,31 @@ class AuditFacade:
                 "decision": result.decision, "score": result.score, "policy_version": result.policy_version,
                 "critical": [f.reason for f in findings if f.critical],
             })
+        if self._repo is not None:
+            self._repo.save_evaluation(req, result, requested_by)
         return result
+
+    # ------------------------------------------------------- persistencia
+    def _r(self) -> "SqlAuditRepository":
+        if self._repo is None:
+            raise PersistenceNotConfigured("Este auditor no tiene persistencia configurada")
+        return self._repo
+
+    def get(self, audit_id: str) -> AuditRecord:
+        """Auditoria guardada + revisiones humanas (AuditNotFound si no existe)."""
+        return self._r().get(audit_id)
+
+    def review(self, audit_id: str, reviewer: str, aprobar: bool, comentario: str | None = None) -> HumanReview:
+        """Revision humana (p. ej. de un ESCALATE). Append-only: queda en la cadena."""
+        if not reviewer or not reviewer.strip():
+            raise ValueError("La revision humana requiere identificar al revisor")
+        return self._r().add_review(audit_id, reviewer.strip(), "aprobada" if aprobar else "rechazada", comentario)
+
+    def verify_chain(self) -> ChainReport:
+        return self._r().verify_chain()
+
+    def events(self, limit: int = 100) -> list[AuditEvent]:
+        return self._r().events(limit)
+
+    def counts(self) -> dict:
+        return self._r().counts() if self._repo is not None else {}

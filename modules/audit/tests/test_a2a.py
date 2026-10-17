@@ -79,7 +79,7 @@ def test_t4_sin_token_o_invalido_401_sin_evaluar(client, spy, headers):
 
 
 def test_t4_sin_tokens_configurados_nadie_entra(spy, tmp_path):
-    s = AuditSettings(log_dir=tmp_path, a2a_agent_tokens={}, a2a_allowed_agents=["copilot"])
+    s = AuditSettings(log_dir=tmp_path, audit_dir=tmp_path / "audit", a2a_agent_tokens={}, a2a_allowed_agents=["copilot"])
     with TestClient(create_app(spy, s)) as c:
         assert c.post("/a2a", json=send_message(ok_request()), headers={"Authorization": "Bearer x"}).status_code == 401
     assert spy.calls == 0

@@ -36,7 +36,7 @@ def test_exposicion_con_multa_y_uit():
 @pytest.fixture
 def poblada(rag, tmp_path):
     """Facade con obligaciones e infracciones extraidas (todo como propuesta)."""
-    auditor = AuditFacade.from_settings(AuditSettings(log_dir=tmp_path / "alog"), rag=rag, today=lambda: HOY)
+    auditor = AuditFacade.from_settings(AuditSettings(log_dir=tmp_path / "alog", audit_dir=tmp_path / "audit"), rag=rag, today=lambda: HOY)
     f, _ = make_facade(rag, tmp_path, responder_correcto, uit=5000.0, auditor=auditor)
     f.extract_obligations(["BAN-004", "BAN-005", "BAN-007"])
     f.extract_infractions(["BAN-004"])

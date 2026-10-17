@@ -38,6 +38,6 @@ def test_critico_sigue_bloqueando(audit):
 def test_politica_v1_se_conserva_sin_techos(rag, tmp_path):
     v1 = AuditSettings().audit_policy_path.with_name("aml-audit-v1.yaml")
     assert Policy.load(v1).techos == () and Policy.load(AuditSettings().audit_policy_path).techos
-    facade = AuditFacade.from_settings(AuditSettings(log_dir=tmp_path, audit_policy_path=v1), rag=rag)
+    facade = AuditFacade.from_settings(AuditSettings(log_dir=tmp_path, audit_dir=tmp_path / "audit", audit_policy_path=v1), rag=rag)
     res = facade.evaluate(audit_request([CITA_OK, DATO]))
     assert res.decision == Decision.ALLOW and res.policy_version == "aml-audit-v1"
