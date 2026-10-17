@@ -1,0 +1,25 @@
+# ---------------------------------------------------------------------------
+# Dependencias de ejecucion. Versiones fijadas desde el env conda `hackaton-ntt`
+# (Python 3.11). Todo corre LOCAL: los modelos los sirve Ollama, no hay APIs.
+# Desarrollo/tests: requirements-dev.txt
+# ---------------------------------------------------------------------------
+
+# --- Runtime de modelos (cliente de Ollama) ---
+ollama==0.6.2
+
+# --- Indices ---
+chromadb==1.5.9        # vectorial persistente (telemetria desactivada en codigo)
+rank-bm25==0.2.2       # lexico
+
+# --- Parseo de PDFs ---
+pymupdf==1.28.0
+
+# --- API / CLI ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+typer==0.27.0
+
+# --- Configuracion ---
+pydantic==2.14.1
+pydantic-settings==2.14.2
+python-dotenv==1.2.2   # pydantic-settings lo usa para leer .env
