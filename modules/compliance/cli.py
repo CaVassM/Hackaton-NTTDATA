@@ -65,5 +65,91 @@ def extract_obligations(
     _dump(asdict(_facade().extract_obligations(_cats(categorias), _fecha(fecha), progress=_Barra())))
 
 
+@app.command("extract-infractions")
+def extract_infractions(
+    categorias: Optional[str] = typer.Option(None, help="BAN-004,BAN-005 (default: todas por prioridad)"),
+    fecha: Optional[str] = typer.Option(None, help="Fecha de vigencia AAAA-MM-DD (default hoy)"),
+):
+    """Extrae infracciones + enlace categoria->infraccion (propuestas). Norma: NORMA_INFRACCIONES."""
+    _dump(asdict(_facade().extract_infractions(_cats(categorias), _fecha(fecha), progress=_Barra())))
+
+
+@app.command()
+def proposals(
+    tipo: Optional[str] = typer.Option(None, help="obl | inf | enl (default: todas)"),
+    estado: str = typer.Option("propuesta", help="propuesta | validada | rechazada | todas"),
+):
+    """Lista propuestas con su cita para validacion humana."""
+    from modules.compliance.domain import EstadoPropuesta, TipoPropuesta
+
+    res = _facade().proposals(TipoPropuesta(tipo) if tipo else None,
+                              None if estado == "todas" else EstadoPropuesta(estado))
+    for o in res.get("obligaciones", []):
+        plazo = f"{o.plazo_valor} {o.plazo_unidad} {o.tipo_plazo or ''}".strip() if o.plazo_unidad else "sin plazo"
+        typer.echo(f"\n[{o.proposal_id}] {o.codigo} ({o.revision.estado}) {o.norma_codigo} art. {o.articulo_numero} v{o.version_id}")
+        typer.echo(f"   {o.sujeto}: {o.accion_requerida}  | plazo: {plazo}")
+        typer.echo(f"   CITA: \"{o.cita_textual}\"")
+    for i in res.get("infracciones", []):
+        multa = f"{i.multa_min_uit}-{i.multa_max_uit} UIT" if (i.multa_min_uit or i.multa_max_uit) else "sin multa en la cita"
+        typer.echo(f"\n[{i.proposal_id}] numeral {i.codigo_numeral} ({i.revision.estado}) {i.norma_codigo} v{i.version_id}")
+        typer.echo(f"   {i.gravedad or 'gravedad no consta'} | {multa} | {i.descripcion}")
+        typer.echo(f"   CITA: \"{i.cita_textual}\"")
+    for e in res.get("enlaces", []):
+        typer.echo(f"\n[{e.proposal_id}] {e.categoria} -> inf-{e.infraccion_id} ({e.revision.estado}) score={e.score} | {e.motivo}")
+
+
+@app.command()
+def review(
+    proposal_id: str = typer.Argument(..., help="obl-N | inf-N | enl-N"),
+    revisor: str = typer.Option(..., help="Quien valida (queda registrado)"),
+    aprobar: bool = typer.Option(True, "--aprobar/--rechazar"),
+    comentario: Optional[str] = typer.Option(None),
+):
+    """Aprueba o rechaza una propuesta (validacion humana)."""
+    _facade().review(proposal_id, aprobar, revisor, comentario)
+    typer.echo(f"{proposal_id}: {'validada' if aprobar else 'rechazada'} por {revisor}")
+
+
+@app.command()
+def report(
+    fecha_corte: Optional[str] = typer.Option(None, help="AAAA-MM-DD (default hoy)"),
+    categorias: Optional[str] = typer.Option(None),
+    auditar: bool = typer.Option(False, help="Pasar el reporte por modules/audit antes de mostrarlo"),
+    json_out: bool = typer.Option(False, "--json"),
+):
+    """Reporte por obligacion VALIDADA: estado, atraso, infraccion y exposicion potencial."""
+    from modules.audit import AuditFacade
+
+    configure_logging()
+    from modules.compliance import ComplianceFacade as CF
+    from modules.rag import RagFacade
+
+    rag = RagFacade.from_settings()
+    facade = CF.from_settings(rag=rag, auditor=AuditFacade.from_settings(rag=rag) if auditar else None)
+    rep, audit = facade.report(_fecha(fecha_corte), _cats(categorias), auditar=auditar)
+    if json_out:
+        _dump({"reporte": asdict(rep), "auditoria": audit.model_dump(mode="json") if audit else None})
+        return
+    typer.echo(f"REPORTE DE CUMPLIMIENTO al {rep.fecha_corte}  [{rep.rotulo}]")
+    for a in rep.advertencias:
+        typer.echo(f"  ! {a}")
+    for it in rep.items:
+        o = it.obligacion
+        typer.echo(f"\n{o.codigo} | {it.estado.upper()} | atraso max {it.dias_atraso} d | {o.accion_requerida}")
+        typer.echo(f"   cita obligacion: {o.norma_codigo} art. {o.articulo_numero} (version {o.version_id})")
+        for c in it.casos:
+            typer.echo(f"   - {c.sujeto_id or '-'}: {c.estado} limite={c.fecha_limite} atraso={c.dias_atraso} | {c.detalle}")
+        for ir in it.infracciones:
+            i, x = ir.infraccion, ir.exposicion
+            marca = " [SINTETICA]" if ir.sintetica else ""
+            rango = (f"{x.multa_min_uit}-{x.multa_max_uit} UIT" + (f" (S/ {x.min_soles}-{x.max_soles})" if x.max_soles else "")
+                     if x.monto_determinado else "monto no determinado")
+            typer.echo(f"   infraccion{marca}: {i.codigo_numeral} {i.gravedad or ''} v{i.version_id} -> {rango} | {x.nota}")
+    p = rep.propuestas_pendientes
+    typer.echo(f"\nPropuestas aun sin validar (no incluidas en el calculo): {p}")
+    if audit:
+        typer.echo(f"\nAUDITORIA: {audit.decision} (score {audit.score}) - {audit.checks['decision_reason']}")
+
+
 if __name__ == "__main__":
     app()
