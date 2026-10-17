@@ -15,4 +15,8 @@
 .batch-table table { min-width: 65rem; }
 .batch-table th { position: sticky; top: 0; z-index: 1; background: #f5f7fa; }
 .batch-detail { min-width: 24rem; white-space: normal; line-height: 1.5; }
+.registry-actions { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; }
+.danger-button { border: 1px solid #f2b8b5; color: #93000a; background: #fff4f3; border-radius: 8px; padding: .5rem .75rem; font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer; }
+.danger-button:hover:not(:disabled) { background: #ffdad6; }
+.danger-button:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 700px) { .page-actions, .import-controls { align-items: stretch; flex-direction: column; } .page-actions > *, .import-controls > * { width: 100%; } }

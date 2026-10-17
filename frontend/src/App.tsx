@@ -154,6 +154,15 @@ export default function App() {
     finally { setLoading(false); }
   };
 
+  const clearImportedExpedientes = async (count: number) => {
+    if (!count || !window.confirm(`Se borrarán ${count} expedientes importados del Registro central. ¿Continuar?`)) return;
+    try {
+      const { eliminados } = await api.clearExpedientes();
+      await refresh();
+      setNotice({ kind: "success", text: `Se borraron ${eliminados} expedientes importados. El registro está listo para la demo.` });
+    } catch (error) { setNotice({ kind: "error", text: `No se pudieron borrar los expedientes: ${(error as Error).message}` }); }
+  };
+
   const navigate = (next: View) => { setView(next); setNotice(null); };
 
   return <div className="app-shell">
@@ -174,7 +183,7 @@ export default function App() {
         {notice && <div className={`notice ${notice.kind}`} role="status"><span>{notice.kind === "error" ? "!" : "✓"}</span>{notice.text}<button aria-label="Cerrar" onClick={() => setNotice(null)}>×</button></div>}
         {loading && <div className="loading-line" />}
         {view === "dashboard" && <Dashboard health={health} cases={cases} expedientes={expedientes} openCase={openCase} go={navigate} />}
-        {view === "cases" && <CasesPage cases={cases} expedientes={expedientes} onOpen={openCase} onOpenExpediente={openExpediente} onImported={refresh} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
+        {view === "cases" && <CasesPage cases={cases} expedientes={expedientes} onOpen={openCase} onOpenExpediente={openExpediente} onClearImported={clearImportedExpedientes} onImported={refresh} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
         {view === "detail" && <CaseDetail result={selected} onBack={() => setView("cases")} />}
         {view === "expediente-detail" && <ExpedienteDetail result={selectedExpediente} onBack={() => setView("cases")} />}
         {view === "rag" && <RagPage />}
@@ -209,7 +218,7 @@ function ExpedienteTable({ expedientes, onOpen }: { expedientes: ExpedienteSumma
   return <div className="table-wrap batch-table"><table><thead><tr><th>Identificador</th><th>Resultado</th><th>Auditoría</th><th>Evaluado</th><th /></tr></thead><tbody>{expedientes.map((item) => <tr key={item.id_caso}><td><code>{item.id_caso}</code></td><td><Pill value={labelFor(item.resultado_esperado)} tone={toneFor(item.resultado_esperado)} /></td><td><Pill value={item.decision_auditoria ?? "SIN_AUDITORIA"} /></td><td>{new Date(item.evaluado_en).toLocaleDateString("es-PE")}</td><td><button className="row-button" onClick={() => void onOpen(item.id_caso)}>Revisar</button></td></tr>)}</tbody></table></div>;
 }
 
-function CasesPage({ cases, expedientes, onOpen, onOpenExpediente, onCreated, onImported }: { cases: CaseSummary[]; expedientes: ExpedienteSummary[]; onOpen: (id: string) => void; onOpenExpediente: (id: string) => void; onCreated: (result: CaseResult) => void; onImported: () => Promise<void> }) {
+function CasesPage({ cases, expedientes, onOpen, onOpenExpediente, onClearImported, onCreated, onImported }: { cases: CaseSummary[]; expedientes: ExpedienteSummary[]; onOpen: (id: string) => void; onOpenExpediente: (id: string) => void; onClearImported: (count: number) => void; onCreated: (result: CaseResult) => void; onImported: () => Promise<void> }) {
   const [showForm, setShowForm] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [schema, setSchema] = useState<CaseSchema | null>(null);
@@ -221,7 +230,7 @@ function CasesPage({ cases, expedientes, onOpen, onOpenExpediente, onCreated, on
     {showImport && <ExpedienteImport onImported={onImported} />}
     {showForm && <CaseForm eventTypes={schema?.tipos_evento ?? {}} onSuccess={onCreated} />}
     <article className="panel">
-      <div className="panel-title"><div><h2>Registro central</h2><p>Casos individuales y expedientes importados.</p></div><span className="counter">{cases.length + expedientes.length} registros</span></div>
+      <div className="panel-title"><div><h2>Registro central</h2><p>Casos individuales y expedientes importados.</p></div><div className="registry-actions"><span className="counter">{cases.length + expedientes.length} registros</span><button className="danger-button" type="button" disabled={!expedientes.length} onClick={() => onClearImported(expedientes.length)}>Borrar importados</button></div></div>
       {cases.length > 0 && <><div className="panel-title"><h2>Casos individuales</h2><span className="counter">{cases.length}</span></div><CaseTable cases={cases} onOpen={onOpen} /></>}
       {expedientes.length > 0 && <><div className="panel-title"><div><h2>Expedientes importados</h2><p>Última evaluación por identificador.</p></div><span className="counter">{expedientes.length}</span></div><ExpedienteTable expedientes={expedientes} onOpen={onOpenExpediente} /></>}
       {!cases.length && !expedientes.length && <Empty>No hay casos ni expedientes importados todavía.</Empty>}

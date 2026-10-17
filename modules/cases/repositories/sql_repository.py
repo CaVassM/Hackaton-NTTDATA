@@ -92,6 +92,13 @@ class SqliteCasesRepository:
         return [{"id_caso": r[0], "resultado_esperado": r[1], "decision_auditoria": r[2], "evaluado_en": r[3]}
                 for r in rows]
 
+    def clear_expedientes(self) -> int:
+        """Elimina las filas importadas del registro de expedientes y devuelve el total borrado."""
+        with self._lock:
+            cursor = self._conn.execute("DELETE FROM expediente_run")
+            self._conn.commit()
+            return cursor.rowcount
+
     def count_expedientes(self) -> dict[str, int]:
         rows = self._conn.execute(
             """SELECT e.resultado, COUNT(*) FROM expediente_run e

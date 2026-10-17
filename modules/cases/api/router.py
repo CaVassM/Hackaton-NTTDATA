@@ -130,6 +130,14 @@ def create_cases_router(get_facade: Callable[..., CasesFacade]) -> APIRouter:
         """Ultima evaluacion de cada expediente importado."""
         return facade.listar_expedientes(limit)
 
+    @router.delete("/expedientes")
+    def limpiar_expedientes(confirmar: bool = Query(False),
+                             facade: CasesFacade = Depends(get_facade)) -> dict[str, int]:
+        """Limpia los expedientes importados tras una confirmacion explicita."""
+        if not confirmar:
+            raise HTTPException(400, "Confirma la limpieza con confirmar=true")
+        return {"eliminados": facade.limpiar_expedientes()}
+
     @router.get("")
     def listar(limit: int = Query(100, ge=1, le=1000), facade: CasesFacade = Depends(get_facade)) -> list[dict]:
         """Ultima evaluacion de cada caso (case_id, tipo_evento, decision, fecha)."""

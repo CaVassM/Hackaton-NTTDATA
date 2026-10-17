@@ -72,6 +72,7 @@ export const api = {
   cases: () => request<CaseSummary[]>("/cases"),
   expedientes: () => request<ExpedienteSummary[]>("/cases/expedientes?limit=1000"),
   expediente: (id: string) => request<ExpedienteResult>(`/cases/expedientes/${encodeURIComponent(id)}`),
+  clearExpedientes: () => request<{ eliminados: number }>("/cases/expedientes?confirmar=true", { method: "DELETE" }),
   caseSchema: () => request<CaseSchema>("/cases/schema"),
   case: (id: string) => request<CaseResult>(`/cases/${encodeURIComponent(id)}`),
   evaluateCase: (payload: unknown) => request<CaseResult>("/cases/evaluate", { method: "POST", body: JSON.stringify(payload) }),

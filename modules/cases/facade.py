@@ -145,6 +145,9 @@ class CasesFacade:
     def listar_expedientes(self, limit: int = 1000) -> list[dict]:
         return self._repo.list_expedientes(limit)
 
+    def limpiar_expedientes(self) -> int:
+        return self._repo.clear_expedientes()
+
     # ------------------------------------------------------------- preguntas
     def question(self, q: QuestionInput | dict[str, Any]) -> QuestionResult:
         inp = q if isinstance(q, QuestionInput) else QuestionInput.model_validate(q)
