@@ -123,7 +123,7 @@ def create_app(container: Container | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=(container.settings.frontend_allowed_origins if container else AppSettings().frontend_allowed_origins),
         allow_credentials=False,
-        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
         allow_headers=["Content-Type"],
     )
     app.state.container = container
