@@ -1,0 +1,1836 @@
+CODIGO: Resolución SBS N° 2660-2015
+TITULO: Reglamento de Gestión de Riesgos de Lavado de Activos y del Financiamiento del Terrorismo (texto concordado del PDF provisto: incluye la Res. SBS N° 4705-2017)
+TIPO: resolucion
+FECHA_EMISION: 2015-05-14
+ESTADO: vigente
+VIGENCIA_DESDE: 2017-12-06
+---
+CORPUS DE TRABAJO: texto limpiado automaticamente desde 7. Reg. Gestión de Riesgos de Lavado de Activos_Res. SBS N° 2660-2015.pdf. No garantiza ser la version consolidada oficial vigente; validar contra el portal de la SBS.
+
+Artículo 1°.- Alcance
+El Reglamento es de aplicación, según corresponda, a las empresas señaladas en los artículos 16° y
+17° de la Ley General, al Banco Agropecuario, al Banco de la Nación, al Fondo de Garantía para la
+Pequeña Industria – FOGAPI, a las administradoras privadas de fondos de pensiones, a la
+Corporación Financiera de Desarrollo S.A. - COFIDE, al Fondo Mivivienda S.A., a los corredores de
+seguros y a las cooperativas de ahorro y crédito no autorizadas a operar con recursos del público, en
+adelante empresas.
+
+Artículo 2°.- Definiciones y abreviaturas
+Para efectos de lo dispuesto en el Reglamento, considérense las siguientes definiciones y
+abreviaturas:
+a) Días: días calendario.
+b) Directorio: directorio de las empresas o cualquier órgano de gobierno equivalente o que haga sus
+veces.
+c) Documento de identidad: documento nacional de identidad para el caso de peruanos, y el carné de
+extranjería, pasaporte o documento legalmente establecido para la identificación de extranjeros,
+según corresponda.
+d) Entes jurídicos: son i) patrimonios autónomos gestionados por terceros, que carecen de
+personalidad jurídica o ii) contratos en los que dos o más personas, que se asocian
+temporalmente, tienen un derecho o interés común para realizar una actividad determinada, sin
+constituir una persona jurídica. Entre otros determinados por la Superintendencia, se consideran
+en esta categoría a los fondos de inversión, fondos mutuos de inversión en valores, patrimonios
+fideicometidos y consorcios.
+e) LA/FT: lavado de activos y del financiamiento del terrorismo.
+
+f) Ley General: Ley General del Sistema Financiero y del Sistema de Seguros y Orgánica de la
+Superintendencia de Banca y Seguros, Ley N° 26702 y sus normas modificatorias.
+g) Ley: Ley que crea la Unidad de Inteligencia Financiera del Perú – UIF-Perú, Ley Nº 27693 y sus
+normas modificatorias y complementarias.
+h) Manual: manual de prevención y gestión de los riesgos de LA/FT.
+i) Oficial de cumplimiento: persona natural responsable de vigilar la adecuada implementación y
+funcionamiento del sistema de prevención del LA/FT. Es la persona de contacto del sujeto
+obligado con la Superintendencia y un agente en el cual esta se apoya en el ejercicio de la labor
+de control y supervisión del sistema de prevención del LA/FT.
+j) Operación inusual: operación realizada o que se haya intentado realizar cuya cuantía,
+características y periodicidad no guarda relación con la actividad económica del cliente, sale de los
+parámetros de normalidad vigentes en el mercado o no tiene un fundamento legal evidente.
+k) Operación sospechosa: operación realizada o que se haya intentado realizar, cuya cuantía o
+características no guarda relación con la actividad económica del cliente o que no cuenta con
+fundamento económico; o que, por su número, cantidades transadas o las características
+particulares de estas, puede conducir razonablemente a sospechar que se está utilizando a la
+empresa para transferir, manejar, aprovechar o invertir recursos provenientes de actividades
+delictivas o destinados a su financiación.
+l) Personas expuestas políticamente (PEP): personas naturales, nacionales o extranjeras, que
+cumplen o que en los últimos cinco (5) años hayan cumplido funciones públicas destacadas o
+funciones prominentes en una organización internacional, sea en el territorio nacional o extranjero,
+y cuyas circunstancias financieras puedan ser objeto de un interés público. Asimismo, se
+considera como PEP al  colaborador directo de la máxima autoridad de la institución.
+m) Reglamento: Reglamento de Gestión de Riesgos de Lavado de Activos y del Financiamiento del
+Terrorismo, aprobado por la Superintendencia.
+n) Reglamento de la Ley: Reglamento de la Ley que crea la UIF-Perú, aprobado por Decreto
+Supremo Nº 018-2006-JUS.
+o) Riesgos de LA/FT: posibilidad de que la empresa sea utilizada para fines de LA/FT. Esta definición
+excluye el riesgo de reputación y el operacional.
+p) Superintendencia: Superintendencia de Banca, Seguros y Administradoras Privadas de Fondos de
+Pensiones.
+q) Trabajador: persona natural que mantiene vínculo laboral o contractual con la empresa.
+r) UIF-Perú: Unidad de Inteligencia Financiera del Perú, unidad especializada de la
+Superintendencia.
+s) Vinculación y grupo económico: conceptos definidos en las Normas Especiales sobre Vinculación
+y Grupo Económico.
+
+Artículo 3°.- Sistema de prevención del LA/FT
+Las empresas deben implementar un sistema de prevención del LA/FT con componentes de
+cumplimiento y de gestión de riesgos de LA/FT a los que se encuentran expuestos.
+
+El componente de cumplimiento se encuentra conformado por las políticas y procedimientos
+establecidos por las empresas en el marco de la Ley, el Reglamento de la Ley, la Ley General en lo
+que corresponda, el Reglamento y demás disposiciones sobre la materia, así como las medidas
+establecidas por la empresa para garantizar el deber de reserva indeterminado de la información
+relacionada al sistema de prevención del LA/FT.
+
+El componente de gestión de riesgos de LA/FT comprende, entre otros procedimientos y controles
+detallados en el Reglamento, aquellos vinculados a la detección oportuna y reporte de operaciones
+sospechosas, con la finalidad de evitar ser utilizadas con fines vinculados con el LA/FT.
+
+Artículo 4°.- Factores de riesgos del LA/FT
+Entre los principales factores de riesgos de LA/FT que deben ser identificados y considerados por las
+empresas se encuentran:
+
+a) Clientes.-  Las empresas deben gestionar los riesgos de LA/FT asociados a los clientes, su
+comportamiento, antecedentes y actividades, al inicio y durante toda la relación comercial. El
+análisis asociado a este factor de riesgos de LA/FT incorpora los atributos o características
+de los clientes.
+
+b) Productos y/o servicios.- Las empresas deben gestionar los riesgos de LA/FT asociados a
+los productos y/o servicios que ofrecen por cuenta propia, durante la etapa de diseño o
+desarrollo, así como durante su vigencia. El análisis asociado a este factor de riesgos de
+LA/FT incluye los riesgos vinculados a los canales de distribución y medios de pago con los
+que operan.
+
+c) Zona geográfica.- Las empresas deben gestionar los riesgos de LA/FT asociados a las
+zonas geográficas en las que ofrecen sus productos y/o servicios, tanto a nivel local como
+internacional, tomando en cuenta sus características de seguridad, económico-financieras y
+socio-demográficas, las disposiciones que autoridades competentes o el Grupo de Acción
+Financiera Internacional – GAFI emitan con respecto a dichas jurisdicciones, entre otras. El
+análisis asociado a este factor de riesgos de LA/FT comprende las zonas en las que operan
+las empresas, así como aquellas vinculadas al proceso de la operación.
+
+CAPÍTULO II
+AMBIENTE INTERNO
+
+SUB CAPÍTULO I
+ROLES Y RESPONSABILIDADES
+
+Artículo 5°.- Responsabilidad del directorio
+El directorio es responsable de implementar el sistema de prevención del LA/FT y de propiciar un
+ambiente interno que facilite su desarrollo. Para ello, es responsabilidad del directorio:
+a) Tomar en cuenta los riesgos de LA/FT al establecer los objetivos empresariales.
+b) Aprobar y revisar periódicamente las políticas y procedimientos para la gestión de los riesgos
+de LA/FT.
+c) Aprobar el manual y el código de conducta.
+d) Establecer y revisar periódicamente el funcionamiento del sistema de prevención del LA/FT
+en función al perfil de riesgos de LA/FT de la empresa.
+e) Designar a un oficial de cumplimiento con las características, responsabilidades y
+atribuciones que la normativa vigente establece.
+f)
+Proveer los recursos (humanos, tecnológicos, entre otros) e infraestructura que permitan,
+considerando el tamaño de la institución y la complejidad de sus operaciones y/o servicios, el
+adecuado cumplimiento de las funciones y responsabilidades del oficial de cumplimiento.
+g) Establecer medidas para mantener la confidencialidad del oficial de cumplimiento, para que
+su identidad no sea conocida por personas ajenas a la empresa.
+h) Aprobar el plan anual de trabajo del oficial de cumplimiento.
+i)
+Aprobar el plan de capacitación basada en riesgos, establecido por el oficial de cumplimiento.
+
+j)
+En caso corresponda, aprobar la creación de un comité de riesgos de LA/FT, estableciendo
+su forma de integración, funciones y atribuciones.
+
+Lo expuesto resulta aplicable sin perjuicio de las responsabilidades contempladas en las normas
+sobre la gestión integral de riesgos y otras normas relacionadas dictadas por la Superintendencia.
+
+Artículo 6°.- Responsabilidad de la gerencia
+La gerencia general, conjuntamente con el directorio, tiene la responsabilidad de implementar el
+sistema de prevención del LA/FT conforme a la regulación vigente.
+
+Los gerentes, o las personas de las unidades organizativas de negocios o de apoyo, que desempeñen
+funciones equivalentes, cualquiera que sea la denominación dada al cargo, en su ámbito de acción,
+tienen la responsabilidad de cumplir con las medidas asociadas al control de los riesgos de LA/FT,
+conforme a las políticas y procedimientos definidos, apoyando al oficial de cumplimiento en el
+desarrollo de su labor.
+
+Lo expuesto resulta aplicable sin perjuicio de las responsabilidades contempladas en las normas
+sobre la gestión integral de riesgos y otras normas relacionadas dictadas por la Superintendencia.
+
+Artículo 7°.- Oficial de  cumplimiento
+El oficial de cumplimiento debe tener vínculo laboral directo, a tiempo completo y exclusivo con la
+empresa. Asimismo, debe ser designado por el directorio, depender y comunicar directamente a dicho
+órgano de gobierno y gozar de autonomía e independencia en el ejercicio de sus funciones; y debe
+contar con capacitación y/o experiencia asociada a la prevención del LA/FT y gestión de riesgos.
+
+El oficial de cumplimiento debe encontrarse en la categoría de primer nivel gerencial, considerando en
+esta a las personas que, sin importar la denominación dada al cargo, son directos colaboradores del
+gerente general en la ejecución de las políticas y decisiones del directorio, sin que ello implique una
+subordinación a dicho órgano, en el ejercicio de sus funciones. En concordancia con lo expuesto,
+debe contar con los beneficios laborales propios del primer nivel gerencial, los cuales deben ser
+consistentes con los que correspondan a dicha categoría en la empresa. Para los fines del
+Reglamento, la categoría de primer nivel gerencial no comprende a quienes mantienen una relación
+de subordinación respecto de otros gerentes de primer nivel gerencial o categoría inferior.
+
+Siempre que se garantice la autonomía e independencia  del oficial de cumplimiento en el ejercicio de
+sus funciones y su dependencia directa del directorio, así como el cumplimiento de las disposiciones
+desarrolladas en la Ley y el Reglamento, las empresas pueden ubicar, estructuralmente, el cargo de
+oficial de cumplimiento de acuerdo a su tamaño y complejidad, únicamente para realizar
+coordinaciones administrativas. Lo expuesto no puede implicar la subordinación del oficial de
+cumplimiento a otros gerentes en el cumplimiento de las responsabilidades sobre el sistema de
+prevención del LA/FT, que le corresponden conforme al artículo 11 del Reglamento. Si la estructura
+adoptada por la empresa incumple lo indicado en el presente artículo y/o no permite una adecuada
+gestión de los riesgos de LA/FT, la Superintendencia puede requerir la modificación de la ubicación
+del cargo dispuesta por la empresa.1
+
+Artículo 8°.- Impedimentos del oficial de cumplimiento
+Son impedimentos para ser oficial de cumplimiento:
+
+a) Haber sido declarado en quiebra, condenado por la comisión de delitos dolosos o estar
+incurso en los demás impedimentos, distintos a aquel considerado en el numeral 2 del
+artículo 365 de la Ley General. Con relación al impedimento señalado en el numeral 1 del
+referido artículo, el oficial de cumplimiento no puede ser titular, en forma directa o indirecta
+del capital de la empresa que busca designarlo ni de las empresas, bajo la supervisión de la
+Superintendencia, que conforman su grupo económico.2
+b) Ser o haber sido el auditor interno de la empresa durante los seis (6) meses anteriores a su
+nombramiento.
+c) Para el caso de las cooperativas de ahorro y crédito no autorizadas a operar con recursos del
+público, adicionalmente, estar incurso en los impedimentos del artículo 33º de la Ley General
+de Cooperativas.
+d) Ser cónyuge o conviviente de algún miembro del directorio o del gerente general.
+e) Adicionalmente, en el caso del oficial de cumplimiento corporativo, mantener participaciones
+u acciones en alguno de los integrantes del grupo económico, cuya tenencia pueda ocasionar
+un conflicto de intereses con la labor que desempeña.
+f)
+Adicionalmente, en caso se trate de empresas cuyo oficial de cumplimiento no es a
+dedicación exclusiva,  no puede desempeñar dicho cargo, el director o asesor del directorio,
+gerente general o gerente de alguna de las áreas directamente relacionadas con las
+actividades previstas en el objeto social de la empresa o quienes desempeñen funciones
+equivalentes a las de dichos gerentes, cualquiera que sea la denominación dada al cargo.
+g) Otros que establezca la Superintendencia, a fin de garantizar la idoneidad del oficial de
+cumplimiento.
+
+Los impedimentos establecidos en el presente artículo se mantienen vigentes durante el ejercicio del
+cargo. Si el oficial de cumplimiento se encontrara en alguno de estos supuestos, no puede seguir
+actuando como tal, sin perjuicio de las responsabilidades de Ley; por lo que debe comunicarlo por
+escrito a la empresa en un plazo máximo de cinco (5) días hábiles de ocurrido el hecho. En este caso,
+la empresa debe designar a un nuevo oficial de cumplimiento.
+
+Artículo 9°.- Designación, remoción y vacancia del cargo de oficial de cumplimiento
+Las empresas deben informar a la Superintendencia la designación del oficial de cumplimiento, en un
+plazo no mayor de quince (15) días hábiles de producida, mediante comunicación dirigida a la UIF-
+Perú, señalando como mínimo: nombres y apellidos, tipo y número de documento de identidad,
+nacionalidad, domicilio, dirección de la oficina en la que trabaja, datos de contacto (teléfono y correo
+electrónico), la fecha de ingreso, si es a dedicación exclusiva o no, el cargo que desempeña en la
+empresa, currículum vitae y una declaración jurada referida al cumplimiento de los artículos 7° y 8°
+del Reglamento. Cualquier cambio en la información del oficial de cumplimiento debe ser comunicado
+por la empresa a la UIF-Perú, en un plazo no mayor de cinco (5) días hábiles de ocurrido.
+
+Las empresas pueden designar, en dicho momento o posteriormente, a un oficial de cumplimiento
+alterno, el cual debe cumplir con las mismas condiciones establecidas para el titular, con excepción de
+aquel referido a la categoría de gerente, para que se desempeñe como oficial de cumplimiento alterno
+únicamente en caso de ausencia temporal o remoción del titular.
+
+Las referidas comunicaciones deben observar las medidas de seguridad, con el fin de proteger la
+identidad del oficial de cumplimiento y del oficial de cumplimiento alterno. Adicionalmente, para
+proteger su identidad, la UIF-Perú asigna códigos secretos a las empresas, oficial de cumplimiento y
+
+oficial de cumplimiento alterno, luego de verificar la documentación e información a que se refiere el
+presente artículo.
+
+La remoción del oficial de cumplimiento debe ser aprobada por el directorio, así como comunicada a la
+Superintendencia, dentro de cinco (5) días hábiles de adoptada la decisión, indicando las razones que
+justifican tal medida. La situación de vacancia del cargo del oficial de cumplimiento no puede durar
+más de treinta (30) días.
+
+Artículo 10°.- Del  ejercicio de funciones del oficial de cumplimiento alterno
+En aquellos casos en los que se requiera que un oficial de cumplimiento alterno realice las funciones
+establecidas en el Reglamento, sin perjuicio de dar cumplimiento a las disposiciones contempladas en
+el artículo precedente, se debe considerar lo siguiente:
+
+10.1 En caso de ausencia temporal o vacancia, el oficial de cumplimiento alterno puede desempeñar
+sus funciones, hasta el retorno o la designación del nuevo oficial de cumplimiento, cuando
+corresponda.
+10.2 En los casos en los que se requiera que el oficial de cumplimiento alterno desempeñe las
+funciones establecidas en el Reglamento, la empresa debe comunicarlo por escrito a la UIF-Perú, en
+un plazo no menor de cinco (5) días hábiles previos a la ausencia del oficial de cumplimiento o
+vacancia del cargo, salvo casos de fuerza mayor debidamente sustentados. En la comunicación se
+debe indicar el período de ausencia, cuando corresponda, y solicitar la activación de los códigos
+secretos a los que hace referencia el artículo 9°, para el oficial de cumplimiento alterno.
+10.3 El período de ausencia temporal del oficial de cumplimiento no puede durar más de cuatro (4)
+meses.
+
+Artículo 11°.- Responsabilidades y funciones del oficial de cumplimiento
+Las responsabilidades y funciones del oficial de cumplimiento, entre otras contempladas en el
+Reglamento, son las siguientes:
+a) Proponer las estrategias de la empresa para prevenir y gestionar los riesgos de LA/FT.
+b) Vigilar la adecuada implementación y funcionamiento del sistema de prevención del LA/FT.
+c) Evaluar y verificar la aplicación de las políticas y procedimientos implementados en el
+sistema de prevención del LA/FT, según lo indicado en el Reglamento, incluyendo el registro
+de operaciones y la detección oportuna y reporte de operaciones sospechosas.
+d) Evaluar y verificar la aplicación de las políticas y procedimientos implementados para
+identificar a los PEP.
+e) Implementar las políticas y procedimientos para asegurar la adecuada gestión de riesgos de
+LA/FT.
+f) Verificar que el personal de la empresa cuente con el nivel de capacitación apropiado para
+los fines del sistema de prevención del LA/FT, que incluye la adecuada gestión de los riesgos
+de LA/FT.
+g) Verificar que el sistema de prevención del LA/FT incluya la revisión de las listas señaladas en
+el Anexo N° 1.
+h) Proponer señales de alerta a ser incorporadas en el manual.
+i) Llevar un registro de aquellas operaciones inusuales que, luego del análisis respectivo, no
+fueron determinadas como sospechosas.
+j) Evaluar las operaciones y en su caso, calificarlas como sospechosas y comunicarlas,
+manteniendo el deber de reserva al que hace referencia el artículo 12° de la Ley, a través de
+los ROS a la UIF-Perú, en representación de la empresa.
+k) Emitir informes trimestrales y semestrales sobre su gestión al presidente del directorio.
+
+l) Verificar la adecuada conservación y custodia de los documentos relacionados al sistema de
+prevención del LA/FT.
+m) Actuar como interlocutor de la empresa ante la Superintendencia, en los temas relacionados
+a su función.
+n) Atender los requerimientos de información o de información adicional y/o complementaria
+solicitada por las autoridades competentes.
+o) Informar al comité de riesgos o al directorio, en caso no se exija la composición del referido
+comité, respecto a las modificaciones e incorporaciones al listado de países de alto riesgo y
+no cooperantes publicado por el Grupo de Acción Financiera Internacional - GAFI.
+p) Las demás que sean necesarias o establezca la Superintendencia para vigilar el
+funcionamiento y el nivel de cumplimiento del sistema de prevención del LA/FT.
+q) Verificar, con el debido seguimiento, la ejecución de forma inmediata de las medidas de
+congelamiento nacional de fondos o activos que dicte la SBS en los casos vinculados a los
+delitos de LA/FT, conforme al numeral 11 del artículo 3 de la Ley N° 27693.3
+r) Verificar, con el debido seguimiento, la ejecución de forma inmediata de las medidas de
+congelamiento que dicte la SBS, conforme a las Resoluciones del Consejo de Seguridad de
+las Naciones Unidas en materia de terrorismo y su financiamiento, así como el financiamiento
+a la proliferación de armas de destrucción masiva, conforme al numeral 12 del artículo 3 de la
+Ley N° 27693.4
+Artículo 12°.- Programa anual de trabajo del oficial de cumplimiento
+Para el cumplimiento de las responsabilidades y funciones señaladas en el artículo precedente, el
+oficial de cumplimiento debe elaborar un programa anual de trabajo, el cual debe ser puesto en
+consideración previa del directorio, y aprobado por este a más tardar el 31 de diciembre del año
+previo. Dicho programa debe contener la metodología para la ejecución de cada una de las
+actividades contenidas en este, así como las fechas, roles y responsables de la ejecución de cada
+actividad.
+Artículo 13°.- Dedicación exclusiva del oficial de cumplimiento
+El oficial de cumplimiento realiza sus funciones a dedicación exclusiva cuando se trate de:
+a) Las empresas bancarias, con excepción de las señaladas en el inciso d) del numeral 10.2.1
+del artículo 10° de la Ley;
+b) Las empresas de operaciones múltiples, distintas a las empresas bancarias, cuyo patrimonio
+efectivo a diciembre del año previo, haya sido equivalente al capital mínimo requerido a las
+empresas bancarias;
+c) Las empresas de seguros y/o reaseguros, cuyo patrimonio efectivo a diciembre del año
+previo, haya sido superior a cien millones de nuevos soles (S/. 100,000,000.00);
+d) Las empresas emisoras de tarjetas de crédito y/o débito, las empresas de transporte,
+custodia y administración de numerario; y, los almacenes generales de depósito, que tengan
+más de cien (100) trabajadores;
+e) Las empresas de transferencia de fondos cuyo promedio mensual de fondos transferidos en
+los últimos doce (12) meses sea igual o superior a las cuatro mil unidades impositivas
+tributarias (4000 UIT);
+f)
+Las empresas emisoras de dinero electrónico que tengan más de cien (100) trabajadores y/o
+cuyo promedio mensual de fondos emitidos en los últimos doce (12) meses sea igual o
+superior a las cuatro mil unidades impositivas tributarias (4000 UIT); y/o alcancen con sus
+operaciones de transferencia los niveles señalados en el literal anterior;
+
+g) Las administradoras privadas de fondos de pensiones; y,
+h) Otros que determine la Superintendencia en atención al tamaño de su organización,
+complejidad o volumen de operaciones.
+
+Artículo 14°.- Dedicación no exclusiva del oficial de cumplimiento
+Las empresas que no se encuentren dentro de los parámetros señalados en el artículo precedente no
+están obligadas a contar con un oficial de cumplimiento a dedicación exclusiva.
+
+De forma excepcional, los sujetos obligados que se encuentran comprendidos en el artículo
+precedente pueden solicitar de manera sustentada a la UIF-Perú, la autorización para contar con un
+oficial de cumplimiento a dedicación no exclusiva, el cual debe cumplir con los artículos 7° y 8º del
+Reglamento. La solicitud debe contener información sobre los siguientes aspectos:
+a) Funciones y composición de la oficialía de cumplimiento;
+b) Descripción de la distribución de la carga laboral del funcionario que realizará las funciones
+de oficial de cumplimiento a dedicación no exclusiva;
+c) Descripción de otras características de la empresa;
+d) Informe que describa el nivel de exposición a los riesgos de LA/FT que enfrenta la empresa
+de acuerdo a lo señalado en el artículo 25° del Reglamento; y,
+e) Fundamentos de la solicitud de designación de oficial de cumplimiento a dedicación no
+exclusiva.
+
+Lo expuesto en los párrafos precedentes no limita que, si en uso de sus facultades de supervisión, la
+Superintendencia determina que el ejercicio práctico de las  funciones del oficial de cumplimiento a
+dedicación no exclusiva no permite una adecuada gestión de los riesgos de LA/FT que enfrenta la
+empresa, pueda dejar sin efecto la autorización para contar con un oficial de cumplimiento a
+dedicación no exclusiva.
+
+Artículo 15°.- Oficial de cumplimiento corporativo
+15.1 Los integrantes de un grupo económico, en el marco de las disposiciones contempladas en la
+Ley pueden designar a un oficial de cumplimiento corporativo, para lo cual deben contar con la
+autorización expresa de la UIF-Perú y, de ser el caso, de los titulares de los organismos supervisores
+de otros miembros del grupo económico, no supervisados por la Superintendencia.
+
+El cargo de oficial de cumplimiento corporativo debe ser a dedicación exclusiva y tener primer nivel
+gerencial en uno de los conformantes del grupo económico que sea supervisado por la
+Superintendencia.
+
+15.2 Para la autorización del cargo de oficial de cumplimiento corporativo, las empresas deben
+presentar una solicitud de autorización dirigida a la UIF-Perú, suscrita por cada uno de los
+representantes de los integrantes del grupo económico, adjuntando un informe técnico que sustente la
+viabilidad de contar con un oficial de cumplimiento corporativo.  La solicitud debe estar acompañada
+de la siguiente información:
+a)
+Relación de integrantes del grupo económico bajo el control del oficial de cumplimiento
+corporativo, sean supervisados o no por la Superintendencia;
+b)
+Relación del personal a cargo del oficial de cumplimiento corporativo y de los coordinadores
+corporativos designados por cada integrante del grupo;
+c)
+Informe que sustente la forma en que se dará cumplimiento a las disposiciones vigentes en
+materia de prevención del LA/FT, para cada uno de los integrantes del grupo económico que
+se encontrarían en el ámbito de la función corporativa;
+d)
+Currículum vitae del oficial de cumplimiento corporativo;
+
+e)
+Declaración jurada del oficial de cumplimiento corporativo donde se precise que consta
+dentro de su documentación personal información suficiente sobre sus antecedentes
+personales, laborales, historial crediticio y patrimonial;
+f)
+Declaración jurada que indique que el nombramiento del oficial de cumplimiento corporativo
+cuenta con la aprobación del directorio de cada uno de los integrantes del grupo económico,
+sean o no supervisados por la Superintendencia;
+g)
+Declaración jurada que establezca que, de otorgarse la autorización, el oficial de
+cumplimiento corporativo contará con el personal suficiente para cumplir con sus
+obligaciones;
+h)
+Informe que describa el nivel de exposición a los riesgos de LA/FT de las empresas del
+grupo, tomando en cuenta lo señalado en el artículo 25º del Reglamento;
+i)
+Razones por las que se solicita la designación de un oficial de cumplimiento corporativo; y,
+j)
+En caso de que existan integrantes del grupo económico que se encuentren bajo la
+competencia de otros órganos de supervisión diferentes a la Superintendencia, se debe
+también acompañar a la mencionada solicitud copia de  sus opiniones técnicas favorables
+para que las empresas bajo su competencia cuenten con el cargo de oficial de cumplimiento
+corporativo o el cargo de recepción de dichas solicitudes para acreditar que se encuentran en
+trámite.
+
+El pronunciamiento de la UIF-Perú será emitido previa evaluación de las opiniones técnicas emitidas
+por los demás órganos supervisores; y, comunicado a los organismos supervisores y a los integrantes
+del grupo económico.
+
+15.3 Para la designación, remoción y vacancia, las empresas deben aplicar lo dispuesto en el artículo
+9° del Reglamento, adjuntando –adicionalmente- en las comunicaciones que se remitan a la
+Superintendencia, una declaración jurada sobre la inexistencia del cambio sustancial en el grupo
+económico. En caso de modificación en el grupo económico por incorporación de un nuevo integrante,
+debe considerarse, adicionalmente, lo señalado en el numeral 15.4.
+
+15.4 Los integrantes de un grupo económico autorizado para contar con un oficial de cumplimiento
+corporativo, que requieran incorporar al grupo económico un nuevo sujeto obligado, sea o no
+supervisado por la Superintendencia, deben seguir el procedimiento establecido en el numeral 15.2,
+adjuntando la información adicional requerida o aquella que sea materia de modificación respecto a la
+presentada al momento de nombrar al oficial de cumplimiento corporativo. Adicionalmente, deben
+informar a la Superintendencia respecto a la salida de algún integrante del grupo económico.
+15.5 Si se determina que el ejercicio práctico de las funciones del oficial de cumplimiento corporativo
+no permite una adecuada gestión de los riesgos de LA/FT en los integrantes del grupo económico,
+puede dejarse sin efecto la autorización concedida.
+Artículo 16°.- Coordinador corporativo en materia de prevención del LA/FT
+Los integrantes de un grupo económico que cuente con un oficial de cumplimiento corporativo deben
+designar un coordinador corporativo en cada integrante del grupo económico, el cual está encargado
+de coordinar directamente todos los temas relacionados a la prevención del LA/FT con el oficial de
+cumplimiento corporativo; sin perjuicio de que el oficial de cumplimiento corporativo mantiene la
+responsabilidad del sistema de prevención del LA/FT de cada una de las empresas integrantes del
+grupo económico.
+
+La Superintendencia, dependiendo de las características de las empresas, puede solicitar que el
+cargo del coordinador corporativo sea ejercido a dedicación exclusiva.
+
+Artículo 17°.- Comité de riesgos de LA/FT
+Las empresas pueden constituir un comité de riesgos de LA/FT cuya única finalidad es brindar apoyo
+al oficial de cumplimiento en la adopción de políticas y procedimientos necesarios para el buen
+funcionamiento del sistema de prevención del LA/FT. Las empresas deben contar con un reglamento
+del referido comité, aprobado por el directorio, que contenga las disposiciones y procedimientos
+necesarios para el cumplimiento de sus funciones, en concordancia con las normas sobre la gestión
+integral de riesgos. Este comité es presidido por el oficial de cumplimiento y debe estar conformado
+por al menos un (1) miembro del directorio y por funcionarios del primer nivel gerencial o quienes
+desempeñen funciones equivalentes, cualquiera que sea la denominación dada al cargo, de acuerdo a
+las normas dictadas por la Superintendencia y que –en su mayoría-, realicen labores de gestión en
+áreas directamente relacionadas con el objeto social de la empresa.
+
+En el caso de constituirse un comité de riesgos de LA/FT corporativo, este debe estar compuesto por
+un funcionario del primer nivel gerencial, o las personas que desempeñen funciones equivalentes,
+cualquiera que sea la denominación dada al cargo, de cada integrante del grupo económico.
+
+SUB CAPÍTULO II
+NORMAS INTERNAS
+
+Artículo 18°.- Manual
+Las políticas y procedimientos relacionados al cumplimiento del sistema de prevención del LA/FT, por
+parte del directorio, gerentes y trabajadores de la empresa; y, la gestión de riesgos de LA/FT, deben
+estar incluidos en el manual. El manual debe contener como mínimo la información señalada en el
+Anexo Nº 2, y ser aprobado por el directorio.
+
+Las empresas deben dejar constancia del conocimiento que han tomado los directores, gerentes y
+trabajadores sobre el manual y de su compromiso a cumplirlo en el ejercicio de sus funciones. Dicha
+constancia debe estar registrada por las empresas, a través del mecanismo establecido por estas.
+
+El manual debe actualizarse en concordancia con la regulación nacional y estándares internacionales
+sobre la materia, dichas modificaciones deben ser puestas en conocimiento de los directores,
+gerentes y trabajadores, en lo que corresponda.
+
+Las empresas podrán establecer convenios con la finalidad de contar con un manual único a nivel
+gremial.
+
+Artículo 19°.- Código de conducta
+Los directores, gerentes y trabajadores deben comprometerse a poner en práctica un código de
+conducta, aprobado por el directorio, destinado a asegurar el adecuado funcionamiento del sistema de
+prevención del LA/FT y establecer medidas para garantizar el deber de reserva indeterminado, de la
+información relacionada al sistema de prevención del LA/FT.
+
+El código de conducta de las empresas debe contener, entre otros aspectos, los principios rectores,
+valores y políticas que permitan resaltar el carácter obligatorio de los procedimientos que integran el
+sistema de prevención del LA/FT y su adecuado desarrollo, de acuerdo con la normativa vigente sobre
+la materia. Asimismo, el código debe establecer que cualquier incumplimiento al sistema de
+prevención del LA/FT se considera  infracción, estableciendo su gravedad y la aplicación de las
+sanciones según correspondan al tipo de falta, de acuerdo con las disposiciones y los procedimientos
+aprobados por las empresas.
+
+Las empresas deben dejar constancia del conocimiento que han tomado los directores, gerentes y
+trabajadores sobre el código de conducta y el compromiso a cumplirlo en el ejercicio de sus funciones
+dentro de las empresas; así como de mantener el deber de reserva en forma indeterminada de la
+información relacionada al sistema de prevención del LA/FT sobre la que hayan tomado conocimiento
+durante su permanencia en las empresas. Asimismo, de ser el caso, las sanciones que se impongan y
+las constancias previamente señaladas, deben ser registradas por las empresas, a través del
+mecanismo establecido por estas.
+
+SUB CAPÍTULO III
+TRATAMIENTO DEL GRUPO ECONÓMICO
+
+Artículo 20°.- Grupo económico
+Los grupos económicos conformados por empresas que estén afectos a supervisión consolidada de
+acuerdo a lo dispuesto por la Superintendencia deben desarrollar políticas y procedimientos
+corporativos con relación al sistema de prevención del LA/FT, incluyendo:
+
+a) Políticas y procedimientos a nivel de grupo en materia de gestión de riesgos y prevención del
+LA/FT.
+b) Políticas y procedimientos para intercambiar información dentro del grupo para propósitos de
+prevención del LA/FT, estableciendo las salvaguardas adecuadas sobre la confidencialidad y
+el uso de la información intercambiada.
+c) Criterios necesarios que deben adoptar los integrantes del grupo económico para asegurar
+elevados estándares a la hora de contratar a los trabajadores y designar a los directores y
+gerentes.
+d) Programas de capacitación en materia de prevención del LA/FT.
+
+El tipo y alcance de las referidas políticas y procedimientos deben tomar en consideración los riesgos
+de LA/FT y ser consistentes con la complejidad de las operaciones y/o servicios que ofrecen, y el
+tamaño del grupo económico.
+
+Las disposiciones establecidas en el presente artículo son adicionales a aquellas aplicables para los
+grupos económicos que cuenten con un oficial de cumplimiento corporativo.
+
+Artículo 21°.- Sucursales, subsidiarias y empresas en el exterior
+Las sucursales y subsidiarias ubicadas en el exterior, pertenecientes a un grupo económico
+supervisado por la Superintendencia deben cumplir con las medidas de prevención del LA/FT y la
+gestión de riesgos de LA/FT compatibles con las exigidas en el Perú y las recomendaciones del Grupo
+de Acción Financiera Internacional - GAFI.
+
+En caso de que la normativa local del país en que se encuentran constituidas impida cumplir
+apropiadamente con las medidas de prevención del LA/FT definidas por la Superintendencia, las
+empresas tienen un plazo máximo de treinta (30) días desde la emisión de la norma en el país de
+constitución, para remitir un informe a la Superintendencia sobre: i) las limitaciones presentadas; dicho
+informe debe contar con el sustento legal del impedimento de su aplicación y ii) las medidas que se
+adoptarán para manejar los riesgos de LA/FT. En lo que corresponda, resulta aplicable lo dispuesto en
+la normativa emitida por la Superintendencia sobre la supervisión consolidada de los conglomerados
+financieros y mixtos.
+
+Para el caso de otras empresas del exterior no comprendidas en el párrafo precedente, debe
+verificarse que cuentan con medidas de prevención del LA/FT y la gestión de riesgos de LA/FT
+compatibles con las exigidas en el Perú y las recomendaciones del Grupo de Acción Financiera
+Internacional – GAFI.
+
+CAPITULO III
+
+ESTABLECIMIENTO DE OBJETIVOS
+
+Artículo 22.- Calificación de riesgos de LA/FT para clientes
+22.1.  Las empresas deben desarrollar criterios con relación a la calificación de riesgos de LA/FT de
+clientes, los cuales deben tomar en cuenta, entre otros aspectos, los atributos asociados al
+factor de riesgos “clientes”, tales como nacionalidad, residencia, actividad económica; así como
+el volumen transaccional estimado –al inicio de la relación contractual- y real para las
+posteriores calificaciones, en concordancia con lo señalado en el artículo 4 del Reglamento.
+Esta calificación se debe realizar en la aceptación de clientes y debe actualizarse a lo largo de
+la relación con el cliente, en la oportunidad que para tal efecto determinen las empresas.
+Estos criterios deben formalizarse a través de un sistema de calificación (scoring) de riesgos de
+LA/FT, al cual deben ser sometidos todos los clientes. La calificación de riesgos de LA/FT debe
+registrarse a través del mecanismo establecido por las empresas. El Anexo N° 3 establece los
+criterios mínimos a ser considerados en este sistema de calificación. Asimismo, las empresas
+deben establecer la periodicidad con la que se actualiza la calificación de riesgos de LA/FT de
+los clientes.
+
+ 22.2. Tratándose de los clientes sujetos al régimen simplificado, la calificación de riesgos de LA/FT
+debe tener en cuenta las variables requeridas para el mencionado régimen e información
+propia de la relación contractual. En tanto el cliente cuente únicamente con productos de este
+régimen, la empresa puede asignar el nivel de riesgos de LA/FT del producto para la primera
+calificación de riesgos de LA/FT del cliente; salvo si la empresa sospecha que el cliente se
+encuentra relacionado con actividades de LA/FT, en cuyo caso se aplica el régimen reforzado.
+Artículo 23°.- Lanzamiento de nuevos productos y/o servicios
+Las empresas deben emitir un informe que contenga la evaluación del nivel de exposición a los
+riesgos de LA/FT al que se encontrarían expuestos los nuevos productos y/o servicios que pretendan
+ofrecer las empresas; dicho informe debe estar a disposición de la Superintendencia.
+
+Esta evaluación debe tomar en cuenta, entre otros aspectos, el canal de distribución del producto y/o
+servicio, así como otros atributos del factor de riesgos “productos y/o servicios”. Esta evaluación
+
+también debe realizarse cuando las empresas decidan usar nuevas tecnologías asociadas a los
+productos y/o servicios ofrecidos o se realice un cambio en un producto existente que modifica su
+perfil de riesgos de LA/FT.  La evaluación que debe realizar el oficial de cumplimiento es
+independiente de aquella que corresponde efectuar de acuerdo con lo establecido en la Circular N° G-
+165-2012 y sus normas modificatorias  o sustitutorias, que establece el requerimiento de un informe
+de riesgos por nuevos productos o cambios importantes en el ambiente de negocios, operativo o
+informático.
+Artículo 24°.- Incursión en nuevas zonas geográficas
+Las empresas deben emitir un informe que contenga la evaluación del nivel de exposición a los
+riesgos de LA/FT al que se encontrarían expuestas en caso de incursionar en nuevas zonas
+geográficas. Esta evaluación debe tener en consideración la evaluación del factor de riesgos “zona
+geográfica”, en concordancia con lo señalado en el artículo 4° del Reglamento.
+
+CAPÍTULO IV
+IDENTIFICACIÓN Y EVALUACIÓN DE LOS RIESGOS DE LA/FT
+
+Artículo 25°.- Identificación y evaluación de riesgos de LA/FT
+Las empresas deben desarrollar e implementar procedimientos de identificación y evaluación de los
+riesgos de LA/FT, tomando en cuenta los factores de riesgos de LA/FT a los que se encuentran
+expuestas, así como el mercado en el cual la empresa realiza sus actividades.
+
+Para tales efectos, las empresas deben evaluar los riesgos de LA/FT por lo menos cada dos (2) años
+y revisar la metodología asociada como mínimo cada cuatro (4) años. El informe que contenga los
+resultados de la evaluación y la metodología empleada para realizar dicha evaluación deben estar a
+disposición de la Superintendencia.
+Artículo 26°.- Indicadores clave de riesgos de LAFT
+Los indicadores clave de riesgos de LA/FT constituyen la métrica que provee información acerca del
+nivel de exposición de las empresas a los riesgos de LA/FT en un momento dado.
+
+Los indicadores clave de riesgos proveen información acerca del nivel de exposición de las empresas
+a los riesgos de LA/FT, de acuerdo a lo requerido por la Superintendencia. Para dicho propósito, las
+empresas, de acuerdo a la complejidad de sus operaciones y/o servicios, deben desarrollar
+internamente indicadores clave de riesgos adicionales a los requeridos por la Superintendencia.
+
+CAPÍTULO V
+TRATAMIENTO DE LOS RIESGOS DE LA/FT
+
+SUB CAPÍTULO I
+CONOCIMIENTO DEL CLIENTE
+
+Artículo 27°.- Determinación de clientes
+El cliente es la persona natural o jurídica con la cual las empresas contratan la prestación de algún
+servicio o el suministro de cualquier producto financiero, con las siguientes particularidades:
+a) Tratándose de las empresas de seguros, se considera como clientes, según corresponda, al
+contratante, al asegurado y al beneficiario del seguro, debiendo identificarse a estas
+personas conforme al Reglamento. No obstante, las disposiciones sobre conocimiento del
+
+cliente se pueden aplicar al beneficiario del seguro después de haberse establecido la
+relación con el contratante del seguro y/o asegurado, pero antes de efectuar el pago de la
+indemnización que corresponda o de que el beneficiario pueda ejercer los derechos
+derivados del contrato de seguro.
+b) En el caso de las administradoras privadas de fondos de pensiones, son clientes los afiliados
+al sistema privado de administración de fondos de pensiones. No obstante, las disposiciones
+sobre conocimiento del cliente pueden aplicarse después de haberse establecido la relación
+con el contratante, únicamente cuando dicha información no pueda ser obtenida por las
+empresas al momento de la contratación. El sustento de esta acción debe ser comunicado a
+la Superintendencia.
+c) Para el caso de las cooperativas de ahorro y crédito no autorizadas a operar con recursos del
+público, se considerarán como clientes a todos los socios que han cumplido con los
+requisitos exigidos, según las propias normas internas de cada cooperativa a la cual se
+asocian, y con quienes en virtud de esta condición mantienen o establecen relaciones para la
+prestación de servicios o suministro de productos propios de las cooperativas, conforme a
+sus normas aplicables y a sus operaciones autorizadas.
+d) En el caso de transferencia de fondos, se considera como clientes aquellas personas
+naturales o jurídicas que actúen como ordenantes, independientemente del monto y/o
+número de operaciones efectuadas. Las medidas en materia de conocimiento del cliente
+también resultan aplicables a los beneficiarios de la operación considerando para tal efecto lo
+indicado en el subcapítulo VI sobre transferencia de fondos.
+e) En el caso de fideicomisos, se considera como cliente al fideicomitente y, en caso intervenga
+en el contrato, el fideicomisario.
+
+Las disposiciones en materia de debida diligencia basada en riesgos son aplicables a todos los
+clientes de las empresas independientemente de sus características particulares o de la frecuencia
+con la que realizan operaciones.
+
+Artículo 28°.- Conocimiento del beneficiario final del cliente
+Para el sistema de prevención del LA/FT, el beneficiario final es la persona natural en cuyo nombre se
+realiza una transacción y/o que posee o ejerce el control efectivo final sobre un cliente a favor de la
+cual se realiza una operación. Incluye también a las personas que ejercen el control efectivo final
+sobre una persona jurídica o ente jurídico.
+
+Constituye deber permanente de las empresas identificar a los beneficiarios finales de todos los
+servicios o productos que suministren y tomar las medidas razonables para verificar su identidad,
+hasta donde la debida diligencia lo permita, de modo que estén convencidas de que se conoce quién
+es el beneficiario final.
+
+Para el caso de personas jurídicas y entes jurídicos, en caso no pueda determinarse quién detenta el
+control efectivo final, por participación mayoritaria, se considera a quien ejerce el control por otros
+medios; y solo cuando en dichos casos no se identifique a una persona natural, se considerará a la
+persona natural que desempeñe funciones de dirección y/o gestión.
+
+En el caso de fideicomisos, se debe determinar la identidad del fideicomisario y, en caso corresponda,
+del destinatario de los bienes remanentes En caso que los fideicomisarios fueran más de cinco (5),
+debe identificarse a los representantes y procuradores designados por las juntas; salvo los previstos
+en el artículo 267° de la Ley General.
+
+Cuando el beneficiario de un seguro de vida sea una persona jurídica o ente jurídico, se deben
+adoptar las medidas razonables para identificar y verificar la identidad del beneficiario final en el
+momento del pago, y de detectarse que representa mayores riesgos, debe incluirse en el régimen
+reforzado.
+
+La exigencia contemplada en el presente artículo resulta aplicable sin importar el régimen de debida
+diligencia al que se encuentre sometido el cliente.
+Artículo 29°.- Etapas de la debida diligencia en el conocimiento del cliente
+29.1 El proceso de debida diligencia en el conocimiento del cliente consta de las siguientes etapas: i)
+identificación, ii) verificación y iii) monitoreo; la realización parcial o total de cada una de las etapas se
+encuentra en función a lo establecido en el Reglamento:
+
+a) Etapa de identificación.- consiste en desarrollar e implementar procedimientos para obtener
+la información que permita determinar la identidad de un cliente o beneficiario final.
+b) Etapa de verificación.- implica la aplicación de procedimientos de verificación al inicio de la
+relación contractual con respecto a la información proporcionada por los clientes y, de ser el
+caso, de su beneficiario final, con el objetivo de asegurarse que han sido debidamente
+identificados, debiendo dejar constancia de ello en su documentación personal. Cuando
+resulte necesario iniciar la relación comercial antes de la verificación para no interrumpir el
+curso normal de esta, las empresas pueden verificar la identidad del cliente luego o durante
+el curso de la relación contractual, siempre que la empresa haya adoptado procedimientos de
+gestión de riesgos de LA/FT para determinar las condiciones bajo las cuales un cliente podría
+utilizar los servicios y/o productos de la empresa con anterioridad a la verificación y, los
+plazos aplicables para realizarla.
+c) Etapa de monitoreo.- tiene por propósito asegurar que las operaciones que realizan los
+clientes sean compatibles con lo establecido en su perfil. Asimismo, el monitoreo permite
+reforzar y reafirmar el conocimiento que poseen las empresas sobre sus clientes, así como
+obtener mayor información cuando se tengan dudas sobre la veracidad o actualidad de los
+datos proporcionados por los clientes. Las empresas deben determinar su frecuencia,
+considerando los riesgos de LA/FT que enfrentan.
+
+29.2 Cuando la empresa no se encuentre en la capacidad de cumplir con las medidas de debida
+diligencia en el conocimiento del cliente debe proceder de la siguiente manera: i) no iniciar relaciones
+comerciales, no efectuar la operación y/o terminar la relación comercial iniciada; y/o ii) evaluar la
+posibilidad de efectuar un reporte de operaciones sospechosas (ROS) con relación al cliente.
+
+29.3 En caso la empresa tenga sospechas de actividades de LA/FT y considere que el efectuar
+acciones de debida diligencia alertaría al cliente, debe reportar la operación sospechosa a la UIF-Perú
+sin efectuar dichas acciones. Estos casos deben encontrarse fundamentados y documentados.
+
+Artículo 30°.- Régimen general de debida diligencia en el conocimiento del cliente
+30.1 La información mínima que las empresas deben obtener de sus clientes personas naturales,
+cuando sea aplicable, es la siguiente:
+a)
+Nombres y apellidos completos.
+b)
+Tipo y número del documento de identidad.
+c)
+Nacionalidad y residencia.
+d)
+Domicilio.
+e)
+Número de teléfono y/o correo electrónico.
+
+f)
+Propósito de la relación a establecerse con la empresa, siempre que este no se desprenda
+directamente del objeto del contrato.
+g)
+Ocupación, oficio o profesión y nombre del centro de labores.
+h)
+Si es una persona expuesta políticamente - PEP, indicar el nombre de la institución,
+organismo público u organización internacional y el cargo.
+i)
+Identificación de los representantes legales, apoderados y mandatarios con poderes de
+disposición, considerando la información requerida en los literales precedentes, así como el
+documento que acredite la representación legal o el otorgamiento de los poderes
+correspondientes (poder por escritura pública o mandato con representación, según
+corresponda), en lo que resulte aplicable.
+
+30.2 La información mínima que las empresas deben obtener de sus clientes personas jurídicas, así
+como de entes jurídicos, cuando sea aplicable, es la siguiente:
+a) Denominación o razón social.
+b) Registro Único de Contribuyentes (RUC) o registro equivalente para no domiciliados.
+c) Objeto social, actividad económica principal o finalidad de constitución de la persona jurídica
+o ente jurídico, según corresponda.
+d) Identificación de los accionistas, socios o asociados que tengan directa o indirectamente más
+del 25% del capital social, aporte o participación de la persona jurídica y/o ente jurídico,
+considerando la información requerida para las personas naturales, identificando aquellos
+que sean PEP, cuando corresponda.
+e) Propósito de la relación a establecerse con la empresa, siempre que este no se desprenda
+directamente del objeto del contrato.
+f) Identificación de los representantes legales considerando la información requerida para las
+personas naturales, así como el otorgamiento de los poderes correspondientes, en lo que
+resulte aplicable.
+g) Personas jurídicas vinculadas al cliente y/o a su grupo económico, en caso corresponda.
+h) Dirección y teléfono de la oficina o local principal, donde desarrollan las actividades propias al
+giro de su negocio.
+
+30.3. Adicionalmente, las empresas deben realizar la calificación de riesgos de LA/FT del cliente,
+tomando en cuenta los aspectos señalados en el artículo 22º y el Anexo Nº 3 del Reglamento.
+
+30.4 Para realizar la verificación de la información, las empresas deben tomar en consideración los
+riesgos de LA/FT de los productos y/o servicios y las características de la relación esperada con el
+cliente. Para ello, deben desarrollar estudios que determinen los criterios aplicables, que sean
+compatibles con la adecuada verificación de la información mínima de identificación requerida para
+dichas operaciones. En ningún caso los requerimientos de verificación podrán ser menores que
+aquellos establecidos en el régimen simplificado de debida diligencia en el conocimiento de clientes.
+
+30.5 Las empresas deben dejar constancia de las verificaciones efectuadas, las cuales pueden
+constar en visitas a domicilios u oficinas o entrevistas personales y/u otros procedimientos que
+permitan a las empresas asegurarse de que sus clientes y, de ser el caso, beneficiarios finales, han
+sido debidamente identificados, en la que se indique el lugar, fecha y hora de estas y sus resultados,
+según corresponda al tipo de verificación efectuada. La referida constancia debe incorporarse en la
+documentación personal de cada cliente, la cual puede conservarse en medio físico o electrónico.
+
+30.6 Las empresas deben realizar el monitoreo de los clientes considerando procesos de revisión con
+objeto de asegurar que los documentos, datos e información obtenidos como consecuencia de la
+aplicación de las medidas de debida diligencia se mantengan actualizados y se encuentren vigentes.
+
+Las empresas, en función de los riesgos identificados, determinarán la periodicidad de los procesos
+de monitoreo.
+Artículo 31°.- Régimen simplificado de debida diligencia en el conocimiento de clientes
+31.1 La aplicación de este régimen permite a las empresas la reducción de algunos requisitos de
+información mínima aplicable a la etapa de identificación de clientes, cuando el nivel de riesgos de
+LA/FT así lo amerite, de acuerdo con el tratamiento establecido por la Superintendencia en su
+normativa o la autorización otorgada por esta sobre determinados productos y/o servicios.
+
+31.2 La información mínima a ser obtenida bajo este régimen en el caso de personas naturales, con
+excepción de aquellos supuestos en los que normas especiales establezcan información mínima
+distinta, es la siguiente:
+a) Nombres y apellidos completos.
+b) Tipo y número de documento de identidad.
+c) Domicilio.
+31.3 La información mínima a ser obtenida bajo este régimen en el caso de personas jurídicas y entes
+jurídicos, cuando sea aplicable, con excepción de aquellos supuestos en los que normas especiales
+establezcan información mínima distinta, es la siguiente:
+a) Denominación o razón social.
+b) Registro Único de Contribuyentes (RUC) o registro equivalente para no domiciliados.
+c) Identificación de los representantes legales considerando sus nombres y apellidos completos;
+y, tipo y número de documento de identidad.
+d) Dirección de la oficina o local principal, donde desarrollan las actividades propias al giro de su
+negocio.
+
+31.4 Para su correspondiente verificación, es exigible la presentación del documento de identidad en
+el caso de personas naturales. Para el caso de personas jurídicas, los documentos públicos que
+acrediten su existencia y contengan su denominación o razón social. En el caso de entes jurídicos
+debe requerirse, como mínimo, el documento constitutivo.
+
+31.5 Para aplicar el régimen simplificado a un determinado producto, las empresas deben solicitar
+autorización en forma previa a la Superintendencia, para lo cual deben presentar:
+a) Información acerca de las características del producto y/o servicio; incluyendo sus
+características comerciales.
+b) Información relativa a los factores de riesgos de LA/FT relacionados al producto y/o servicio.
+c) Información relativa al sistema de detección del LA/FT relacionado al producto y/o servicio.
+
+Las empresas deben efectuar actualizaciones cuando las condiciones o características del producto
+y/o servicio varíen. La Superintendencia puede dejar sin efecto dichas autorizaciones cuando
+determine que el producto y/o servicio no amerita encontrarse bajo el régimen simplificado.
+
+31.6  Si un cliente contrata un producto y/o servicio considerado en este régimen, pero el cliente
+presenta alguna de las características indicadas en el artículo siguiente, para el referido producto y/o
+servicio debe primar el régimen simplificado. Lo expuesto no resulta aplicable cuando la empresa
+sospecha que el cliente se encuentra relacionado con actividades de LA/FT, o cuando se identifique,
+como resultado del análisis realizado por la empresa, la existencia de mayores riesgos, en cuyo caso
+se debe aplicar un régimen reforzado de debida diligencia.
+
+Artículo 32°.- Régimen reforzado de debida diligencia en el conocimiento del cliente
+La aplicación de este régimen implica para las empresas el desarrollo e implementación de
+procedimientos de debida diligencia reforzados en el conocimiento de sus clientes. Las empresas
+deben  identificar y registrar bajo este régimen a los clientes que en el transcurso de la relación
+comercial, muestren un patrón que no corresponde a su perfil de riesgos de LA/FT, así como a
+aquellos clientes que podrían encontrarse altamente afectados por los riesgos de LA/FT.
+
+Este régimen se debe aplicar obligatoriamente a los siguientes clientes:
+a) Nacionales o extranjeros, no residentes;
+b) Personas jurídicas no domiciliadas.
+c) Fideicomisos.
+d) Organizaciones sin fines de lucro, entendidas como aquellas personas o estructuras jurídicas
+que principalmente se dedican a la recaudación y desembolso de fondos para fines y
+propósitos caritativos, religiosos, culturales, educativos, sociales o fraternales o para la
+realización de otro tipo de obras benéficas o sin fin lucrativo.
+e) Personas expuestas políticamente (PEP). Las empresas también deben reforzar sus
+procedimientos de conocimiento del cliente cuando uno de sus clientes se convierta en un
+PEP, luego de haber iniciado relaciones comerciales.
+f) Identificados como: i) parientes de PEP hasta el segundo grado de consanguinidad y
+segundo de afinidad y ii) cónyuge o conviviente de PEP.
+g) Personas jurídicas o entes jurídicos en las que un PEP tenga el 25% o más del capital social,
+aporte o participación.
+h) Que tengan la calidad de socios, accionistas, asociados o título equivalente, y los
+administradores de personas jurídicas o entes jurídicos donde un PEP tenga el 25% o más
+del capital social, aporte o participación.
+i)
+Personas naturales o jurídicas, o entes jurídicos que reciben transferencias desde países
+considerados como no cooperantes por el Grupo de Acción Financiera Internacional - GAFI,
+con riesgos relacionados al LA/FT, con escasa supervisión bancaria, o países sujetos a
+sanciones Office of Foreign Assets Control - OFAC.
+j)
+Personas naturales, jurídicas o entes jurídicos respecto de los cuales se tenga conocimiento
+que están siendo investigados por el delito de lavado de activos, delitos precedentes y/o
+financiamiento del terrorismo por las autoridades competentes.
+k) Vinculados con personas naturales o jurídicas sujetas a investigación o procesos judiciales
+relacionados con el lavado de activos, delitos precedentes y/o el financiamiento del
+terrorismo.
+l)
+Dedicados a servicios de corresponsalía con empresas extranjeras constituidas en países de
+baja o nula imposición tributaria, de acuerdo a lo señalado por la autoridad tributaria, o que
+no cuentan con regulación o supervisión bancaria.
+m) Aquellos otros supuestos que identifiquen las empresas.
+
+La empresa debe implementar las siguientes medidas de debida diligencia para todos los clientes
+registrados en este régimen:
+
+a) Tratándose de PEP, se debe requerir el nombre de sus parientes hasta el segundo grado de
+consanguinidad y segundo de afinidad y del cónyuge o conviviente, así como la relación de
+personas jurídicas o entes jurídicos donde mantenga una participación igual o superior al
+25% de su capital social, aporte o participación.
+b) Incrementar la frecuencia en la revisión de la actividad transaccional del cliente.
+c) Incrementar la frecuencia en la actualización de la información del cliente; cuando se trate de
+personas jurídicas o entes jurídicos, una actualización anual de sus accionistas, socios,
+
+asociados o título equivalente, que tengan directa o indirectamente más del 25% de su
+capital social, aporte o participación, de ser el caso.
+d) Realizar indagaciones y aplicar medidas adicionales de identificación y verificación, como:
+obtener información sobre los principales proveedores y clientes, recolectar información de
+fuentes públicas o abiertas, realización de visitas al domicilio.
+e) La decisión de aceptación y/o de mantenimiento de la relación con el cliente está a cargo del
+nivel gerencial más alto de la empresa o cargo similar, el que  puede delegar esta función a
+otro puesto gerencial dentro de la organización o a un comité establecido al efecto,
+conservando la responsabilidad de la aceptación y/o mantenimiento o no del cliente.
+
+SUB CAPÍTULO II
+CONOCIMIENTO DEL MERCADO
+Artículo 33°.- Aspectos generales del conocimiento del mercado
+El mercado está compuesto por quienes participan en la adquisición o utilización de un producto o
+servicio ofrecido por las empresas. La participación puede ser directa o a través de terceros, física o
+virtual, entre otras.
+
+El conocimiento del mercado es un complemento del conocimiento del cliente que permite a las
+empresas estimar los rangos dentro de los cuales se ubicarían las operaciones usuales que realizan
+sus clientes, así como conocer las características de los segmentos en los cuales operan, a partir de
+la exposición a los riesgos de LA/FT.
+
+Para cumplir con dicho propósito las empresas deben determinar un conjunto de variables que les
+permitan conocer las características de los mercados en los que operan, desarrollar criterios y
+procedimientos con la finalidad de estimar los rangos dentro de los cuales las operaciones de sus
+clientes serían consideradas como normales, entre otros aspectos a criterio de las empresas.
+Artículo 34.- Formación de segmentos
+Las empresas deben formar segmentos de mercado, estableciendo grupos que guarden una
+homogeneidad interna, pero una heterogeneidad entre ellos, de acuerdo con una o varias variables.
+La información relativa a los segmentos determinados y las variables utilizadas para el conocimiento
+del mercado deben encontrarse a disposición de la Superintendencia, así como el documento que
+contenga los resultados de la formación de segmentos.
+
+Las empresas deben tomar en consideración la naturaleza, tamaño y complejidad de sus operaciones
+y/o servicios para la determinación de los segmentos. Los resultados obtenidos deben ser
+considerados para establecer y revisar las políticas y procedimientos para la gestión de los riesgos de
+LA/FT.
+
+SUB CAPÍTULO III
+CONOCIMIENTO DE DIRECTORES, GERENTES, TRABAJADORES, PROVEEDORES,
+CONTRAPARTES  Y SUBCONTRATACIÓN
+
+Artículo 35°.- Conocimiento de directores, gerentes y trabajadores
+35.1 Las empresas deben implementar una política de debida diligencia en el conocimiento de sus
+directores, gerentes y trabajadores que forme parte del programa de reclutamiento y selección del
+personal de nuevo ingreso, permanentes y temporales, que asegure su integridad.
+
+35.2 El propósito de la debida diligencia en el conocimiento de los directores, gerentes y trabajadores
+es que las empresas estén en la capacidad de establecer sus perfiles; para ello, las empresas deben
+requerir y evaluar, por lo menos, la siguiente información:
+a) Nombres y apellidos completos.
+b) Copia del documento de identidad.
+c) Estado civil, incluyendo los nombres, apellidos y número documento de identidad del
+cónyuge o conviviente.
+d) Dirección domiciliaria y número telefónico de su domicilio habitual.
+e) Certificado u otros documentos que presenten información sobre sus antecedentes policiales
+y penales.
+f) Declaración jurada patrimonial y de otros ingresos, distintos a los percibidos por la relación
+laboral con la empresa.
+g) Ocupación dentro de la empresa.
+h) Nivel de endeudamiento en el sistema financiero.
+
+Esta información debe ser parte de la documentación personal de cada uno de los directores,
+gerentes y trabajadores de las empresas.
+
+35.3 Las empresas deben cumplir con lo siguiente:
+a) Al momento de la selección o contratación y con posterioridad a la vinculación entre las
+partes, verificar las listas señaladas en el Anexo N° 1, a fin de determinar si los directores,
+gerentes y trabajadores se encuentran comprendidos en ellas.
+b) La declaración jurada patrimonial a que se refiere el numeral 35.2 no debe tener una
+antigüedad mayor a dos (2) años.
+c) Elaborar señales de alerta, así como los procedimientos que se deben seguir una vez que
+estas se activen, considerando –entre otros- las disposiciones emitidas por la
+Superintendencia sobre la idoneidad de accionistas, directores y principales funcionarios.
+
+Artículo 36°.- Conocimiento de proveedores
+Las empresas deben desarrollar procedimientos de debida diligencia durante la selección de los
+proveedores, considerando en dicha categoría a las empresas con las que se contrata la prestación
+de bienes o servicios que se encuentran relacionados directamente con el desarrollo de la actividad
+por la cual son objeto de supervisión y/o regulación por parte de la Superintendencia. Para cumplir
+con dicho procedimiento, las empresas deben requerir y verificar la siguiente información como
+mínimo:
+
+a) Nombres y apellidos completos o denominación o razón social, en caso se trate de una
+persona jurídica.
+b) Registro Único de Contribuyentes (RUC), o registro equivalente para no domiciliados, de ser
+el caso.
+c) Tipo y número de documento de identidad, en caso se trate de una persona natural.
+d) Dirección de la oficina o local principal.
+e) Años de experiencia en el mercado.
+f) Rubros en los que el proveedor brinda sus productos o servicios.
+
+g) Identificación de los accionistas, socios o asociados que tengan directa o indirectamente más
+del 25% del capital social, aporte o participación de la persona jurídica, y el nombre del
+representante legal, considerando la información requerida para las personas naturales.
+h) Declaración jurada de no contar con antecedentes penales del proveedor, de ser el caso.
+
+Las empresas deben:
+a) Al momento de selección de los proveedores y con posterioridad a la vinculación entre las
+partes, deben verificar las listas señaladas en el Anexo N° 1, a fin de determinar si se
+encuentra o no comprendido en ellas.
+b) Actualizar la información de forma periódica; el plazo de actualización no puede ser mayor a
+los dos (2) años. En caso no se haya modificado la información, deberá dejarse constancia
+de ello.
+c) Evaluar los casos en los que, teniendo en consideración el sector donde desarrollen sus
+actividades económicas, es conveniente incluir en los contratos con los proveedores la
+obligación de cumplir con las normas de prevención del LA/FT, así como aspectos
+relacionados al deber de reserva de la información a la que tienen acceso.
+d) Elaborar señales de alerta relacionadas a los proveedores, así como los procedimientos que
+se deben seguir una vez que estas se activen.
+
+Artículo 37°.- Conocimiento de otras contrapartes
+Se considera como otras contrapartes a las personas naturales o jurídicas con las cuales la empresa
+mantiene vínculos contractuales y que no se encuentran incorporados en las definiciones de clientes o
+proveedores; este tipo de contratos no guarda relación con la prestación de bienes o servicios por los
+que son objeto de supervisión y/o regulación por parte de la Superintendencia, sino que se trata de
+otra clase de contratos, como aquellos de naturaleza civil. Las empresas deben desarrollar
+procedimientos de debida diligencia para el conocimiento de estas contrapartes, los que deben ser
+similares a aquellos establecidos para el caso de sus proveedores.
+Artículo 38°.-Utilización y responsabilidad de intermediarios
+Las empresas pueden utilizar intermediarios para dar cumplimiento a los servicios relacionados a la
+identificación y/o verificación de información de clientes, directores, gerentes, trabajadores,
+contrapartes o proveedores; para introducir y/o atraer nuevos negocios o para desarrollar actividades
+comerciales propias de la empresa, en la medida que ello se encuentre permitido, sujetándose a las
+normas generales de subcontratación definidas en la regulación vigente.
+
+Las empresas deben adoptar las medidas correspondientes para obtener la información, copias de los
+datos de identificación y demás documentación pertinente; así como una declaración jurada  por la
+que el intermediario señala que ha tomado medidas necesarias para cumplir con las disposiciones en
+materia de debida diligencia de los clientes, directores, gerentes, trabajadores, contrapartes o
+proveedores.
+
+La empresa mantiene la responsabilidad del proceso de debida diligencia en el conocimiento de los
+clientes, directores, gerentes, trabajadores, contrapartes o proveedores, aun cuando esta haya sido
+encargada a un intermediario, vinculado o no, debiendo supervisar el cumplimiento de lo dispuesto por
+la normativa vigente.
+
+SUB CAPÍTULO IV
+CAPACITACIÓN
+
+Artículo 39°.- Programa de capacitación
+Las empresas deben elaborar un programa de capacitación anual que es aprobado por el directorio,
+que toma en consideración el perfil de los directores, gerentes y trabajadores, su formación progresiva
+y los riesgos de LA/FT a los que podrían encontrarse expuestos. Este programa tiene por finalidad
+instruir a los directores, gerentes y trabajadores sobre las normas vigentes, así como respecto de las
+políticas, normas y procedimientos establecidos por las empresas.
+
+Los programas de capacitación deben ser revisados y actualizados por el oficial de cumplimiento, con
+la finalidad de evaluar su efectividad y adoptar las mejoras que se consideren pertinentes. Asimismo,
+el oficial de cumplimiento es responsable de comunicar a todos los directores, gerentes y trabajadores
+de la empresa los cambios en la normativa del sistema de prevención del LA/FT, ya sea esta interna o
+externa.
+
+Artículo 40°.- Capacitaciones del oficial de cumplimiento
+El oficial de cumplimiento, así como los trabajadores que estén bajo su mando, deben contar cuando
+menos con dos (2) capacitaciones especializadas al año, distintas a las que se dicten a los
+trabajadores de la empresa, a fin de ser instruidos detalladamente sobre la gestión de los riesgos de
+LA/FT.
+
+Artículo 41°.- Información sobre las capacitaciones
+Las empresas deben mantener información actualizada anualmente, sobre el nivel de capacitación
+recibido por los directores, gerentes y trabajadores, oficial de cumplimiento y el personal a su cargo,
+así como los coordinadores corporativos en materia de prevención del LA/FT, cuando corresponda, de
+acuerdo a su especialidad y funciones que desempeñan.
+
+Los nuevos directores, gerentes y trabajadores que ingresen a las empresas deben recibir una
+capacitación sobre los alcances del sistema de prevención del LA/FT de la empresa, de acuerdo con
+las funciones que les correspondan, a más tardar dentro de los treinta (30) días siguientes a la fecha
+de ingreso.
+
+Las empresas deben mantener una constancia de las capacitaciones recibidas y las evaluaciones
+relacionadas efectuadas, si se hubieren realizado, que deben encontrarse a disposición de la
+Superintendencia en la documentación personal, en medio físico y/o electrónico.
+
+Artículo 42°.- Requerimientos mínimos de capacitación
+Se debe capacitar, de acuerdo a sus funciones, a los directores, gerentes y trabajadores, como
+mínimo en los siguientes temas:
+a) Definición de los delitos de lavado de activos y financiamiento del terrorismo.
+b) Políticas de la empresa sobre el modelo de prevención y gestión de los riesgos de LA/FT.
+c) Riesgos de LA/FT a los que se encuentra expuesta la empresa.
+d) Normativa externa vigente.
+e) Tipologías de LA/FT, así como las detectadas en la empresa o en otras empresas o en otros
+sujetos obligados.
+f) Normas internas de la empresa.
+g) Señales de alertas para detectar operaciones inusuales y sospechosas.
+
+h) Procedimiento de comunicación de operaciones inusuales.
+i)
+Responsabilidad de cada director, gerente y trabajador, según corresponda, respecto de esta
+materia.
+
+La Superintendencia puede establecer los aspectos que la capacitación debe cumplir de acuerdo con
+las funciones de las personas que reciben la capacitación.
+
+SUB CAPÍTULO V
+RELACIONES DE CORRESPONSALÍA Y OPERACIONES CON BANCOS PANTALLA
+
+Artículo 43°.- Relaciones de corresponsalía
+Conforme al artículo 14º de la Ley, las empresas de operaciones múltiples y de servicios
+complementarios y conexos, así como las cooperativas de ahorro y crédito no autorizadas a operar
+con recursos del público, según corresponda, deben contar con políticas y procedimientos para la
+prevención del LA/FT en los servicios de corresponsalía con personas jurídicas nacionales o
+extranjeras.
+
+Los contratos de corresponsalía deben definir claramente las obligaciones y responsabilidades de
+cada participante con relación a la prevención del LA/FT y encontrarse suscritos por el nivel gerencial
+más alto de las empresas.
+
+Cuando una relación de corresponsalía incluya el mantenimiento de cuentas de transferencia de
+fondos en otras plazas, las empresas deben tener constancia de que: i) su cliente (la institución
+representada) ha cumplido con todas las obligaciones de debida diligencia respecto de sus clientes
+que tengan acceso directo a las cuentas de la institución financiera corresponsal; y, ii) por pedido, la
+institución representada está en condiciones de suministrarle datos de identificación de los clientes.
+
+Artículo 44°.- Conocimiento de bancos corresponsales y empresas de transferencia de
+fondos
+Los bancos corresponsales son aquellos que actúan como mandatarios de otros radicados en una
+plaza o área geográfica diferente, a quienes  se les encomienda determinadas operaciones en
+representación de su mandante. Usualmente, esta clase de operaciones se establece en forma
+recíproca.
+
+Las empresas deben establecer e implementar procedimientos de debida diligencia y conocimiento
+respecto a las entidades con las que se pretende establecer o se haya establecido servicios de
+corresponsalía bancaria; por lo que deben evaluar el sistema de prevención del LA/FT desarrollado
+por estas últimas, con énfasis, en el caso de empresas ubicadas en países con regulaciones estrictas
+respecto del secreto bancario o países de baja o nula imposición tributaria. Las evaluaciones y demás
+acciones que se realicen sobre estas entidades deben mantenerse en un expediente, que debe estar
+a disposición de la Superintendencia
+
+Las disposiciones contempladas en este artículo también resultan aplicables a las relaciones de
+naturaleza similar que mantienen las empresas de transferencias de fondos con otras instituciones,
+distintas a las bancarias.
+
+Artículo 45°.- Régimen reforzado en relaciones de corresponsalía
+En el caso que la entidad con la que se mantiene relaciones de corresponsalía haya sido investigada
+y/o sancionada públicamente por deficiencias en su sistema de prevención del LA/FT, o se encuentre
+
+autorizada en un país no cooperante de acuerdo a lo publicado por el Grupo de Acción Financiera
+Internacional - GAFI, las empresas deben aplicar medidas reforzadas de conocimiento y debida
+diligencia, las cuales deben constar en el expediente de la institución corresponsal.
+
+Artículo 46°.- Operaciones con bancos o empresas pantalla
+Se considera banco o empresa pantalla a la entidad del sistema financiero constituida y con
+autorización en un país en el que no tiene presencia física y que no es miembro de un grupo
+económico sujeto a supervisión consolidada efectiva. Por presencia física se entiende a las funciones
+directivas y administrativas ubicadas dentro de un país. La existencia de un representante local o de
+personal de bajo nivel no constituye presencia física.
+
+Las empresas no pueden iniciar o continuar relaciones con bancos o empresas pantalla; asimismo,
+deben obtener constancia de que las instituciones extranjeras con las cuales mantienen relaciones no
+permiten el uso de sus cuentas por parte de bancos o empresas pantalla.
+
+SUB CAPÍTULO VI
+TRANSFERENCIA DE FONDOS
+
+Artículo 47.- Disposiciones sobre transferencia de fondos aplicables a las empresas
+originadoras
+
+47.1 Transferencias electrónicas:
+Las transferencias electrónicas son operaciones realizadas a través de canales o medios electrónicos,
+como consecuencia de la instrucción, orden o autorización realizada por el ordenante,  y pueden ser
+de alcance nacional o transfronterizas. Para efecto de transferencias electrónicas se considera
+ordenante al cliente de la empresa que origina la transferencia (empresa originadora).
+
+Sin perjuicio de las exigencias señaladas en el subcapítulo precedente sobre servicios de
+corresponsalía, se debe considerar lo siguiente en las transferencias electrónicas:
+
+a) Cuando se trate de transferencias transfronterizas, se debe requerir al ordenante, como mínimo,
+la siguiente información: i) sus nombres y apellidos, en caso se trate de una persona natural o la
+denominación o razón social en caso se trate de una persona jurídica, ii) su número de
+documento de identidad en caso se trate de una persona natural o el Registro Único de
+Contribuyentes (RUC) o registro equivalente en caso se trate de una persona jurídica; y, iii)
+respecto del beneficiario de la operación, sus nombres y apellidos, en caso se trate de una
+persona natural o la denominación o razón social en caso se trate de una persona jurídica. La
+empresa originadora debe remitir dicha información junto con el número de cuenta del originador
+y del beneficiario cuando la cuenta se utilice para procesar la transacción o, de no haber una
+cuenta, con el código de referencia de la operación que permita rastrearla.
+
+b) Cuando se trate de transferencias nacionales, se debe cumplir con solicitar la información
+indicada en el literal a) precedente, la que debe enviarse cuando participen diferentes entidades
+en la operación.
+
+Tanto en operaciones de transferencias electrónicas transfronterizas o nacionales, se consideran
+cumplidas las exigencias sobre remisión de información, si la empresa originadora tiene los datos de
+
+identificación del ordenante y los códigos de referencia o identificación u otros datos que permitan la
+identificación del beneficiario, y rastrear o monitorear la operación.
+
+Las empresas originadoras deben contar con políticas y procedimientos basados en los riesgos LAFT
+para determinar: i) cuándo ejecutar, rechazar o suspender una transferencia que carezca de la
+información requerida sobre el ordenante y ii) la acción de seguimiento apropiada.
+
+47.2 Transferencias en efectivo:
+Las transferencias en efectivo, nacionales o transfronterizas, son aquellas en las que el ordenante
+entrega fondos en efectivo para realizar la operación. Para efecto de transferencias en efectivo se
+considera ordenante al cliente de la empresa que origina la transferencia (empresa originadora).
+
+En estos casos, se debe solicitar lo siguiente de las transferencias en efectivo:
+
+a) Cuando se trate de transferencias transfronterizas se debe requerir al ordenante, como mínimo, la
+siguiente información: i) sus nombres y apellidos, en caso se trate de una persona natural o la
+denominación o razón social en caso se trate de una persona jurídica; ii) su número de
+documento de identidad en caso se trate de una persona natural o el Registro Único de
+Contribuyentes (RUC) o registro equivalente en caso se trate de una persona jurídica; y, iii)
+respecto del beneficiario de la operación, sus nombres y apellidos, en caso se trate de una
+persona natural o la denominación o razón social en caso se trate de una persona jurídica. La
+empresa originadora debe remitir dicha información junto con el número de cuenta del originador
+y del beneficiario cuando la cuenta se utilice para procesar la transacción o, de no haber una
+cuenta, con el código de referencia de la operación, que permita rastrearla.
+
+b) Cuando se trate de transferencias nacionales se debe cumplir con solicitar la información indicada
+en el literal a) precedente, la que debe enviarse cuando participen diferentes entidades en la
+operación.
+
+Tanto en operaciones de transferencias en efectivo transfronterizas o nacionales, se consideran
+cumplidas las exigencias sobre remisión de información, si la empresa originadora tiene los datos de
+identificación del ordenante y los códigos de referencia o identificación u otros datos que permitan la
+identificación del beneficiario, y rastrear o monitorear la operación.
+
+Las empresas originadoras deben contar con políticas y procedimientos basados en los riesgos LAFT
+para determinar: i) cuándo ejecutar, rechazar o suspender una transferencia que carezca de la
+información requerida sobre el ordenante y ii) la acción de seguimiento apropiada.
+
+47.3 Responsabilidad de las empresas originadoras:
+Las empresas originadoras son responsables del cumplimiento de la regulación vigente sobre
+prevención y gestión de riesgos de LA/FT, aun cuando utilicen agentes o cajeros corresponsales  para
+realizar operaciones de transferencias de fondos. Para tal efecto, las empresas deben incluir como
+parte de sus sistemas de prevención y gestión de riesgos de LA/FT a los agentes o cajeros
+corresponsales, y monitorear el cumplimiento de las medidas establecidas.
+
+Cuando varias transferencias electrónicas transfronterizas individuales de un único originador estén
+agrupadas en un solo archivo de procesamiento por lotes para su transmisión a los beneficiarios, el
+archivo debe contener la información requerida y precisa sobre el originador y la información completa
+sobre el beneficiario, de tal forma que sean rastreables en el país del beneficiario; adicionalmente, la
+empresa debe incluir el número de cuenta del originador o el código de referencia de la operación.
+
+La empresa debe verificar la información de los clientes de transferencias de fondos – tanto
+electrónicas como en efectivo – cuando exista sospecha de LA/FT.
+
+Artículo 47-A.- Disposiciones sobre transferencia de fondos aplicables a empresas
+intermediarias
+En los casos en los que las empresas solo intervengan como intermediarias en la operación, es decir,
+cuando solo son el nexo entre la institución originadora y la beneficiaria, deben, como mínimo, solicitar
+información sobre la identificación del ordenante y/o beneficiario, con: nombres y apellidos, en caso se
+trate de una persona natural; y, la denominación o razón social, en caso se trate de una persona
+jurídica. La información previamente señalada debe conservarse junto con aquella correspondiente al
+código de referencia de la operación.
+
+Las empresas intermediarias deben tomar medidas razonables asociadas al procesamiento directo
+para identificar las transferencias que carezcan de la información requerida sobre el originador o sobre
+el beneficiario.
+
+Las empresas intermediarias deben contar con políticas y procedimientos basados en los riesgos de
+LA/FT para determinar: i) cuándo ejecutar, rechazar o suspender una transferencia que carezca de la
+información requerida sobre el ordenante y/o beneficiario y ii) la acción de seguimiento apropiada.
+
+Artículo 47-B.- Disposiciones sobre transferencia de fondos aplicables a las empresas
+beneficiarias
+Las empresas beneficiarias que reciben transferencias de una entidad originadora o intermediaria, y
+suministran los fondos al beneficiario, deben tomar medidas de debida diligencia para identificar al
+beneficiario de la operación, así como verificar que se cuente con la información del ordenante
+códigos de referencia o identificación u otros datos que permitan la identificación de este, remitida por
+la empresa originadora. Las medidas de verificación pueden incluir el monitoreo posterior o un
+monitoreo en tiempo real de la operación, cuando sea factible.
+
+Las empresas beneficiarias deben contar con políticas y procedimientos basados en los riesgos LAFT
+para determinar: i) cuándo ejecutar, rechazar o suspender una transferencia que carezca de la
+información requerida sobre el ordenante y ii) la acción de seguimiento apropiada.
+
+CAPÍTULO VI
+ACTIVIDADES DE CONTROL
+
+Artículo 48°.- Sistemas de información
+Las empresas deben desarrollar e implementar sistemas de información que permitan la gestión de
+los riesgos de LA/FT en la empresa, los cuales comprenden desde los canales de comunicación entre
+el oficial de cumplimiento y el directorio, gerencia y demás trabajadores de las empresas, hasta las
+herramientas informáticas utilizadas en la gestión de los riesgos de LA/FT.
+
+CAPÍTULO VII
+INFORMACIÓN Y COMUNICACIÓN
+SUB CAPÍTULO I
+REGISTRO DE OPERACIONES Y CONTRATOS
+Artículo 49.- Información contenida en el registro de operaciones
+
+49.1 Operaciones materia de registro:
+Adicionalmente a las operaciones a que se refiere el numeral 9.2 del artículo 9 de la Ley, las
+empresas, según les sea aplicable, deben crear un registro que contenga las siguientes operaciones
+que se realicen por importes iguales o superiores a los descritos en el presente artículo:
+a) Retiro de fondos.
+b) Pago de aportes en el caso de las cooperativas de ahorro y crédito no autorizadas a operar
+con recursos del público.
+c) Retiro de aportes en el caso de las cooperativas de ahorro y crédito no autorizadas a operar
+con recursos del público.
+d) Cobro de cheques.
+e) Compra de cheques certificados o cheques de gerencia.
+f) Pago o devolución de primas por la contratación de pólizas de seguro, independientemente
+de su forma de pago.
+g) Pago de beneficios, siniestros, rescate o cualquier desembolso que efectúe la empresa de
+seguros al asegurado o beneficiario como consecuencia de la ejecución del contrato de
+seguro.
+h) Pago de aportes obligatorios al sistema privado de pensiones.
+i)
+Pago de aportes voluntarios con o sin fin previsional al sistema privado de pensiones.
+j)
+Transferencias de aportes previsionales al exterior.
+k)  Realización y/o adjudicación de alhajas u otros objetos de oro o plata, así como oro en
+lingotes otorgados en garantía, indicando el valor neto.
+l)
+Transporte de valores realizado por las Empresas de Transporte, Custodia y Administración
+de Numerario - ETCAN.
+m) Pagos que realicen las empresas de seguros a los corredores de seguros por comisiones de
+intermediación de seguros y otros servicios recibidos.
+n) Pagos que realicen los corredores de seguros relacionados con esquemas permitidos para
+compartir comisiones con otros corredores de seguros por la intermediación conjunta de
+seguros y pagos por servicios recibidos por terceros.
+
+Las operaciones realizadas por cuenta propia entre las empresas no requieren anotación en el
+registro de operaciones.
+
+49.2. Registro de operaciones únicas:
+ Las empresas deben anotar en el registro las operaciones antes señaladas considerando lo siguiente:
+a) Operaciones por importes iguales o superiores a diez mil dólares americanos (US$
+10,000.00), su equivalente en moneda nacional u otras monedas, de ser el caso, umbral que
+resulta aplicable a todas las operaciones individuales que no consideren un umbral distinto.
+En el caso de pago de primas de pólizas de seguro no incluidas en el literal d), debe
+considerarse operaciones por pagos iguales o superiores a diez mil dólares americanos (US$
+
+10,000.00). En el caso de primas fraccionadas, estas operaciones se anotarán solo una vez
+si la prima de la póliza es igual o superior a diez mil dólares americanos (US$ 10,000).
+b) Tratándose de transferencia de fondos en efectivo y de la entrega de fondos en efectivo a un
+cliente – beneficiario, la obligación comprende a las operaciones iguales o superiores a dos
+mil quinientos dólares americanos (US$ 2,500.00), su equivalente en moneda nacional u
+otras monedas, de ser el caso. Tratándose de transferencias de fondos electrónicas y
+aquellas vinculadas a los fondos privados de pensiones, el umbral aplicable es aquel
+señalado en el literal a) precedente.
+c) Para el caso de las cooperativas de ahorro y crédito no autorizadas a captar recursos del
+público la obligación resulta aplicable para las operaciones iguales o superiores a cinco mil
+dólares americanos (US$ 5,000.00) o su equivalente en moneda nacional u otras monedas,
+de ser el caso.
+d) En el caso de pago de primas de pólizas de seguros de vida con componente de ahorro y/o
+inversión, la obligación de anotar comprende a las pólizas cuya prima anual sea igual o
+superior a mil quinientos dólares americanos (US$1,500.00) o su equivalente en moneda
+nacional u otras monedas, de ser el caso; las que se anotarán al momento de que se realice
+el primer pago. En el caso de pólizas a prima única, la obligación de anotar comprende las
+pólizas cuyo equivalente anual sea igual o superior a mil quinientos dólares americanos (US$
+1,500) o su equivalente en moneda nacional u otras monedas.
+e) Para el caso del valor neto de realización y/o de adjudicación de los bienes otorgados en
+garantía a que se refiere el literal j) del numeral 49.1 precedente, se incluyen los valores por
+montos iguales o superiores a dos mil quinientos dólares americanos (US$ 2,500.00).
+f)
+Para el caso de compra y/o venta de divisas en efectivo, la obligación resulta aplicable para
+las operaciones iguales o superiores a cinco mil dólares americanos (US$ 5,000.00) o su
+equivalente en moneda nacional u otras monedas, de ser el caso.
+g) Para el caso de pagos que realicen los corredores de seguros relacionados con esquemas
+permitidos para compartir comisiones con otros corredores de seguros por la intermediación
+conjunta y pagos por servicios recibidos de terceros, los corredores de seguros que generen
+ingresos operativos en un ejercicio económico anterior, por montos iguales o superiores a
+quinientos mil soles (S/. 500,000.00,) deben reportar los pagos realizados por estos
+conceptos por montos iguales o superiores a diez mil dólares americanos (US$ 10,000), o su
+equivalente en moneda nacional u otras monedas.
+
+49.3. Registro de operaciones múltiples:
+Las empresas deben mantener a disposición de la Superintendencia un registro de las operaciones
+múltiples efectuadas en una o varias de las oficinas, establecimientos o cualquier tipo de dispositivo
+electrónico, que individualmente superen el umbral de mil dólares americanos (US$1,000.00) o su
+equivalente en moneda nacional u otras monedas; y que adicionalmente, en su conjunto, durante un
+mes calendario, igualen o superen cincuenta mil dólares americanos (US$ 50,000.00), su equivalente
+en moneda nacional u otras monedas, de ser el caso.
+
+El umbral de cincuenta mil dólares americanos (US$ 50,000.00) indicado en el párrafo precedente no
+resulta aplicable:
+a) Cuando se trate de operaciones de transferencias de fondos en efectivo y de la entrega de
+fondos en efectivo a un cliente – beneficiario, a que se refiere el literal b) del numeral 49.2,
+precedente, las que deben considerar un umbral que iguale o supere diez mil dólares
+americanos (US$ 10,000.00), su equivalente en moneda nacional u otras monedas, de ser el
+caso.
+b) Cuando se trate de operaciones realizadas en cooperativas de ahorro y crédito no
+autorizadas a captar recursos del público a que se refiere el literal c) del numeral 49.2
+
+precedente, las que deben considerar un umbral que iguale o supere veinte mil dólares
+americanos (US$ 20,000.00), su equivalente en moneda nacional u otras monedas, de ser el
+caso.
+
+Para cada operación múltiple se debe registrar el detalle de las operaciones que la componen; sin
+perjuicio de su registro como operaciones únicas conforme al numeral 49.2. Las referidas
+operaciones, se consideran para efectos del presente registro, como una sola operación.
+
+49.4. Aspectos generales sobre el registro de operaciones únicas y múltiples:
+El tipo de cambio aplicable para fijar el equivalente en moneda nacional u otras monedas, de ser el
+caso, es el obtenido de promediar los tipos de cambio de venta diarios correspondientes al mes
+anterior a la operación, publicados por la Superintendencia.
+
+El registro de operaciones se realiza mediante sistemas informáticos que contengan la información
+señalada en el numeral 9.3 del artículo 9 de la Ley, el inciso 24.5 del artículo 24 del Reglamento de la
+Ley y el Reglamento. Respecto de las personas naturales y/o jurídicas que intervienen en la
+operación, se debe anotar en el registro de operaciones la identificación de la persona que
+físicamente realiza la operación (ejecutante), así como de la persona en nombre de quien se realiza la
+operación (ordenante) y de la persona a favor de quién se realiza la operación (beneficiario o
+destinatario), si lo hubiere.
+
+Las empresas envían a la Superintendencia el registro de operaciones únicas mediante el medio
+electrónico que esta establezca.”
+
+Artículo 50.- Declaración jurada
+En caso se efectúe la anotación de una operación en efectivo en el registro de operaciones,
+correspondiente a operaciones únicas, las empresas deben solicitar una declaración jurada del
+ejecutante de la operación en la que se detalle el origen de los fondos utilizados en la operación
+materia de registro.
+
+Artículo 50-Aº.- Requerimiento de información adicional para operaciones en moneda
+extranjera en efectivo
+Las empresas deben solicitar información adicional a la señalada en el artículo 50, que permita
+determinar y sustentar el origen de fondos cuando se efectúen operaciones en moneda extranjera en
+efectivo, de acuerdo a lo considerado en el artículo 49 del Reglamento, por importes iguales o
+superiores a:
+
+a) Tratándose de transferencias de fondos, el importe es de siete mil quinientos dólares
+americanos (US$ 7,500.00), su equivalente en otras monedas extranjeras, de ser el caso.
+b) Cuando se trate de operaciones de compra y/o venta de divisas, el importe es de diez mil
+dólares americanos (US$ 10,000.00), su equivalente en otras monedas extranjeras, de ser el
+caso.
+c) Para las operaciones no consideradas en los literales precedentes, el importe a considerar es
+de cincuenta mil dólares americanos (US$ 50,000.00), su equivalente en otras monedas
+extranjeras, de ser el caso.
+
+Las empresas deben incorporar en el Manual u otro documento normativo interno el listado de
+información de sustento que solicitarán para este tipo de operaciones en efectivo, así como las
+medidas que adoptarán cuando el ejecutante de la operación se niegue a proporcionar la información
+solicitada.
+
+Las empresas pueden establecer umbrales menores, de acuerdo a la identificación y evaluación de
+riesgos que hayan efectuado de acuerdo a lo señalado en el artículo 25 del Reglamento.
+
+Artículo 51°.- Cajas de seguridad
+Las empresas autorizadas a prestar servicios de cajas de seguridad deben remitir, con una
+periodicidad anual, información sobre los arrendatarios de cajas de seguridad, detallando los nombres
+y apellidos completos y el tipo y número de documento de identidad; así como el número de veces en
+que el titular o su representante ha accedido a la caja de seguridad. Adicionalmente, se debe
+presentar la referida información, cuando se autorice a representantes u otras personas a acceder a
+las cajas de seguridad. En caso no se realice ninguna modificación respecto de la información
+previamente remitida, solo debe hacerse referencia a dicha circunstancia.
+
+Las empresas remiten la citada información mediante el medio electrónico u otro medio que
+establezca la Superintendencia.
+
+SUB CAPÍTULO II
+INFORMES DEL OFICIAL DE CUMPLIMIENTO
+Artículo 52°.- Informes trimestrales
+El oficial de cumplimiento debe presentar al presidente del directorio, de manera trimestral, un informe
+sobre su gestión, que considere la información detallada en el Anexo Nº 4, dentro de los treinta (30)
+días siguientes al vencimiento del trimestre. En el caso del oficial de cumplimiento corporativo, se
+debe presentar los informes trimestrales al presidente del directorio de las empresas que forman parte
+del grupo económico, por cada una de las empresas supervisadas por la Superintendencia que
+formen parte del grupo económico que representan. Dicha información se encontrará a disposición de
+la Superintendencia.
+Artículo 53°.- Informes semestrales
+El oficial de cumplimiento debe presentar al presidente del directorio, de manera semestral, un
+informe, sobre su gestión que considere, como mínimo, la información detallada en el Anexo N° 4. Los
+informes se presentan al presidente del directorio en el mes calendario siguiente al vencimiento del
+semestre y son remitidos a la Superintendencia, mediante el medio electrónico que esta establezca,
+dentro de los quince (15) días siguientes a la fecha en que se haya presentado al presidente del
+directorio.
+
+Los informes semestrales pueden servir para dar cumplimiento a la obligación de presentar el
+segundo y cuarto informe trimestral, respectivamente, siempre que se incorporen en él los aspectos
+propios del informe trimestral que no sean parte de los temas revisados en el informe semestral, y que
+se comunique ello al presidente del directorio.
+
+El oficial de cumplimiento corporativo debe presentar los informes semestrales al presidente del
+directorio de las empresas que forman parte del grupo económico que representan, por cada una de
+las empresas supervisadas por la Superintendencia.
+
+SUB CAPÍTULO III
+CONSERVACIÓN DE DOCUMENTOS Y ATENCIÓN DE REQUERIMIENTOS
+
+Artículo 54°.- Conservación y disponibilidad del registro de operaciones
+Las empresas deben mantener el registro de operaciones en forma precisa y completa a partir del día
+en que se realizó la operación y por un plazo no menor a diez (10) años, utilizando para tal fin los
+medios informáticos, de microfilmación, microformas o similares que sean de fácil recuperación. El
+registro de operaciones debe estar a disposición de los órganos jurisdiccionales y autoridades
+competentes conforme a Ley.
+
+Las empresas deben mantener una copia de seguridad al final de cada trimestre, que se compendia
+en períodos de cinco (5) años, procedimiento que debe estar acorde con el Plan de Seguridad de
+Información exigido por la Superintendencia. La copia de seguridad del último quinquenio debe estar a
+disposición de la Superintendencia y del Ministerio Público, dentro de las cuarenta y ocho (48) horas
+hábiles de ser requerida, a menos que la referida autoridad establezca un plazo distinto.
+
+Artículo 55°.- Conservación de otros documentos
+Las empresas deben conservar la información relacionada con el sistema de prevención del LA/FT por
+un plazo no menor a diez (10) años. Esta información comprende, principalmente:
+
+a) La información relacionada con la vinculación y operaciones realizadas por los clientes,
+incluyendo toda aquella información obtenida y/o generada en aplicación de las medidas de
+debida diligencia. La referida información debe mantenerse actualizada, considerando para
+tal efecto los análisis de riesgos de LA/FT y periodicidad establecidos por la empresa y
+considerados en el manual.
+b) La información referida a la vinculación y operaciones con contrapartes y proveedores.
+c) Las políticas, procedimientos y análisis efectuados y demás información referida al
+cumplimiento de las obligaciones expresamente contempladas en el Reglamento.
+Para tal efecto, se utilizan medios informáticos, microfilmación, microformas o similares que permitan
+una fácil recuperación de la información para su consulta y reporte interno o externo a las autoridades
+competentes conforme a Ley.
+Artículo 56°.- Atención de requerimientos de información de las autoridades
+Las empresas deben desarrollar e implementar mecanismos de atención de los requerimientos que
+realicen las autoridades competentes con relación al sistema de prevención del LA/FT, tomando en
+cuenta los plazos y formas dispuestas en la legislación y regulación de la materia.
+
+TÍTULO II
+DETECCIÓN Y REPORTE DE OPERACIONES SOSPECHOSAS
+Artículo 57°.- Señales de alerta
+El Anexo Nº 5 contiene una relación de señales de alerta que las empresas deben tener en cuenta
+con la finalidad de detectar operaciones inusuales o sospechosas. Lo anterior no exime a las
+empresas de considerar otras señales de alerta que pudieran dar origen a la calificación de
+operaciones que consideren sospechosas de acuerdo con su sistema de prevención del LA/FT. Sin
+perjuicio de ello, la Superintendencia puede proporcionar información o criterios adicionales que
+contribuyan a la detección de operaciones inusuales o sospechosas.
+
+Las empresas deben efectuar evaluaciones periódicas sobre la totalidad de las señales de alerta
+definidas por estas y consideradas en la gestión de riesgos LA/FT.
+Artículo 58.- Reporte de Operaciones Sospechosas
+La empresa tiene la obligación de comunicar a la UIF-Perú a través de su oficial de cumplimiento, las
+operaciones detectadas en el curso de sus actividades, realizadas o que se hayan intentado realizar,
+que según su buen criterio sean consideradas como sospechosas, sin importar los montos
+involucrados. A estos efectos, se considera buen criterio, al discernimiento o juicio que se forma el
+oficial de cumplimiento a partir, por lo menos, del conocimiento del cliente y del mercado; abarca la
+experiencia, la capacitación y diligencia en la prevención del LA/FT.
+
+La comunicación debe ser realizada de forma inmediata y suficiente, es decir, en un plazo que -
+conforme a la naturaleza y complejidad de la operación sospechosa- permita al oficial de cumplimiento
+la elaboración, documentación y remisión del ROS a la UIF-Perú, el cual en ningún caso debe exceder
+las veinticuatro horas (24) desde que la operación es calificada como sospechosa. Una operación es
+calificada como sospechosa cuando dicha categoría puede presumirse luego del análisis y evaluación
+realizado por el oficial de cumplimiento.
+
+El oficial de cumplimiento debe dejar constancia documental del análisis y evaluaciones realizadas,
+para la calificación de una operación como inusual o sospechosa, así como el motivo por el cual una
+operación inusual no fue calificada como sospechosa y reportada a la UIF-Perú, de ser el caso. Las
+operaciones calificadas como inusuales y el sustento documental del análisis y evaluaciones se
+conservan por un plazo no menor a diez (10) años, conforme al artículo 55.
+
+La comunicación de operaciones sospechosas y el ROS que realizan las empresas por medio de sus
+oficiales de cumplimiento tienen carácter confidencial y reservado. Únicamente el oficial de
+cumplimiento, o de ser el caso el oficial de cumplimiento alterno, puede tener conocimiento del envío
+del ROS. Para todos los efectos legales, el ROS no constituye una denuncia penal o administrativa.
+
+Artículo 59°.- Contenido del Reporte de Operaciones Sospechosas (ROS)
+Los ROS deben contener la siguiente información mínima:
+
+a)
+Identidad de las personas que intervienen en las operaciones indicando nombres y apellidos
+completo, fecha de nacimiento, tipo y número del documento de identidad, nacionalidad,
+profesión u oficio, domicilio y teléfono, de las personas naturales; así como denominación o
+razón social, número del Registro Único de Contribuyentes (RUC) o registro equivalente en el
+caso de personas jurídicas no domiciliadas, objeto social, domicilio, teléfono y nombres y
+apellidos del representante legal, en el caso de personas jurídicas. Respecto del representante
+se debe incluir la información requerida para las personas naturales. Lo expuesto resulta
+aplicable en el caso de ROS sobre clientes, trabajadores, proveedores y/o contrapartes.
+b)
+Cuando intervengan terceras personas (ejecutantes) en la operación se debe indicar los
+nombres y apellidos completos de dichas personas y demás información con que se cuente de
+estas.
+c)
+Indicar si han realizado anteriormente una operación sospechosa, señalando la documentación
+con que se comunicó a las autoridades competentes dicha operación.
+d)
+Relación y descripción de las operaciones realizadas mencionando las fechas, montos,
+monedas, cuentas utilizadas, cuentas vinculadas, lugar de realización, documentos de sustento
+
+que se adjuntan al reporte, como transferencias de fondos, copias de cheques, estados de
+cuenta, entre otros, según corresponda a la clase de operación.
+e)
+Irregularidades y consideraciones que llevaron a calificar dichas operaciones como
+sospechosas.
+f)
+Otra información que se considere relevante.
+
+Artículo 60°.- Forma de envío
+Las empresas comunican a la UIF-Perú, el ROS y la documentación adjunta o complementaria
+mediante el sistema de reporte de operaciones sospechosas en línea - ROSEL utilizando para ello la
+plantilla ROSEL u otro que haga sus veces, publicado en el portal de prevención del lavado de activos
+y del financiamiento del terrorismo (plaft.sbs.gob.pe), habilitado por la Superintendencia para tal
+efecto.
+
+El oficial de cumplimiento es responsable del correcto uso del sistema ROSEL y de toda la
+información contenida en la plantilla respectiva y sus anexos, u otro que haga sus veces, debiendo
+adoptar las medidas necesarias para asegurar la exactitud y veracidad de la información, su reserva y
+confidencialidad.
+
+Artículo 61°.- Confidencialidad
+En ningún caso debe consignarse en el ROS la identidad del oficial de cumplimiento ni de la empresa,
+ni algún otro elemento que pudiera contribuir a identificarlos, salvo los códigos secretos asignados por
+la UIF-Perú.
+
+Asimismo, en todas las demás comunicaciones de la empresa dirigidas a la Superintendencia, el
+oficial de cumplimiento solo debe utilizar los códigos secretos asignados.
+
+TÍTULO III
+DE LA EVALUACIÓN DEL SISTEMA DE PREVENCIÓN DEL LA/FT
+
+Artículo 62°.- Auditoría interna
+El diseño y aplicación del sistema de prevención del LA/FT debe ser evaluado por su Unidad de
+Auditoría Interna. La evaluación del referido sistema debe comprender, como mínimo, los aspectos
+sobre la materia señalados en el Reglamento de Auditoría Interna. Las conclusiones de dicha
+evaluación deben presentarse a la Superintendencia mediante un informe especial anual, como anexo
+del informe del oficial de cumplimiento correspondiente al segundo semestre.
+
+Artículo 63°.- Auditoría externa
+Las sociedades de auditoría externa deben emitir anualmente un informe independiente de
+cumplimiento, sobre la evaluación del sistema de prevención del LA/FT de las empresas, conforme a
+lo dispuesto en el Reglamento de Auditoría Externa.
+
+TITULO IV14
+CORREDORES DE SEGUROS
+
+Artículo 64.- Sistema de prevención del LA/FT para corredores de seguros
+Los corredores de seguros se rigen por las disposiciones contenidas en el presente título,
+considerando para tal efecto lo siguiente:
+a) Los corredores de seguros como representantes de los clientes deben remitir a las empresas
+de seguros la información referida al conocimiento del cliente a la que hacen referencia los
+artículos 30 y 31 del Reglamento, según corresponda, antes de la emisión de la póliza.
+
+b) Los corredores de seguros que generen ingresos operativos en el ejercicio económico
+anterior, por montos iguales o superiores a quinientos mil soles (S/. 500,000.00), deben
+cumplir con los artículos 49, 65,  66 y 67 del Reglamento.
+Para efectos de lo dispuesto en la presente norma se considera como ingresos operativos:
+1. En el caso de personas naturales, la sumatoria de los ingresos por comisiones,
+honorarios y otros, obtenidos por las operaciones relacionadas con la actividad
+aseguradora.
+2. En el caso de personas jurídicas, la sumatoria de los ingresos de las cuentas del rubro
+57, Ingresos por Servicios y Otros del Capítulo IV, Descripción y Dinámica del Plan de
+Cuentas del Sistema de Seguros.
+
+c) Los corredores de seguros que no se encuentren comprendidos en el supuesto detallado en
+el literal b) precedente, es decir que no lleguen a quinientos mil soles (S/. 500,000.00)  de
+ingresos operativos, deben: i) nombrar un oficial de cumplimiento; ii) atender los
+requerimientos de información considerando lo dispuesto en los numerales 65.2 y 65.3 del
+artículo 65, iii) comunicar las operaciones sospechosas que detecten en el marco de lo
+dispuesto por el artículo 66, y iv) cumplir con la exigencia de conservación considerada en el
+artículo 67 del Reglamento.
+
+Artículo 65.- Características del sistema de prevención del LA/FT
+65.1 Para efectos de la implementación del sistema de prevención del LA/FT, los corredores de
+seguros observan las siguientes disposiciones:
+a)
+Clientes.- Se consideran clientes de los corredores de seguros, a aquellos
+comprendidos en el literal a) del artículo 27 del Reglamento, con los cuales se
+relacionen en ejercicio de su labor de asesoría en la contratación de seguros.
+
+b)
+Conocimiento del cliente y debida diligencia.- los corredores de seguros deben aplicar
+las etapas de la debida diligencia en el conocimiento del cliente a las que hace
+referencia el artículo 29 del Reglamento, con excepción de la etapa de monitoreo,
+independientemente del régimen de debida diligencia al cual pertenezca el cliente. Para
+tal efecto, se debe considerar los siguientes aspectos:
+i. Para el caso de los seguros que se encuentren sujetos al régimen simplificado de
+debida diligencia, solo es aplicable la obtención y verificación de la información
+mínima requerida para la identificación del cliente persona natural o jurídica, según
+corresponda.
+ii. Para el caso de los seguros distintos de los señalados en el párrafo precedente, son
+aplicables los requerimientos establecidos en el artículo 30 del Reglamento, sobre
+información mínima y los procedimientos de verificación, establecidos en la
+regulación vigente.
+iii. Cuando corresponda, considerando los criterios señalados en el artículo 32 del
+Reglamento, resulta aplicable el régimen reforzado de debida diligencia al que hace
+referencia el mencionado artículo con relación a los requerimientos sobre
+
+información mínima y procedimientos de verificación, establecidos en la regulación
+vigente. En consecuencia, adicionalmente a las exigencias a que se refiere el
+régimen general de debida diligencia indicado en el literal ii. precedente, se deben
+cumplir con las disposiciones de los literales d) y e) sobre las medidas de debida
+diligencia aplicables a los clientes registrados en el régimen reforzado del artículo
+32.
+iv. Los corredores de seguros deben verificar que las solicitudes de seguros de sus
+clientes contengan la información de identificación mínima.
+
+c)
+Calificación de riesgos de LA/FT.- Los corredores de seguros no se encuentran
+obligados a realizar la  calificación de riesgos LA/FT de sus clientes de acuerdo a las
+disposiciones contempladas en el artículo 22 del Reglamento.
+
+65.2 Designación del oficial de cumplimiento.- la designación del oficial de cumplimiento, para el
+caso de los corredores de seguros, debe cumplir con lo siguiente:
+
+a)
+Cuando el corredor de seguros sea persona jurídica, la designación del oficial de
+cumplimiento corresponde al directorio y -de no contar con directorio-, la designación
+está a cargo del gerente general, titular-gerente, administrador u órgano equivalente,
+según corresponda. El oficial de cumplimiento no requiere tener rango gerencial ni
+desarrollar sus actividades a dedicación exclusiva, salvo que la Superintendencia
+determine lo contrario, tomando en consideración, entre otros aspectos, el tamaño de la
+organización, su complejidad, nivel de riesgos operativos, administrativos y legales, así
+como el volumen promedio de operaciones, número de personal, movimiento
+patrimonial, además de las particulares características del sujeto obligado.
+
+b)
+Cuando el corredor de seguros sea persona jurídica con un solo titular (empresa
+individual de responsabilidad limitada -EIRL o similares) con menos de diez (10)
+trabajadores o persona natural, el oficial de cumplimiento puede ser el propio corredor
+de seguros o titular de la persona jurídica.
+
+c)
+Cuando el oficial de cumplimiento sea persona distinta al corredor de seguros persona
+jurídica o al único titular de la persona jurídica, se requiere que dependa laboralmente
+del corredor de seguros persona jurídica o del único titular de la persona jurídica y goce
+de autonomía e independencia en el ejercicio de sus responsabilidades y funciones.
+
+d)
+El oficial de cumplimiento debe reunir, por lo menos, los siguientes requisitos:
+i. Tener conocimiento respecto de las actividades propias del corredor de seguros.
+ii. No ser ni haber sido el auditor interno del sujeto obligado durante los seis (6) meses
+anteriores a su nombramiento.
+iii. En caso de que el oficial de cumplimiento sea el propio corredor o único titular de la
+persona jurídica, no debe estar incurso en los impedimentos establecidos en el
+artículo 4 del Reglamento del Registro de Intermediarios y Auxiliares de Seguros
+aprobado por la Superintendencia o norma que lo sustituya, y debe mantener la
+condición de estar habilitado en el Registro de Intermediarios y Auxiliares de
+Seguros.
+iv. Otros que establezca la Superintendencia mediante oficio múltiple.
+
+Los requisitos a que se refieren los incisos antes señalados pueden constar en
+declaración jurada.
+
+e)
+La designación del oficial de cumplimiento debe ser comunicada a la Superintendencia
+mediante carta dirigida a la UIF-Perú, en un plazo no mayor de quince (15) días hábiles
+de producida, señalando como mínimo: nombres y apellidos, tipo y número de
+documento de identidad, nacionalidad, domicilio, dirección de la oficina en la que
+trabaja, datos de contacto (teléfono y correo electrónico) y el currículum vitae,
+adjuntando la documentación que sustente el cumplimiento de los requisitos a que se
+refiere el literal precedente. Para proteger su identidad, la UIF-Perú asigna códigos
+secretos a los oficiales de cumplimiento luego de verificar la documentación e
+información a que se refiere el presente título.
+
+f)
+Las personas naturales corredores de seguros que suscriban contratos con personas
+jurídicas inscritas como corredores de seguros, que den origen a una relación laboral
+con características de subordinación y dependencia no tienen que designar, en su
+calidad de corredores de seguros, a un oficial de cumplimiento, en razón que dichas
+características determinan la exclusividad del corredor con la empresa corredora de
+seguros, conforme lo señala el artículo 12 del Reglamento del Registro de
+Intermediarios y Auxiliares de Seguros, o norma que lo sustituya.
+
+g)
+El oficial de cumplimiento, así como los trabajadores que estén bajo su dirección, deben
+contar como mínimo con dos (2) capacitaciones especializadas al año, a fin de ser
+instruidos detalladamente sobre la gestión de los riesgos de LA/FT.
+
+65.3 El oficial de cumplimiento es el interlocutor de la empresa ante la Superintendencia en los
+temas relacionados a su función, que son aquellos establecidos en el presente capítulo.
+Adicionalmente, el oficial de cumplimiento debe atender los requerimientos de información o de
+información adicional y/o complementaria solicitada por las autoridades competentes.
+
+65.4 El oficial de cumplimiento de los corredores de seguros a los que se refiere el literal b) del
+numeral 65.2, emite un informe anual sobre la evaluación del cumplimiento de las presentes
+normas aplicables al corredor de seguros, que debe contener al menos lo siguiente:
+i.
+Estadística anual de ROS remitidos a la UIF-Perú, discriminando la información por mes,
+tipo de seguro y montos involucrados, entre otros aspectos que se considere
+significativos.
+ii.
+Descripción de nuevas tipologías de operaciones sospechosas detectadas y reportadas,
+en caso las hubiere.
+iii.
+Políticas de conocimiento del cliente.
+iv.
+Número de capacitaciones recibidas por el sujeto obligado, trabajadores y el oficial de
+cumplimiento, en materia de prevención del LA/FT, incluyendo una breve descripción de
+la capacitación y el número de personas capacitadas.
+v.
+Detalle de las actividades realizadas para el cumplimiento del código de conducta y
+manual, indicando los casos de incumplimiento y las medidas correctivas adoptadas.
+vi.
+Acciones adoptadas respecto de las observaciones que hubiere formulado la
+Superintendencia, de ser el caso, y la oportunidad de estas.
+vii.
+Otros que el oficial de cumplimiento considere relevante.
+viii.
+Otros que determine la Superintendencia mediante comunicación al oficial de
+cumplimiento.
+
+Cuando el corredor de seguros sea persona jurídica, el informe anual se presenta al directorio,
+y de no contar con directorio, al gerente general, titular-gerente, administrador u órgano
+
+equivalente según lo disponga su estatuto social, dentro de los treinta (30) días siguientes al
+vencimiento del año calendario; y se remite a la Superintendencia dentro de los quince (15)
+días siguientes al plazo señalado, a través del medio electrónico que disponga la
+Superintendencia.
+
+Cuando el corredor de seguros sea persona natural, o persona jurídica con un solo titular con
+menos de diez (10) trabajadores, el informe anual debe remitirse a la Superintendencia dentro
+de los cuarentaicinco días (45) días siguientes al vencimiento del año calendario a través del
+medio electrónico que disponga la Superintendencia.
+
+65.5 Código de conducta y manual.-  los corredores de seguros deben contar con un código de
+conducta y manual de prevención y gestión de los riesgos de LA/FT. El código de conducta y
+el manual de los corredores de seguros deben contener políticas y aspectos generales sobre
+prevención del LAFT y tendrán en cuenta los alcances de su función. El código de conducta y
+manual deben ser aprobados por el directorio, y -de no contar con directorio-, por el gerente
+general, titular-gerente, administrador u órgano equivalente según lo disponga el estatuto
+social del sujeto obligado, o el propio sujeto obligado tratándose de los corredores a que se
+refiere el literal b) del numeral 65.2.
+
+El manual debe contener como mínimo, lo siguiente:
+a)
+Definiciones relevantes relacionadas a la prevención y la gestión de los riesgos de LA/FT
+a los que se encuentran expuestos.
+b)
+Objetivo del manual.
+c)
+Políticas referidas a la prevención y gestión de los riesgos de LA/FT.
+d)
+Programas de capacitación.
+e)
+Lineamientos generales establecidos en el código de conducta de las empresas con el
+objetivo de gestionar los riesgos de LA/FT.
+f)
+Sanciones internas, contempladas en el Reglamento Interno de Trabajo de la empresa,
+cuando corresponda, por incumplimientos del código de conducta, el manual, el sistema
+de prevención del LA/FT en su conjunto o las disposiciones legales vigentes.
+g)
+Señales de alerta para la detección de operaciones inusuales o sospechosas.
+h)
+Procedimiento de análisis de alertas, operaciones inusuales y operaciones sospechosas.
+
+El código de conducta debe considerar aspectos destinados a asegurar el adecuado
+funcionamiento del sistema de prevención del LA/FT y establecer medidas para garantizar el
+deber de reserva indeterminado, de la información relacionada al sistema de prevención del
+LA/FT.
+
+Los corredores de seguros pueden establecer convenios con el fin de contar con un código de
+conducta y un manual único a nivel gremial.
+
+65.6  Programas de capacitación.- Son aplicables las disposiciones contenidas en el subcapítulo IV
+del capítulo V del título I del Reglamento con relación al desarrollo de capacitaciones dirigidas
+a los trabajadores bajo la dirección del corredor de seguros. Los corredores de seguros pueden
+establecer convenios con el fin de capacitarse a nivel gremial.
+
+Artículo 66.- Reporte de operaciones sospechosas
+Los corredores de seguros reportan las operaciones sospechosas conforme lo establecido en el Título
+II del Reglamento, tomando en consideración, de manera especial, lo dispuesto en el Anexo Nº 5, en
+lo que resulte aplicable.
+
+Artículo 67.- Conservación de documentos
+Los corredores de seguros deben conservar la información relacionada con el sistema de prevención
+del LA/FT por un plazo no menor a diez (10) años. Esta información comprende, principalmente:
+a) La información relacionada con la vinculación y operaciones realizadas por los clientes,
+incluyendo toda aquella información obtenida y/o generada en aplicación de las medidas de
+debida diligencia.
+b) Los procedimientos y análisis efectuados y demás información referida al cumplimiento de las
+obligaciones expresamente contempladas en el presente Título.
+Para tal efecto, se utilizan medios informáticos, microfilmación, microformas o similares que permitan
+una fácil recuperación de la información para su consulta y reporte interno o externo a las autoridades
+competentes conforme a Ley.
