@@ -57,7 +57,7 @@ def create_rag_router(get_facade: Callable[[], RagFacade]) -> APIRouter:
     @router.post("/search", response_model=SearchResponse)
     def search(body: SearchRequest, rag: RagFacade = Facade):
         try:
-            res = rag.search(body.query, body.fecha, body.top_k, body.incluir_proyectos)
+            res = rag.search(body.query, body.fecha, body.top_k, body.incluir_proyectos, norma=body.norma)
         except RagError as exc:
             raise _http(exc) from exc
         return SearchResponse.model_validate(res)

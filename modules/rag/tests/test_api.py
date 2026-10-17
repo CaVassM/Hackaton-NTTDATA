@@ -55,3 +55,9 @@ def test_ingest_rechaza_rutas_fuera_de_raw(client):
     assert client.post("/rag/ingest", json={"ruta": "../../"}).status_code == 400
     r = client.post("/rag/ingest", json={"ruta": "sinteticos"})
     assert r.status_code == 200 and len(r.json()["normas_omitidas"]) == 3
+
+
+def test_search_con_filtro_de_norma(client):
+    r = client.post("/rag/search", json={"query": "plazo de reclamos", "norma": BASE, "top_k": 5})
+    assert r.status_code == 200 and all(f["cita"]["norma"] == BASE for f in r.json()["fragmentos"])
+    assert client.post("/rag/search", json={"query": "plazo", "norma": "Res SBS 1-1990"}).status_code == 404
