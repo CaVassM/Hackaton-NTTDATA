@@ -6,7 +6,7 @@ requires-python = ">=3.11"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
-testpaths = ["modules", "shared"]
+testpaths = ["modules", "shared", "nanda"]
 markers = [
     "ollama: requiere Ollama corriendo con los modelos configurados",
 ]
