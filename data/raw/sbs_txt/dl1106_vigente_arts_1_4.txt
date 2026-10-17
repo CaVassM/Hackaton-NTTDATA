@@ -1,0 +1,35 @@
+CODIGO: Decreto Legislativo N° 1106
+TITULO: Decreto Legislativo de lucha eficaz contra el lavado de activos y otros delitos relacionados a la mineria ilegal y crimen organizado (articulos 1-4 vigentes, conforme a Ley N° 31178)
+TIPO: decreto_legislativo
+FECHA_EMISION: 2012-04-18
+ESTADO: vigente
+VIGENCIA_DESDE: 2021-04-29
+FUENTE_OFICIAL: https://busquedas.elperuano.pe/dispositivo/NL/1947912-1
+---
+CORPUS PARCIAL: contiene el texto vigente de los articulos 1 al 4, modificado por la Ley N° 31178, publicada el 28/04/2021. No incluye el resto del Decreto Legislativo 1106 ni constituye un texto unico ordenado.
+
+Artículo 1. Actos de conversión y transferencia
+El que convierte o transfiere dinero, bienes, efectos o ganancias cuyo origen ilícito conoce o debía presumir, con la finalidad de evitar la identificación de su origen, su incautación o decomiso, será reprimido con pena privativa de la libertad no menor de ocho ni mayor de quince años y con ciento veinte a trescientos cincuenta días multa e inhabilitación de cinco a veinte años de conformidad con los incisos 1, 2 y 8 del artículo 36 del Código Penal.
+
+Artículo 2. Actos de ocultamiento y tenencia
+El que adquiere, utiliza, posee, guarda, administra, custodia, recibe, oculta o mantiene en su poder dinero, bienes, efectos o ganancias, cuyo origen ilícito conoce o debía presumir, será reprimido con pena privativa de la libertad no menor de ocho ni mayor de quince años y con ciento veinte a trescientos cincuenta días multa e inhabilitación de cinco a veinte años de conformidad con los incisos 1, 2 y 8 del artículo 36 del Código Penal.
+
+Artículo 3. Transporte, traslado, ingreso o salida por territorio nacional de dinero o títulos valores de origen ilícito
+El que transporta o traslada consigo o por cualquier medio dentro del territorio nacional dinero en efectivo o instrumentos financieros negociables emitidos “al portador” cuyo origen ilícito conoce o debía presumir, con la finalidad de evitar la identificación de su origen, su incautación o decomiso; o hace ingresar o salir del país consigo o por cualquier medio tales bienes, cuyo origen ilícito conoce o debía presumir, con igual finalidad, será reprimido con pena privativa de libertad no menor de ocho ni mayor de quince años y con ciento veinte a trescientos cincuenta días multa e inhabilitación de cinco a veinte años de conformidad con los incisos 1, 2 y 8 del artículo 36 del Código Penal.
+
+Artículo 4. Circunstancias agravantes y atenuantes
+La pena será privativa de la libertad no menor de diez ni mayor de veinte años y trescientos sesenta y cinco a setecientos treinta días multa, cuando:
+
+1. El agente utilice o se sirva de su condición de funcionario público o de agente del sector inmobiliario, financiero, bancario o bursátil.
+
+2. El agente cometa el delito en calidad de integrante de una organización criminal.
+
+3. El valor del dinero, bienes, efectos o ganancias involucrados sea superior al equivalente a quinientas (500) unidades impositivas tributarias.
+
+La pena será privativa de la libertad no menor de veinticinco años cuando el dinero, bienes, efectos o ganancias provienen de la minería ilegal, tráfico ilícito de drogas, terrorismo, secuestro, extorsión o trata de personas.
+
+La pena será privativa de la libertad no menor de cuatro ni mayor de seis años y de ochenta a ciento diez días multa, cuando el valor del dinero, bienes, efectos o ganancias involucrados no sea superior al equivalente a cinco (5) unidades impositivas tributarias.
+
+La misma pena se aplicará a quien proporcione a las autoridades información eficaz para evitar la consumación del delito, identificar y capturar a sus autores o partícipes, así como detectar o incautar los activos objeto de los actos descritos en los artículos 1, 2 y 3 del presente decreto legislativo.
+
+En los supuestos de los numerales 2 y 3 y segundo párrafo del presente artículo, la inhabilitación será perpetua.

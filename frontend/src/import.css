@@ -1,0 +1,18 @@
+.page-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.secondary { border: 1px solid var(--line, #d7dce5); color: var(--ink, #243047); background: #fff; border-radius: 10px; padding: .7rem 1rem; font: inherit; font-weight: 650; cursor: pointer; }
+.secondary:hover, .text-button:hover { filter: brightness(.94); }
+.import-panel { margin-bottom: 1.25rem; }
+.import-guidance, .import-warning { line-height: 1.6; margin: .75rem 0; }
+.import-warning { border-left: 3px solid #d8922b; background: #fff8eb; color: #68490e; border-radius: 6px; padding: .75rem 1rem; }
+.import-controls { display: flex; align-items: end; flex-wrap: wrap; gap: .8rem; }
+.file-label { display: grid; gap: .45rem; font-size: .85rem; font-weight: 650; }
+.file-label input { max-width: min(100%, 25rem); font: inherit; }
+.import-progress { margin-top: .9rem; color: #42536d; font-size: .9rem; }
+.batch-summary { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; margin: 1rem 0; }
+.batch-summary span { border: 1px solid var(--line, #d7dce5); background: #f8fafc; border-radius: 999px; padding: .45rem .8rem; font-size: .85rem; }
+.batch-summary strong { margin-right: .25rem; }
+.batch-table { max-height: 32rem; overflow: auto; }
+.batch-table table { min-width: 65rem; }
+.batch-table th { position: sticky; top: 0; z-index: 1; background: #f5f7fa; }
+.batch-detail { min-width: 24rem; white-space: normal; line-height: 1.5; }
+@media (max-width: 700px) { .page-actions, .import-controls { align-items: stretch; flex-direction: column; } .page-actions > *, .import-controls > * { width: 100%; } }

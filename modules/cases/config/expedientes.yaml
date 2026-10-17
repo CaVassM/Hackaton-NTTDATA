@@ -37,12 +37,12 @@ fechas:
   limite: 'fecha objetivo de atencion interna:\s*(\d{4}-\d{2}-\d{2})'
   atencion: 'fecha de atencion registrada:\s*(\d{4}-\d{2}-\d{2})'
 
-# 4) Norma de referencia. `norma_rag`: codigo con el que el DL 1106 estaria
-#    ingerido en el RAG. Si no esta ingerido, la cita sale NO_DISPONIBLE_EN_CORPUS.
+# 4) Norma de referencia. El corpus contiene los articulos 1-4 vigentes del DL
+#    1106, modificados por la Ley 31178 desde el 2021-04-29.
 norma:
-  etiqueta: "Art. {articulo} (DL 1106, texto original)"
+  etiqueta: "Art. {articulo} (DL 1106, texto vigente conforme a Ley 31178)"
   norma_rag: "Decreto Legislativo N° 1106"
-  fuente_legal_sin_corpus: "NO_DISPONIBLE_EN_CORPUS (falta ingerir DL-1106-LPDerecho.pdf)"
+  fuente_legal_sin_corpus: "NO_DISPONIBLE_EN_CORPUS (texto vigente de DL 1106 no cargado)"
 
 textos:
   POSIBLE_INCUMPLIMIENTO:

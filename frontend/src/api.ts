@@ -33,11 +33,30 @@ export type CaseResult = {
   evaluado_en: string;
 };
 
+export type ExpedienteBatchItem = {
+  id_caso: string | null;
+  ok: boolean;
+  error?: string | null;
+  result?: { fila: Record<string, unknown> } | null;
+};
+
 export type SearchResult = { query: string; fecha: string; fecha_por_defecto: boolean; fragmentos: Array<{ texto: string; cita: Citation }> };
 export type Health = { status: "ok" | "degradado"; version: string; ollama: { reachable: boolean; models: Record<string, boolean>; error?: string | null }; bases: { rag?: { versiones_sql?: number; [key: string]: unknown }; cases?: Record<string, unknown>; [key: string]: unknown }; audit_mode: string; policy_version: string };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { headers: { "Content-Type": "application/json", ...init?.headers }, ...init });
+  if (!response.ok) {
+    let detail = `Error ${response.status}`;
+    try { const body = await response.json(); detail = typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail ?? body); } catch { /* respuesta sin JSON */ }
+    throw new Error(detail);
+  }
+  return response.json() as Promise<T>;
+}
+
+async function uploadCsv<T>(path: string, file: File): Promise<T> {
+  const form = new FormData();
+  form.append("file", file);
+  const response = await fetch(`${API_URL}${path}`, { method: "POST", body: form });
   if (!response.ok) {
     let detail = `Error ${response.status}`;
     try { const body = await response.json(); detail = typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail ?? body); } catch { /* respuesta sin JSON */ }
@@ -52,6 +71,7 @@ export const api = {
   caseSchema: () => request<CaseSchema>("/cases/schema"),
   case: (id: string) => request<CaseResult>(`/cases/${encodeURIComponent(id)}`),
   evaluateCase: (payload: unknown) => request<CaseResult>("/cases/evaluate", { method: "POST", body: JSON.stringify(payload) }),
+  importExpedientesCsv: (file: File) => uploadCsv<ExpedienteBatchItem[]>("/cases/expedientes/batch?formato=json", file),
   search: (payload: { query: string; fecha?: string; top_k: number; incluir_proyectos: boolean }) => request<SearchResult>("/rag/search", { method: "POST", body: JSON.stringify(payload) }),
   report: () => request<{ reporte: Record<string, unknown> }>("/compliance/report", { method: "POST", body: JSON.stringify({}) }),
 };

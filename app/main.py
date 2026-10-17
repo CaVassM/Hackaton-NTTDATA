@@ -38,6 +38,7 @@ class AppSettings(BaseAppSettings):
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://hackaton-nttdata.vercel.app",
+        "https://hackaton-nttdata-5oexvlese-cavassms-projects.vercel.app",
     ]
 
 

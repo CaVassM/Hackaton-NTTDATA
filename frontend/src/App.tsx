@@ -1,5 +1,6 @@
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
-import { api, CaseResult, CaseSchema, CaseSummary, Citation, Health, SearchResult } from "./api";
+import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, Health, SearchResult } from "./api";
+import "./import.css";
 
 type View = "dashboard" | "cases" | "rag" | "alerts" | "detail";
 type Notice = { kind: "error" | "success"; text: string } | null;
@@ -15,6 +16,76 @@ const today = (() => {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 })();
+
+const IMPORT_CHUNK_SIZE = 40;
+type BatchAssessment = { label: string; tone: string; detail: string; source: string; priority: string };
+
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let quoted = false;
+  const source = text.replace(/^\uFEFF/, "");
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === '"') {
+      if (quoted && source[index + 1] === '"') { field += '"'; index += 1; }
+      else quoted = !quoted;
+    } else if (!quoted && char === ",") {
+      row.push(field); field = "";
+    } else if (!quoted && (char === "\n" || char === "\r")) {
+      if (char === "\r" && source[index + 1] === "\n") index += 1;
+      row.push(field);
+      if (row.some((value) => value.trim())) rows.push(row);
+      row = []; field = "";
+    } else field += char;
+  }
+  if (quoted) throw new Error("El CSV tiene comillas sin cerrar.");
+  row.push(field);
+  if (row.some((value) => value.trim())) rows.push(row);
+  if (rows.length < 2) throw new Error("El CSV debe tener encabezados y al menos un caso.");
+  const headers = rows[0].map((value) => value.trim());
+  const required = ["id_caso", "descripcion_caso"];
+  const missing = required.filter((name) => !headers.includes(name));
+  if (missing.length) throw new Error(`Faltan columnas obligatorias: ${missing.join(", ")}.`);
+  if (new Set(headers).size !== headers.length || headers.some((value) => !value)) {
+    throw new Error("Los encabezados deben tener nombres unicos y no pueden estar vacios.");
+  }
+  const badRow = rows.slice(1).findIndex((values) => values.length !== headers.length);
+  if (badRow >= 0) throw new Error(`La fila ${badRow + 2} tiene ${rows[badRow + 1].length} columnas; se esperaban ${headers.length}.`);
+  return rows;
+}
+
+function csvText(rows: string[][]): string {
+  return rows.map((row) => row.map((value) => `"${value.replaceAll('"', '""')}"`).join(",")).join("\r\n");
+}
+
+function assessExpediente(item: ExpedienteBatchItem): BatchAssessment {
+  if (!item.ok || !item.result) {
+    return { label: "No evaluado", tone: "warn", detail: item.error || "No se obtuvo resultado.", source: "—", priority: "—" };
+  }
+  const row = item.result.fila;
+  const result = String(row.resultado_esperado ?? "");
+  const source = String(row.fuente_legal ?? "");
+  const priority = String(row.prioridad ?? "—");
+  if (result === "POSIBLE_INCUMPLIMIENTO") {
+    const reason = String(row.por_que_si_o_no ?? "Se detectaron señales que requieren revisión.");
+    const limitation = String(row.limitacion_de_la_evaluacion ?? "");
+    return { label: "Posible incumplimiento", tone: "danger", detail: [reason, limitation].filter(Boolean).join(" "), source, priority };
+  }
+  if (result === "SIN_INCUMPLIMIENTO_DETECTADO") {
+    return { label: "Sin indicios detectados", tone: "good", detail: String(row.por_que_si_o_no ?? ""), source, priority };
+  }
+  return { label: "Información insuficiente", tone: "warn", detail: String(row.por_que_si_o_no ?? "No hay datos suficientes para evaluar."), source, priority };
+}
+
+function downloadCsv(name: string, rows: string[][]) {
+  const blob = new Blob([`\uFEFF${csvText(rows)}`], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url; link.download = name; link.click();
+  URL.revokeObjectURL(url);
+}
 
 function stateLabel(state?: string | null) {
   const value = state ?? "sin decisión";
@@ -90,7 +161,7 @@ export default function App() {
         {notice && <div className={`notice ${notice.kind}`} role="status"><span>{notice.kind === "error" ? "!" : "✓"}</span>{notice.text}<button aria-label="Cerrar" onClick={() => setNotice(null)}>×</button></div>}
         {loading && <div className="loading-line" />}
         {view === "dashboard" && <Dashboard health={health} cases={cases} openCase={openCase} go={navigate} />}
-        {view === "cases" && <CasesPage cases={cases} onOpen={openCase} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
+        {view === "cases" && <CasesPage cases={cases} onOpen={openCase} onImported={() => { void refresh(); }} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
         {view === "detail" && <CaseDetail result={selected} onBack={() => setView("cases")} />}
         {view === "rag" && <RagPage />}
         {view === "alerts" && <AlertsPage />}
@@ -118,14 +189,77 @@ function HealthRow({ label, value, ok }: { label: string; value: string; ok: boo
 
 function CaseTable({ cases, onOpen }: { cases: CaseSummary[]; onOpen: (id: string) => void }) { return <div className="table-wrap"><table><thead><tr><th>Identificador</th><th>Evento</th><th>Decisión</th><th>Evaluado</th><th /></tr></thead><tbody>{cases.map((item) => <tr key={item.case_id}><td><code>{item.case_id}</code></td><td>{stateLabel(item.tipo_evento)}</td><td><Pill value={item.decision} /></td><td>{new Date(item.evaluado_en).toLocaleDateString("es-PE")}</td><td><button className="row-button" onClick={() => void onOpen(item.case_id)}>Revisar</button></td></tr>)}</tbody></table></div>; }
 
-function CasesPage({ cases, onOpen, onCreated }: { cases: CaseSummary[]; onOpen: (id: string) => void; onCreated: (result: CaseResult) => void }) {
+function CasesPage({ cases, onOpen, onCreated, onImported }: { cases: CaseSummary[]; onOpen: (id: string) => void; onCreated: (result: CaseResult) => void; onImported: () => void }) {
   const [showForm, setShowForm] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const [schema, setSchema] = useState<CaseSchema | null>(null);
   const [schemaError, setSchemaError] = useState<string | null>(null);
   useEffect(() => { void api.caseSchema().then(setSchema).catch((reason) => setSchemaError((reason as Error).message)); }, []);
-  return <section className="page"><div className="page-heading"><div><span className="eyebrow">EXPEDIENTES OFICIALES</span><h1>Gestión integral de casos</h1><p>Registra eventos, evalúa obligaciones y conserva la trazabilidad de la auditoría.</p></div><button className="primary" onClick={() => setShowForm((visible) => !visible)}>{showForm ? "Cerrar formulario" : "+ Nuevo caso"}</button></div>{schemaError && <div className="notice error">No se pudo cargar el catálogo de eventos: {schemaError}</div>}{showForm && <CaseForm eventTypes={schema?.tipos_evento ?? {}} onSuccess={onCreated} />}
-    <article className="panel"><div className="panel-title"><div><h2>Registro central</h2><p>Última evaluación por caso.</p></div><span className="counter">{cases.length} casos</span></div>{cases.length ? <CaseTable cases={cases} onOpen={onOpen} /> : <Empty>No hay expedientes en la base todavía.</Empty>}</article>
+  return <section className="page">
+    <div className="page-heading"><div><span className="eyebrow">EXPEDIENTES OFICIALES</span><h1>Gestión integral de casos</h1><p>Registra eventos, evalúa obligaciones y conserva la trazabilidad de la auditoría.</p></div><div className="page-actions"><button className="secondary" onClick={() => setShowImport((visible) => !visible)}>{showImport ? "Cerrar importación" : "Importar CSV"}</button><button className="primary" onClick={() => setShowForm((visible) => !visible)}>{showForm ? "Cerrar formulario" : "+ Nuevo caso"}</button></div></div>
+    {schemaError && <div className="notice error">No se pudo cargar el catálogo de eventos: {schemaError}</div>}
+    {showImport && <ExpedienteImport onImported={onImported} />}
+    {showForm && <CaseForm eventTypes={schema?.tipos_evento ?? {}} onSuccess={onCreated} />}
+    <article className="panel"><div className="panel-title"><div><h2>Registro central</h2><p>Última evaluación por caso.</p></div><span className="counter">{cases.length} casos</span></div>{cases.length ? <CaseTable cases={cases} onOpen={onOpen} /> : <Empty>No hay expedientes en la base todavia.</Empty>}</article>
   </section>;
+}
+
+function ExpedienteImport({ onImported }: { onImported: () => void }) {
+  const [file, setFile] = useState<File | null>(null);
+  const [results, setResults] = useState<ExpedienteBatchItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [progress, setProgress] = useState({ done: 0, total: 0 });
+  const assessments = results.map(assessExpediente);
+  const possibleCount = assessments.filter((item) => item.label === "Posible incumplimiento").length;
+  const insufficientCount = assessments.filter((item) => item.label === "Información insuficiente").length;
+  const missingNormCount = assessments.filter((item) => item.source.includes("NO_DISPONIBLE_EN_CORPUS")).length;
+
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!file) return;
+    setImporting(true); setError(null); setResults([]); setProgress({ done: 0, total: 0 });
+    let completed = 0;
+    try {
+      const rows = parseCsv(await file.text());
+      const headers = rows[0];
+      const records = rows.slice(1);
+      setProgress({ done: 0, total: records.length });
+      for (let offset = 0; offset < records.length; offset += IMPORT_CHUNK_SIZE) {
+        const chunk = records.slice(offset, offset + IMPORT_CHUNK_SIZE);
+        const part = new File([csvText([headers, ...chunk])], `lote-${Math.floor(offset / IMPORT_CHUNK_SIZE) + 1}.csv`, { type: "text/csv" });
+        const batch = await api.importExpedientesCsv(part);
+        setResults((previous) => [...previous, ...batch]);
+        completed += chunk.length;
+        setProgress({ done: completed, total: records.length });
+      }
+      onImported();
+    } catch (reason) {
+      setError(`${completed ? `Se procesaron ${completed} casos antes del error. ` : ""}${(reason as Error).message}`);
+      if (completed) onImported();
+    } finally { setImporting(false); }
+  };
+
+  const exportResults = () => {
+    const rows: string[][] = [["id_caso", "resultado", "prioridad", "explicacion", "fuente_legal", "revision_humana"]];
+    results.forEach((item) => {
+      const row = item.result?.fila ?? {};
+      const assessment = assessExpediente(item);
+      rows.push([item.id_caso ?? "", assessment.label, assessment.priority, assessment.detail,
+        assessment.source, String(row.revision_humana ?? "PENDIENTE")]);
+    });
+    downloadCsv("resultados_revision_expedientes.csv", rows);
+  };
+
+  return <article className="panel import-panel">
+    <div className="panel-title"><div><h2>Importar y revisar expedientes</h2><p>Sube un CSV para detectar señales por caso y descargar el resultado completo.</p></div>{results.length > 0 && <button className="text-button" onClick={exportResults}>Descargar resultados CSV</button>}</div>
+    <p className="import-guidance">Columnas obligatorias: <code>id_caso</code>, <code>descripcion_caso</code>. Fechas opcionales: <code>fecha_registro</code>, <code>fecha_limite_interna</code>, <code>fecha_atencion</code>. El archivo se procesa en bloques de {IMPORT_CHUNK_SIZE} casos.</p>
+    <p className="import-warning">La clasificación marca posibles indicios para revisión; no determina responsabilidad legal. Consulta los artículos 1-4 vigentes del D. Leg. 1106, modificados por la Ley 31178.</p>
+    <form onSubmit={submit}><div className="import-controls"><label className="file-label">Archivo CSV<input type="file" accept=".csv,text/csv" onChange={(event) => { setFile(event.currentTarget.files?.[0] ?? null); setResults([]); setError(null); }} /></label><button type="button" className="text-button" onClick={() => downloadCsv("plantilla_expedientes.csv", [["id_caso", "descripcion_caso", "fecha_registro", "fecha_limite_interna", "fecha_atencion"], ["EXP-001", "Descripcion completa del expediente con los hechos y soportes conocidos.", "", "", ""]])}>Descargar plantilla</button><button className="primary" disabled={!file || importing}>{importing ? `Evaluando ${progress.done}/${progress.total || "?"}` : "Importar y evaluar"}</button></div></form>
+    {progress.total > 0 && <div className="import-progress" role="status">Procesados {progress.done} de {progress.total} casos.</div>}
+    {error && <div className="form-error">{error}</div>}
+    {results.length > 0 && <><div className="batch-summary"><span><strong>{possibleCount}</strong> posibles incumplimientos</span><span><strong>{insufficientCount}</strong> con información insuficiente</span><span><strong>{missingNormCount}</strong> sin cita normativa cargada</span></div><div className="table-wrap batch-table"><table><thead><tr><th>Caso</th><th>Resultado</th><th>Prioridad</th><th>Fundamento / fuente</th><th>Explicación</th></tr></thead><tbody>{results.map((item, index) => { const assessment = assessExpediente(item); const sourceMissing = assessment.source.includes("NO_DISPONIBLE_EN_CORPUS"); return <tr key={`${item.id_caso ?? "sin-id"}-${index}`}><td><code>{item.id_caso ?? "?"}</code></td><td><Pill value={assessment.label} tone={assessment.tone} /></td><td>{assessment.priority}</td><td>{sourceMissing ? "Texto aplicable no disponible en el corpus" : assessment.source}</td><td className="batch-detail">{assessment.detail}</td></tr>; })}</tbody></table></div></>}
+  </article>;
 }
 
 function CaseForm({ eventTypes, onSuccess }: { eventTypes: CaseSchema["tipos_evento"]; onSuccess: (result: CaseResult) => void }) {

@@ -93,6 +93,7 @@ Qué significa cada variable:
 ### 4. Cargar la normativa (ingesta)
 
 ```powershell
+python -m modules.rag.cli ingest data/raw/sbs_txt
 python -m modules.rag.cli ingest data/raw/sinteticos
 python -m modules.rag.cli health            # "ok": true y 8 versiones en los índices
 ```
@@ -143,6 +144,12 @@ pytest -q            # no necesita los servidores levantados; con Ollama apagado
 | `400` al usar curl con tildes en el JSON | Manda el JSON desde un archivo: `--data-binary @archivo.json` |
 | En PowerShell, `curl` se comporta raro | `curl` es un alias de `Invoke-WebRequest`; usa `curl.exe` |
 | `address already in use` | El puerto está ocupado: usa otro con `--port`, y en el auditor también cambia `A2A_PUBLIC_URL` |
+
+## Importar expedientes por lote
+
+En **Gestión de casos**, usa **Importar CSV**. La plantilla usa `id_caso` y `descripcion_caso` como columnas obligatorias; `fecha_registro`, `fecha_limite_interna` y `fecha_atencion` son opcionales. La interfaz envía lotes de 40 filas y permite descargar un CSV con la clasificación, explicación, fuente y revisión humana pendiente.
+
+El análisis determinista identifica posibles indicios, ausencia de indicios detectables o información insuficiente; no determina culpabilidad ni sustituye una revisión legal. El corpus de este proyecto contiene solo los artículos 1-4 vigentes del Decreto Legislativo 1106, modificados por la [Ley 31178](https://busquedas.elperuano.pe/dispositivo/NL/1947912-1) desde el 29/04/2021. No es el texto consolidado completo del decreto.
 
 ## Uso
 
