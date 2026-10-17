@@ -1,0 +1,31 @@
+{
+  "jsonrpc": "2.0",
+  "id": "demo-1",
+  "method": "SendMessage",
+  "params": {
+    "message": {
+      "messageId": "9b0f6a0e-0000-4000-8000-000000000001",
+      "role": "ROLE_USER",
+      "parts": [
+        {
+          "mediaType": "application/json",
+          "data": {
+            "interaction_id": "demo-uif-001",
+            "user_id": "analista-01",
+            "role": "analista",
+            "query": "¿Debo reportar esta operación a la UIF?",
+            "use_case": "aml_reporte",
+            "candidate": {
+              "text": "La operación debe reportarse a la UIF dentro de 24 horas porque supera S/ 50,000 y representa un riesgo alto.",
+              "claims": [
+                {"claim_id": "c1", "text": "La operación debe reportarse a la UIF dentro de 24 horas", "type": "normativa", "evidence_ids": [6]},
+                {"claim_id": "c2", "text": "porque supera S/ 50,000", "type": "dato_caso", "evidence_ids": []},
+                {"claim_id": "c3", "text": "y representa un riesgo alto", "type": "inferencia", "evidence_ids": []}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

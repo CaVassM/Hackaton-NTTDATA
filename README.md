@@ -1,6 +1,8 @@
 # Hackaton NTTDATA — RAG temporal sobre normativa SBS
 
-Monorepo modular, 100 % local (Ollama, sin APIs externas). Este repo contiene, por ahora, el módulo **`rag`**: búsqueda sobre normativa bancaria peruana (SBS) que
+Monorepo modular, 100 % local (Ollama, sin APIs externas). Módulos actuales: **`rag`** (abajo) y **`audit`**, el auditor de respuestas expuesto como agente A2A ([modules/audit/README.md](modules/audit/README.md)), con su cliente y registro de agentes en `nanda/`.
+
+El módulo **`rag`** ofrece: búsqueda sobre normativa bancaria peruana (SBS) que
 
 - **cita la fuente exacta** (norma, artículo, versión, intervalo de vigencia);
 - sabe **qué texto estaba vigente en una fecha dada**;
