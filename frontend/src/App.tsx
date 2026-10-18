@@ -1,4 +1,4 @@
-import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useState } from "react";
+import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, Health, SearchResult } from "./api";
 import { ClampedText, FragmentCard } from "./ResultCards";
 import { AgentFlow, ExpedienteFlow, ExpedienteSections, ObligationList, pretty } from "./CaseParts";
@@ -279,15 +279,31 @@ function ExpedienteImport({ onImported }: { onImported: () => Promise<void> }) {
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0 });
+  const [fileInfo, setFileInfo] = useState<{ rows: number; missing: string[] } | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const pickFile = async (next: File | null) => {
+    setFile(next); setResults([]); setError(null); setFinished(false); setProgress({ done: 0, total: 0 }); setFileInfo(null);
+    if (!next) return;
+    try {
+      const rows = parseCsv(await next.text());
+      const headers = (rows[0] ?? []).map((h) => h.replace(/^\uFEFF/, "").trim().toLowerCase());
+      setFileInfo({ rows: Math.max(0, rows.length - 1), missing: ["id_caso", "descripcion_caso"].filter((c) => !headers.includes(c)) });
+    } catch { setFileInfo({ rows: 0, missing: ["id_caso", "descripcion_caso"] }); }
+  };
   const assessments = results.map(assessExpediente);
   const possibleCount = assessments.filter((item) => item.label === "Posible incumplimiento").length;
   const insufficientCount = assessments.filter((item) => item.label === "Información insuficiente").length;
   const missingNormCount = assessments.filter((item) => item.source.includes("NO_DISPONIBLE_EN_CORPUS")).length;
+  const clearCount = assessments.filter((item) => item.label === "Sin indicios detectados").length;
+  const failedCount = assessments.filter((item) => item.label === "No evaluado").length;
+  const pct = progress.total ? Math.round((progress.done / progress.total) * 100) : 0;
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!file) return;
-    setImporting(true); setError(null); setResults([]); setProgress({ done: 0, total: 0 });
+    setImporting(true); setError(null); setResults([]); setFinished(false); setProgress({ done: 0, total: 0 });
     let completed = 0;
     try {
       const rows = parseCsv(await file.text());
@@ -303,6 +319,7 @@ function ExpedienteImport({ onImported }: { onImported: () => Promise<void> }) {
         setProgress({ done: completed, total: records.length });
       }
       await onImported();
+      setFinished(true);
     } catch (reason) {
       setError(`${completed ? `Se procesaron ${completed} casos antes del error. ` : ""}${(reason as Error).message}`);
       if (completed) await onImported();
@@ -320,14 +337,59 @@ function ExpedienteImport({ onImported }: { onImported: () => Promise<void> }) {
     downloadCsv("resultados_revision_expedientes.csv", rows);
   };
 
+  const formatSize = (bytes: number) => bytes < 1024 ? `${bytes} B` : bytes < 1048576 ? `${(bytes / 1024).toFixed(0)} KB` : `${(bytes / 1048576).toFixed(1)} MB`;
+  const canImport = !!file && !importing && !!fileInfo && fileInfo.missing.length === 0 && fileInfo.rows > 0;
   return <article className="panel import-panel">
-    <div className="panel-title"><div><h2>Importar y revisar expedientes</h2><p>Sube un CSV para detectar señales por caso y descargar el resultado completo.</p></div>{results.length > 0 && <button className="text-button" onClick={exportResults}>Descargar resultados CSV</button>}</div>
-    <p className="import-guidance">Columnas obligatorias: <code>id_caso</code>, <code>descripcion_caso</code>. Fechas opcionales: <code>fecha_registro</code>, <code>fecha_limite_interna</code>, <code>fecha_atencion</code>. El archivo se procesa en bloques de {IMPORT_CHUNK_SIZE} casos.</p>
+    <div className="panel-title"><div><h2>Importar y revisar expedientes</h2><p>Sube un CSV para detectar señales por caso y descargar el resultado completo.</p></div></div>
+    <div className="import-columns">
+      <div><small>Columnas obligatorias</small><div className="chips"><span className="chip chip-strong">id_caso</span><span className="chip chip-strong">descripcion_caso</span></div></div>
+      <div><small>Opcionales</small><div className="chips"><span className="chip">fecha_registro</span><span className="chip">fecha_limite_interna</span><span className="chip">fecha_atencion</span></div></div>
+      <div><small>Procesamiento</small><div className="chips"><span className="chip">Bloques de {IMPORT_CHUNK_SIZE} casos</span></div></div>
+    </div>
     <p className="import-warning">La clasificación marca posibles indicios para revisión; no determina responsabilidad legal. Consulta los artículos 1-4 vigentes del D. Leg. 1106, modificados por la Ley 31178.</p>
-    <form onSubmit={submit}><div className="import-controls"><label className="file-label">Archivo CSV<input type="file" accept=".csv,text/csv" onChange={(event) => { setFile(event.currentTarget.files?.[0] ?? null); setResults([]); setError(null); }} /></label><button type="button" className="text-button" onClick={() => downloadCsv("plantilla_expedientes.csv", [["id_caso", "descripcion_caso", "fecha_registro", "fecha_limite_interna", "fecha_atencion"], ["EXP-001", "Descripcion completa del expediente con los hechos y soportes conocidos.", "", "", ""]])}>Descargar plantilla</button><button className="primary" disabled={!file || importing}>{importing ? `Evaluando ${progress.done}/${progress.total || "?"}` : "Importar y evaluar"}</button></div></form>
-    {progress.total > 0 && <div className="import-progress" role="status">Procesados {progress.done} de {progress.total} casos.</div>}
-    {error && <div className="form-error">{error}</div>}
-    {results.length > 0 && <><div className="batch-summary"><span><strong>{possibleCount}</strong> posibles incumplimientos</span><span><strong>{insufficientCount}</strong> con información insuficiente</span><span><strong>{missingNormCount}</strong> sin cita normativa cargada</span></div><div className="table-wrap batch-table"><table><thead><tr><th>Caso</th><th>Resultado</th><th>Prioridad</th><th>Fundamento / fuente</th><th>Explicación</th></tr></thead><tbody>{results.map((item, index) => { const assessment = assessExpediente(item); const sourceMissing = assessment.source.includes("NO_DISPONIBLE_EN_CORPUS"); return <tr key={`${item.id_caso ?? "sin-id"}-${index}`}><td><code>{item.id_caso ?? "?"}</code></td><td><Pill value={assessment.label} tone={assessment.tone} /></td><td>{assessment.priority}</td><td>{sourceMissing ? "Texto aplicable no disponible en el corpus" : assessment.source}</td><td className="batch-detail">{assessment.detail}</td></tr>; })}</tbody></table></div></>}
+    <form onSubmit={submit}>
+      <input ref={fileInput} type="file" accept=".csv,text/csv" hidden onChange={(event) => { void pickFile(event.currentTarget.files?.[0] ?? null); event.currentTarget.value = ""; }} />
+      {!file ? <div className={`dropzone ${dragging ? "dragging" : ""}`} role="button" tabIndex={0}
+        onClick={() => fileInput.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fileInput.current?.click(); } }}
+        onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)}
+        onDrop={(event) => { event.preventDefault(); setDragging(false); const dropped = event.dataTransfer.files?.[0]; if (dropped) void pickFile(dropped); }}>
+        <span className="dz-icon" aria-hidden>⇪</span>
+        <strong>Arrastra tu archivo CSV aquí</strong>
+        <span>o <u>elige un archivo</u> de tu equipo</span>
+        <small>Solo .csv · codificación UTF-8</small>
+      </div> : <div className={`file-card ${fileInfo && fileInfo.missing.length ? "invalid" : ""}`}>
+        <span className="dz-icon small" aria-hidden>▤</span>
+        <div className="file-meta"><strong>{file.name}</strong><small>{formatSize(file.size)}{fileInfo ? ` · ${fileInfo.rows} ${fileInfo.rows === 1 ? "expediente" : "expedientes"}` : " · leyendo…"}</small>
+          {fileInfo && fileInfo.missing.length > 0 && <em>Faltan columnas obligatorias: {fileInfo.missing.join(", ")}</em>}</div>
+        <button type="button" className="secondary small" disabled={importing} onClick={() => fileInput.current?.click()}>Cambiar</button>
+        <button type="button" className="icon-button" aria-label="Quitar archivo" disabled={importing} onClick={() => void pickFile(null)}>✕</button>
+      </div>}
+      <div className="import-actions">
+        <button type="button" className="secondary" onClick={() => downloadCsv("plantilla_expedientes.csv", [["id_caso", "descripcion_caso", "fecha_registro", "fecha_limite_interna", "fecha_atencion"], ["EXP-001", "Descripcion completa del expediente con los hechos y soportes conocidos.", "", "", ""]])}>⬇ Descargar plantilla</button>
+        <button className="primary" disabled={!canImport}>{importing ? <><span className="spinner" aria-hidden />Evaluando…</> : "Importar y evaluar"}</button>
+      </div>
+    </form>
+    {(importing || progress.total > 0) && <div className="import-progress-card" role="status" aria-live="polite">
+      <div className="ip-top"><b>{importing ? "Evaluando expedientes…" : finished ? "Evaluación completada" : "Evaluación detenida"}</b><span>{progress.done} de {progress.total} · {pct}%</span></div>
+      <div className="ip-bar"><span style={{ width: `${pct}%` }} className={finished ? "done" : ""} /></div>
+      {importing && <small>No cierres esta pestaña: cada bloque se evalúa con el modelo y la auditoría.</small>}
+    </div>}
+    {error && <div className="form-error import-error">⚠ {error}</div>}
+    {results.length > 0 && <>
+      <div className="import-result-head">
+        <div><h3>{finished ? "Resultado de la importación" : "Resultados parciales"}</h3><p>{finished ? "Los expedientes ya están en el Registro central, pestaña “Expedientes importados”." : "Se muestran los bloques ya procesados."}</p></div>
+        <button type="button" className="secondary" onClick={exportResults}>⬇ Descargar resultados CSV</button>
+      </div>
+      <div className="stat-cards">
+        <div className="stat"><strong>{results.length}</strong><span>evaluados</span></div>
+        <div className="stat bad"><strong>{possibleCount}</strong><span>posibles incumplimientos</span></div>
+        <div className="stat warn"><strong>{insufficientCount}</strong><span>información insuficiente</span></div>
+        <div className="stat ok"><strong>{clearCount}</strong><span>sin indicios</span></div>
+        {missingNormCount > 0 && <div className="stat"><strong>{missingNormCount}</strong><span>sin cita normativa cargada</span></div>}
+        {failedCount > 0 && <div className="stat bad"><strong>{failedCount}</strong><span>con error</span></div>}
+      </div>
+      <div className="table-wrap batch-table"><table><thead><tr><th>Caso</th><th>Resultado</th><th>Prioridad</th><th>Fundamento / fuente</th><th>Explicación</th></tr></thead><tbody>{results.map((item, index) => { const assessment = assessExpediente(item); const sourceMissing = assessment.source.includes("NO_DISPONIBLE_EN_CORPUS"); return <tr key={`${item.id_caso ?? "sin-id"}-${index}`}><td><code>{item.id_caso ?? "?"}</code></td><td><Pill value={assessment.label} tone={assessment.tone} /></td><td>{assessment.priority}</td><td>{sourceMissing ? "Texto aplicable no disponible en el corpus" : assessment.source}</td><td className="batch-detail"><ClampedText text={assessment.detail} lines={2} /></td></tr>; })}</tbody></table></div>
+    </>}
   </article>;
 }
 
