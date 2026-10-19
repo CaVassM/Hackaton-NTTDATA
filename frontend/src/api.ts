@@ -1,4 +1,56 @@
-const API_URL = (import.meta.env.VITE_API_URL ?? "/api").replace(/\/$/, "");
+// URL del backend. El Quick Tunnel de Cloudflare cambia en cada arranque, asi que
+// no basta con la del build (VITE_API_URL): se puede fijar en tiempo de ejecucion
+// con ?api=<url> en el link o desde el panel "Conexión" (queda en este navegador).
+const API_KEY = "backend-url";
+export const DEFAULT_API_URL = (import.meta.env.VITE_API_URL ?? "/api").replace(/\/$/, "");
+
+export function normalizeApiUrl(raw: string): string {
+  const v = raw.trim().replace(/\/+$/, "");
+  if (!v || v.startsWith("/")) return v || DEFAULT_API_URL;
+  return /^https?:\/\//i.test(v) ? v : `https://${v}`;
+}
+
+function initialApiUrl(): string {
+  try {
+    const url = new URL(window.location.href);
+    const fromLink = url.searchParams.get("api");
+    if (fromLink) {
+      const value = normalizeApiUrl(fromLink);
+      localStorage.setItem(API_KEY, value);
+      url.searchParams.delete("api");
+      window.history.replaceState(null, "", url.toString());
+      return value;
+    }
+    return localStorage.getItem(API_KEY) || DEFAULT_API_URL;
+  } catch { return DEFAULT_API_URL; }
+}
+
+let API_URL = initialApiUrl();
+export const getApiUrl = () => API_URL;
+export const isCustomApiUrl = () => API_URL !== DEFAULT_API_URL;
+export function setApiUrl(url: string | null) {
+  API_URL = url ? normalizeApiUrl(url) : DEFAULT_API_URL;
+  try { if (url && API_URL !== DEFAULT_API_URL) localStorage.setItem(API_KEY, API_URL); else localStorage.removeItem(API_KEY); } catch { /* sin almacenamiento */ }
+}
+
+/** Prueba una URL candidata sin cambiar la activa. */
+export async function probeApi(url: string, timeoutMs = 15000): Promise<{ health: Health; ms: number }> {
+  const base = normalizeApiUrl(url);
+  const ctrl = new AbortController();
+  const timer = window.setTimeout(() => ctrl.abort(), timeoutMs);
+  const t0 = performance.now();
+  try {
+    const response = await fetch(`${base}/health`, { signal: ctrl.signal });
+    if (!response.ok) throw new Error(`Error ${response.status} en ${base}/health`);
+    const health = await response.json() as Health;
+    if (!health || typeof health.status !== "string") throw new Error("La URL responde, pero no es este backend (/health sin el formato esperado)");
+    return { health, ms: Math.round(performance.now() - t0) };
+  } catch (error) {
+    if ((error as Error).name === "AbortError") throw new Error(`Sin respuesta de ${base} en ${timeoutMs / 1000} s`);
+    if (error instanceof TypeError) throw new Error(`No se pudo contactar ${base} (apagado, URL vencida o bloqueado por CORS)`);
+    throw error;
+  } finally { window.clearTimeout(timer); }
+}
 
 export type Citation = {
   norma: string;
@@ -85,7 +137,7 @@ export type AuditTrace = {
 };
 
 export type SearchResult ={ query: string; fecha: string; fecha_por_defecto: boolean; fragmentos: Array<{ texto: string; cita: Citation }> };
-export type Health = { status: "ok" | "degradado"; version: string; ollama: { reachable: boolean; models: Record<string, boolean>; error?: string | null }; bases: { rag?: { versiones_sql?: number; [key: string]: unknown }; cases?: Record<string, unknown>; [key: string]: unknown }; audit_mode: string; policy_version: string };
+export type Health = { status: "ok" | "degradado"; version: string; ollama: { host?: string; reachable: boolean; models: Record<string, boolean>; error?: string | null }; modelos?: { llm: string; embeddings: string }; bases: { rag?: { versiones_sql?: number; vectores?: number; bm25?: number; [key: string]: unknown }; compliance?: Record<string, unknown>; audit?: { auditorias?: number; por_decision?: Record<string, number>; revisiones?: number; eventos?: number; via_a2a?: number; cadena_ok?: boolean; cadena_motivo?: string | null; error?: string }; cases?: { casos?: Record<string, number>; expedientes?: Record<string, number> }; [key: string]: unknown }; audit_mode: string; policy_version: string; nanda?: { enabled: boolean; agent_card: string | null; reachable: boolean | null } };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { headers: { "Content-Type": "application/json", ...init?.headers }, ...init });
@@ -127,6 +179,7 @@ export const api = {
   agents: () => request<AgentsInfo>("/agents"),
   auditEvents: (limit = 500) => request<AuditEvent[]>(`/audit/events?limit=${limit}`),
   auditTrace: (auditId: string) => request<AuditTrace>(`/audit/${encodeURIComponent(auditId)}/trace`),
+  verifyChain: () => request<{ ok: boolean; eventos: number; auditorias: number; primer_error_id?: number | null; motivo?: string | null; ultimo_hash?: string | null }>("/audit/verify-chain"),
   auditRecord: (auditId: string) => request<AuditRecord>(`/audit/${encodeURIComponent(auditId)}`),
   reviewAudit: (auditId: string, body: { reviewer: string; aprobar: boolean; comentario?: string | null }) =>
     request<AuditReview>(`/audit/${encodeURIComponent(auditId)}/review`, { method: "POST", body: JSON.stringify(body) }),

@@ -25,7 +25,7 @@ class BaseAppSettings(BaseSettings):
     log_dir: Path = PROJECT_ROOT / "data" / "processed" / "logs"
 
     # --- Ollama ---
-    ollama_host: str = "http://localhost:11434"
+    ollama_host: str = "http://127.0.0.1:11434"
     ollama_timeout_s: float = 120.0
     ollama_max_retries: int = 3
     ollama_retry_backoff_s: float = 1.0

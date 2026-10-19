@@ -179,7 +179,7 @@ def paso2_env(env_file: Path, dry: bool) -> dict[str, str]:
 
 def paso3_ollama(vals: dict[str, str], dry: bool, warmup: bool) -> None:
     paso(3, "Ollama y modelos")
-    host = vals.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
+    host = vals.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
     modelos = [vals.get("LLM_MODEL", "qwen3.5:4b"), vals.get("EMBED_MODEL", "qwen3-embedding:0.6b-q8_0")]
     tags = _get_json(f"{host}/api/tags", 3)
     if tags is None:
@@ -421,8 +421,12 @@ def main(argv: list[str] | None = None) -> int:
         procs = paso7_servidores(vals, a.port, a.dry_run)
         paso8_health(a.port, vals, a.dry_run, procs)
         if a.cloudflare and not a.dry_run:
-            tunnel, _ = iniciar_cloudflare(a.port)
+            tunnel, url = iniciar_cloudflare(a.port)
             procs.append(tunnel)
+            # El Quick Tunnel cambia en cada arranque: el link lleva la URL nueva al front publicado.
+            front = (vals.get("FRONTEND_PUBLIC_URL") or "https://hackaton-nttdata.vercel.app").rstrip("/")
+            ok(f"Front conectado a este backend: {front}/?api={url}")
+            info("comparte ese link; el front recuerda la URL en el navegador (boton 'Conexion' para cambiarla)")
         elif a.cloudflare:
             info(f"se expondria http://127.0.0.1:{a.port} con 'cloudflared tunnel --url'")
     except Falla as f:

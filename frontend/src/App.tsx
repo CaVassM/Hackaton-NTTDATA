@@ -1,26 +1,31 @@
 import { FormEvent, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, Health, SearchResult } from "./api";
+import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem, ExpedienteResult, ExpedienteSummary, getApiUrl, Health, isCustomApiUrl, SearchResult, setApiUrl } from "./api";
 import { ClampedText, FragmentCard } from "./ResultCards";
 import { AgentFlow, ExpedienteFlow, ExpedienteSections, ObligationList, pretty } from "./CaseParts";
 import ProposalPage from "./Proposal";
 import AgentsPage, { AgentConversation } from "./Agents";
+import { ConnectionDialog, ReportPage, SystemPage } from "./System";
 import { EVENTO, grupoEtiqueta } from "./event";
 import "./import.css";
 import "./results.css";
 import "./case.css";
 import "./proposal.css";
 
-type View = "dashboard" | "cases" | "rag" | "alerts" | "proposal" | "agents" | "detail" | "expediente-detail";
+type View = "dashboard" | "cases" | "rag" | "agents" | "report" | "system" | "detail" | "expediente-detail";
 type Notice = { kind: "error" | "success"; text: string } | null;
 
 const menu: Array<{ id: View; icon: string; label: string }> = [
-  { id: "dashboard", icon: "▦", label: "Dashboard principal" },
+  { id: "dashboard", icon: "▦", label: "Dashboard" },
   { id: "cases", icon: "✓", label: "Gestión de casos" },
   { id: "rag", icon: "⌘", label: "Motor RAG y evaluación IA" },
-  { id: "alerts", icon: "◉", label: "Centro de alertas" },
-  { id: "proposal", icon: "★", label: "Propuesta" },
   { id: "agents", icon: "⇄", label: "Flujo entre agentes" },
+  { id: "report", icon: "◉", label: "Reporte de cumplimiento" },
+  { id: "system", icon: "◎", label: "Estado del sistema" },
 ];
+// Links viejos (#proposal, #alerts) siguen funcionando.
+const ALIAS: Record<string, View> = { proposal: "dashboard", alerts: "report" };
+const viewFromHash = (): View => { const h = window.location.hash.slice(1); const v = ALIAS[h] ?? h; return menu.some((m) => m.id === v) ? (v as View) : "dashboard"; };
+const hostOf = (url: string) => { try { return new URL(url, window.location.href).host; } catch { return url; } };
 
 const today = (() => {
   const now = new Date();
@@ -126,7 +131,7 @@ function Empty({ children }: { children: ReactNode }) {
 
 export default function App() {
   // Deep-link: /#agents abre directo esa pantalla (útil para compartir la demo).
-  const [view, setView] = useState<View>(() => { const h = window.location.hash.slice(1); return menu.some((m) => m.id === h) ? (h as View) : "dashboard"; });
+  const [view, setView] = useState<View>(viewFromHash);
   const [health, setHealth] = useState<Health | null>(null);
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [expedientes, setExpedientes] = useState<ExpedienteSummary[]>([]);
@@ -134,16 +139,23 @@ export default function App() {
   const [selectedExpediente, setSelectedExpediente] = useState<ExpedienteResult | null>(null);
   const [notice, setNotice] = useState<Notice>(null);
   const [loading, setLoading] = useState(true);
+  const [healthMs, setHealthMs] = useState<number | null>(null);
+  const [checkedAt, setCheckedAt] = useState<Date | null>(null);
+  const [showConnection, setShowConnection] = useState(false);
+  const [apiEpoch, setApiEpoch] = useState(0); // remonta las vistas al cambiar de backend
 
   const refresh = async () => {
     setLoading(true);
-    const [healthResult, caseResult, expedienteResult] = await Promise.allSettled([api.health(), api.cases(), api.expedientes()]);
-    if (healthResult.status === "fulfilled") setHealth(healthResult.value);
+    const t0 = performance.now();
+    const [healthResult, caseResult, expedienteResult] = await Promise.allSettled([api.health().then((h) => { setHealthMs(Math.round(performance.now() - t0)); return h; }), api.cases(), api.expedientes()]);
+    setCheckedAt(new Date());
+    if (healthResult.status === "fulfilled") setHealth(healthResult.value); else setHealth(null);
     if (caseResult.status === "fulfilled") setCases(caseResult.value);
     if (expedienteResult.status === "fulfilled") setExpedientes(expedienteResult.value);
     const failed = [healthResult, caseResult, expedienteResult].find((result) => result.status === "rejected");
     const failure = failed?.status === "rejected" ? failed.reason : null;
-    if (failure) setNotice({ kind: "error", text: `No se pudo conectar al backend: ${failure.message}. Inícialo en el puerto 8000.` });
+    if (failure) setNotice({ kind: "error", text: `No se pudo conectar al backend (${hostOf(getApiUrl())}): ${failure.message}.` });
+    else setNotice((prev) => (prev?.kind === "error" && prev.text.startsWith("No se pudo conectar") ? null : prev));
     setLoading(false);
   };
 
@@ -176,14 +188,25 @@ export default function App() {
     } catch (error) { setNotice({ kind: "error", text: `No se pudieron borrar los expedientes: ${(error as Error).message}` }); }
   };
 
-  const navigate = (next: View) => { setView(next); setNotice(null); if (menu.some((m) => m.id === next)) window.history.replaceState(null, "", `#${next}`); };
+  const navigate = (next: View) => {
+    setView(next); setNotice(null);
+    if (menu.some((m) => m.id === next)) window.history.replaceState(null, "", `#${next}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  useEffect(() => { const onHash = () => setView(viewFromHash()); window.addEventListener("hashchange", onHash); return () => window.removeEventListener("hashchange", onHash); }, []);
+
+  const connectTo = (url: string | null) => {
+    setApiUrl(url); setShowConnection(false); setApiEpoch((n) => n + 1);
+    void refresh();
+  };
+  const online = health != null;
 
   return <div className="app-shell">
     <aside className="sidebar">
       <div className="brand"><div className="brand-mark">R</div><div><strong>RAG Compliance</strong><small>IA & vigilancia normativa</small></div></div>
       <div className="sidebar-rule" />
       <nav aria-label="Navegación principal">
-        {menu.map((item) => <button key={item.id} onClick={() => navigate(item.id)} className={view === item.id || (item.id === "cases" && (view === "detail" || view === "expediente-detail")) ? "nav-item active" : "nav-item"}><span>{item.icon}</span>{item.label}</button>)}
+        {menu.map((item) => <button key={item.id} title={item.label} aria-current={view === item.id ? "page" : undefined} onClick={() => navigate(item.id)} className={view === item.id || (item.id === "cases" && (view === "detail" || view === "expediente-detail")) ? "nav-item active" : "nav-item"}><span className="nav-icon">{item.icon}</span><span className="nav-label">{item.label}</span></button>)}
       </nav>
       <div className="sidebar-bottom">
         <div className="event-card" aria-label="Datos del evento">
@@ -191,44 +214,30 @@ export default function App() {
           <strong>{grupoEtiqueta()}</strong>
           <ul>{EVENTO.integrantes.map((nombre) => <li key={nombre}>{nombre}</li>)}</ul>
         </div>
-        <div className="side-status"><span className={health?.status === "ok" ? "online" : "offline"} />{health?.status === "ok" ? "Servicios operativos" : "Estado por verificar"}</div>
-        <button className="nav-item" onClick={() => void refresh()}><span>↻</span>Actualizar datos</button>
+        <div className="side-status"><span className={health?.status === "ok" ? "online" : loading && !checkedAt ? "pending" : "offline"} />{health?.status === "ok" ? "Servicios operativos" : online ? "Servicio degradado" : loading && !checkedAt ? "Conectando…" : "Sin conexión"}</div>
+        <button className="nav-item" title="Actualizar datos" onClick={() => void refresh()}><span className="nav-icon">↻</span><span className="nav-label">Actualizar datos</span></button>
       </div>
     </aside>
     <div className="main-area">
-      <header className="topbar"><div><span className="eyebrow">{EVENTO.hackaton.toUpperCase()} · {grupoEtiqueta().toUpperCase()}</span><strong>Centro de cumplimiento LA/FT · {EVENTO.integrantes.join(" y ")}</strong></div><div className="topbar-actions"><span className="live"><i /> Motor RAG local</span><button className="icon-button" aria-label="Actualizar" onClick={() => void refresh()}>↻</button><div className="avatar" title={`${grupoEtiqueta()} · ${EVENTO.integrantes.join(", ")}`}>G{EVENTO.grupoNumero}</div></div></header>
+      <header className="topbar"><div><span className="eyebrow">{EVENTO.hackaton.toUpperCase()} · {grupoEtiqueta().toUpperCase()}</span><strong>Centro de cumplimiento LA/FT · {EVENTO.integrantes.join(" y ")}</strong></div><div className="topbar-actions"><button type="button" className={`conn-pill ${loading && !checkedAt ? "idle" : online ? (health?.status === "ok" ? "ok" : "warn") : "bad"}`} onClick={() => setShowConnection(true)} title={`Backend: ${getApiUrl()}`}><i /><span>{online ? `Backend conectado${isCustomApiUrl() ? ` · ${hostOf(getApiUrl())}` : ""}` : loading && !checkedAt ? "Conectando…" : "Sin conexión · configurar"}</span></button><button className={`icon-button ${loading ? "spinning" : ""}`} aria-label="Actualizar" onClick={() => void refresh()}>↻</button><div className="avatar" title={`${grupoEtiqueta()} · ${EVENTO.integrantes.join(", ")}`}>G{EVENTO.grupoNumero}</div></div></header>
       <main>
-        {notice && <div className={`notice ${notice.kind}`} role="status"><span>{notice.kind === "error" ? "!" : "✓"}</span>{notice.text}<button aria-label="Cerrar" onClick={() => setNotice(null)}>×</button></div>}
+        {notice && <div className={`notice ${notice.kind}`} role="status"><span>{notice.kind === "error" ? "!" : "✓"}</span>{notice.text}{notice.kind === "error" && !online && <button type="button" className="notice-action" onClick={() => setShowConnection(true)}>Configurar conexión</button>}<button aria-label="Cerrar" onClick={() => setNotice(null)}>×</button></div>}
         {loading && <div className="loading-line" />}
-        {view === "dashboard" && <Dashboard health={health} cases={cases} expedientes={expedientes} openCase={openCase} go={navigate} />}
+        <div className="view-enter" key={`${view}-${apiEpoch}`}>
+        {view === "dashboard" && <ProposalPage health={health} onOpenExpediente={openExpediente} />}
         {view === "cases" && <CasesPage cases={cases} expedientes={expedientes} onOpen={openCase} onOpenExpediente={openExpediente} onClearImported={clearImportedExpedientes} onImported={refresh} onCreated={(result) => { setSelected(result); setCases((old) => [{ case_id: result.case.case_id, tipo_evento: result.case.tipo_evento, decision: result.audit_result?.decision ?? null, evaluado_en: result.evaluado_en }, ...old.filter((entry) => entry.case_id !== result.case.case_id)]); setView("detail"); setNotice({ kind: "success", text: "Caso evaluado y registrado correctamente." }); }} />}
         {view === "detail" && <CaseDetail result={selected} onBack={() => setView("cases")} />}
         {view === "expediente-detail" && <ExpedienteDetail result={selectedExpediente} onBack={() => setView("cases")} />}
         {view === "rag" && <RagPage />}
-        {view === "alerts" && <AlertsPage />}
-        {view === "proposal" && <ProposalPage health={health} onOpenExpediente={openExpediente} />}
+        {view === "report" && <ReportPage />}
+        {view === "system" && <SystemPage health={health} healthMs={healthMs} checkedAt={checkedAt} cases={cases} expedientes={expedientes} loading={loading} onRefresh={() => void refresh()} onOpenCase={openCase} onConnection={() => setShowConnection(true)} />}
         {view === "agents" && <AgentsPage health={health} onOpenExpediente={openExpediente} />}
+        </div>
       </main>
     </div>
+    {showConnection && <ConnectionDialog onClose={() => setShowConnection(false)} onConnected={connectTo} />}
   </div>;
 }
-
-function Dashboard({ health, cases, expedientes, openCase, go }: { health: Health | null; cases: CaseSummary[]; expedientes: ExpedienteSummary[]; openCase: (id: string) => void; go: (view: View) => void }) {
-  const indexed = health?.bases.rag?.versiones_sql ?? 0;
-  return <section className="page"><div className="page-heading"><div><span className="eyebrow">PANEL DE CONTROL</span><h1>Inteligencia de cumplimiento</h1><p>Vigilancia regulatoria, evaluación trazable de expedientes y respuestas sustentadas en normativa SBS.</p></div><button className="primary" onClick={() => go("cases")}>+ Evaluar caso</button></div>
-    <div className="metrics">
-      <Metric label="Estado del backend" value={health ? health.status : "Conectando"} detail={health ? `API v${health.version}` : "Verificando servicios"} tone={health?.status === "ok" ? "good" : "warn"} />
-      <Metric label="Versiones RAG indexadas" value={String(indexed)} detail="Base normativa disponible" />
-      <Metric label="Registros evaluados" value={String(cases.length + expedientes.length)} detail="Casos individuales e importados" />
-      <Metric label="Política de auditoría" value={health?.policy_version ?? "—"} detail={`Modo: ${health?.audit_mode ?? "—"}`} />
-    </div>
-    <div className="two-col"><article className="panel"><div className="panel-title"><div><h2>Actividad reciente</h2><p>Resultados recuperados desde la API de casos.</p></div><button className="text-button" onClick={() => go("cases")}>Ver todos →</button></div>{cases.length ? <CaseTable cases={cases.slice(0, 6)} onOpen={openCase} /> : <Empty>Aún no hay casos evaluados. Crea el primero desde Gestión de casos.</Empty>}</article>
-      <article className="panel"><div className="panel-title"><div><h2>Salud operativa</h2><p>Dependencias del procesamiento local.</p></div></div>{health ? <div className="health-list"><HealthRow label="Ollama" value={health.ollama.reachable ? "Disponible" : "No disponible"} ok={health.ollama.reachable} />{Object.entries(health.ollama.models).map(([model, available]) => <HealthRow key={model} label={model} value={available ? "Cargado" : "Pendiente"} ok={available} />)}<HealthRow label="Cadena de auditoría" value={health.bases.audit ? "Verificada por backend" : "Sin datos"} ok={Boolean(health.bases.audit)} /></div> : <Empty>Esperando respuesta de /health.</Empty>}</article></div>
-  </section>;
-}
-
-function Metric({ label, value, detail, tone }: { label: string; value: string; detail: string; tone?: string }) { return <article className="metric"><span>{label}</span><strong className={tone}>{value}</strong><small>{detail}</small></article>; }
-function HealthRow({ label, value, ok }: { label: string; value: string; ok: boolean }) { return <div className="health-row"><span><i className={ok ? "online" : "offline"} />{label}</span><Pill value={value} tone={ok ? "good" : "danger"} /></div>; }
 
 function CaseTable({ cases, onOpen }: { cases: CaseSummary[]; onOpen: (id: string) => void }) { return <div className="table-wrap"><table><thead><tr><th>Identificador</th><th>Evento</th><th>Decisión</th><th>Evaluado</th><th /></tr></thead><tbody>{cases.map((item) => <tr key={item.case_id}><td><code>{item.case_id}</code></td><td>{stateLabel(item.tipo_evento)}</td><td><Pill value={item.decision} /></td><td>{new Date(item.evaluado_en).toLocaleDateString("es-PE")}</td><td><button className="row-button" onClick={() => void onOpen(item.case_id)}>Revisar</button></td></tr>)}</tbody></table></div>; }
 
@@ -454,9 +463,3 @@ function RagPage() {
   return <section className="page"><div className="page-heading"><div><span className="eyebrow">BASE NORMATIVA SBS</span><h1>Motor RAG y evaluación IA</h1><p>Consulta normativa con fecha de vigencia y citas de la versión aplicable.</p></div></div><form className="search-panel search-panel-wide panel" onSubmit={submit}><label className="search-label">Pregunta normativa<textarea value={query} onChange={(event) => setQuery(event.target.value)} placeholder="¿Cuál es el plazo para atender un reclamo? Puedes pegar la descripción completa de un caso." autoFocus minLength={2} maxLength={1000} rows={3} onKeyDown={(event) => { if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) event.currentTarget.form?.requestSubmit(); }} /></label><label className="date-label">Vigencia a consultar<input type="date" value={date} onChange={(event) => setDate(event.target.value)} /></label><label className="checkbox"><input type="checkbox" checked={includeProjects} onChange={(event) => setIncludeProjects(event.target.checked)} /> Incluir proyectos normativos</label><button className="primary" disabled={loading}>{loading ? "Buscando…" : "Consultar RAG"}</button></form>{error && <div className="notice error">{error}</div>}{result ? <div className="rag-results"><div className="rag-summary"><div className="rag-summary-top"><div className="chips"><span className="chip chip-strong">{result.fragmentos.length} {result.fragmentos.length === 1 ? "fragmento" : "fragmentos"}</span><span className="chip">Vigencia: {formatDate(result.fecha)}{result.fecha_por_defecto ? " (fecha actual)" : ""}</span></div>{result.fragmentos.length > 1 && <div className="rag-tools"><button type="button" className="secondary" onClick={() => setOpenSet(new Set(result.fragmentos.map((_, i) => i)))}>Expandir todo</button><button type="button" className="secondary" onClick={() => setOpenSet(new Set())}>Contraer todo</button></div>}</div><div className="rag-query"><span className="label">CONSULTA</span><ClampedText text={result.query} lines={2} /></div></div>{result.fragmentos.length ? result.fragmentos.map((fragment, index) => <FragmentCard key={`${fragment.cita.version_id}-${index}`} index={index} texto={fragment.texto} cita={fragment.cita} open={openSet.has(index)} onToggle={() => toggleFragment(index)} />) : <Empty>No hay fragmentos para esta consulta y fecha.</Empty>}</div> : <Empty>Escribe una consulta para recuperar la normativa aplicable.</Empty>}</section>;
 }
 
-function AlertsPage() {
-  const [report, setReport] = useState<Record<string, unknown> | null>(null); const [error, setError] = useState<string | null>(null); const [loading, setLoading] = useState(false);
-  const load = async () => { setLoading(true); setError(null); try { setReport((await api.report()).reporte); } catch (reason) { setError((reason as Error).message); } finally { setLoading(false); } };
-  const entries = useMemo(() => report ? Object.entries(report) : [], [report]);
-  return <section className="page"><div className="page-heading"><div><span className="eyebrow">MONITOREO DE OBLIGACIONES</span><h1>Centro de alertas</h1><p>Genera el reporte de cumplimiento y exposición disponible en el módulo compliance.</p></div><button className="primary" onClick={() => void load()} disabled={loading}>{loading ? "Generando…" : "Generar reporte"}</button></div>{error && <div className="notice error">{error}</div>}{report ? <article className="panel report"><div className="panel-title"><h2>Reporte de cumplimiento</h2><Pill value="generado" tone="good" /></div><div className="report-grid">{entries.map(([key, value]) => <div key={key}><span>{stateLabel(key)}</span><strong>{typeof value === "object" ? JSON.stringify(value) : String(value ?? "—")}</strong></div>)}</div></article> : <Empty>El reporte se calcula bajo demanda para reflejar las obligaciones y evidencias vigentes.</Empty>}</section>;
-}

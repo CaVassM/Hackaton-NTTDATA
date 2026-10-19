@@ -80,7 +80,7 @@ Qué significa cada variable:
 
 | Variable | Valor por defecto | ¿Tocarla? |
 |---|---|---|
-| `OLLAMA_HOST` | `http://localhost:11434` | No, salvo que Ollama corra en otra máquina |
+| `OLLAMA_HOST` | `http://127.0.0.1:11434` | No, salvo que Ollama corra en otra máquina |
 | `LLM_MODEL` / `EMBED_MODEL` | `qwen3.5:4b` / `qwen3-embedding:0.6b-q8_0` | No (si cambias `EMBED_MODEL`, vuelve a ingestar) |
 | `LLM_THINK`, `LLM_TEMPERATURE`, `LLM_NUM_CTX` | `false`, `0.0`, `8192` | No |
 | `RAG_RRF_K`, `RAG_CANDIDATES_K`, `USE_RERANKER` | `60`, `30`, `false` | No |
@@ -216,6 +216,17 @@ npm run dev
 
 Vite abre `http://localhost:5173` y reenvía `/api` al backend en `http://127.0.0.1:8000`. Para publicar el frontend en otro origen, configura `VITE_API_URL` con la URL del backend y agrega el origen del frontend a `FRONTEND_ALLOWED_ORIGINS` en `.env`.
 
+Pantallas (cada una tiene link directo, p. ej. `/#system`):
+
+| Pantalla | Qué muestra |
+|---|---|
+| **Dashboard** (`/#dashboard`, inicio) | Alertas de los expedientes (normativa, plazo interno o ambas), KPIs, obligaciones vencidas, revisión humana firmada en la cadena y exportación CSV |
+| Gestión de casos (`/#cases`) | Registro de casos y expedientes, importación CSV y detalle con el flujo del agente |
+| Motor RAG (`/#rag`) | Búsqueda normativa con fecha de vigencia y citas |
+| Flujo entre agentes (`/#agents`) | Copiloto ⇄ auditor por A2A: arquitectura en vivo y diagrama de secuencia sellado |
+| Reporte de cumplimiento (`/#report`) | Obligaciones validadas, plazos y exposición potencial |
+| Estado del sistema (`/#system`) | Servicios, bases, verificación de la cadena de auditoría y conexión |
+
 #### Despliegue en Vercel (https://hackaton-nttdata.vercel.app)
 
 El workflow `.github/workflows/deploy-frontend.yml` despliega `frontend/` en Vercel (producción en `main`, preview en PRs).
@@ -229,7 +240,7 @@ El workflow `.github/workflows/deploy-frontend.yml` despliega `frontend/` en Ver
 | Vercel → Project → Settings → General | Root Directory | `frontend` |
 | `.env` del backend | `FRONTEND_ALLOWED_ORIGINS` | debe incluir `https://hackaton-nttdata.vercel.app` (ya es el valor por defecto) |
 
-`VITE_API_URL` se incrusta al compilar: si la URL del Quick Tunnel cambia, actualiza la variable en Vercel y vuelve a desplegar (Actions → *Deploy frontend* → *Run workflow*).
+`VITE_API_URL` se incrusta al compilar, pero la URL del Quick Tunnel cambia en cada arranque. **No hace falta redesplegar**: `start_backend.py` imprime «Front conectado a este backend: https://hackaton-nttdata.vercel.app/?api=<url del túnel>»; ese link deja la URL guardada en el navegador. También se puede pegar desde el botón de conexión de la barra superior (o en *Estado del sistema → Conexión*).
 
 ### Desde otro módulo (la única forma permitida)
 

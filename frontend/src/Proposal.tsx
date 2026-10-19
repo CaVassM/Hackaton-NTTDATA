@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { api, AuditRecord, ComplianceReport, ExpedienteDetalle, Health, ReportItem } from "./api";
+import { CountUp, Modal, Skeleton } from "./ui";
 
-/* Centro de alertas inteligentes y vigilancia de plazos — datos REALES del backend:
+/* Dashboard: centro de alertas inteligentes y vigilancia de plazos — datos REALES del backend:
    expedientes evaluados (/cases/expedientes?detalle=true), reporte de compliance
    (solo obligaciones validadas), propuestas pendientes y la cadena de auditoría
    (las revisiones humanas se registran con POST /audit/{id}/review). */
@@ -10,6 +11,7 @@ type Tipo = "AMBAS" | "NORMATIVA" | "PLAZO_INTERNO";
 type Alerta = { id: string; tipo: Tipo; fila: Record<string, string>; dias: number; auditId: string };
 type Tab = "todas" | "normativa" | "plazo" | "ambas" | "obligaciones";
 type Revision = { decision: string; reviewer: string; at: string };
+type Dialogo = { alerta: Alerta; aprobar: boolean };
 
 const TIPO_LABEL: Record<Tipo, string> = { AMBAS: "Normativa y plazo interno", NORMATIVA: "Incumplimiento normativo", PLAZO_INTERNO: "Vencimiento de plazo interno" };
 const RESULTADO_LABEL: Record<string, string> = { POSIBLE_INCUMPLIMIENTO: "Posible incumplimiento", INFORMACION_INSUFICIENTE: "Información insuficiente", SIN_INCUMPLIMIENTO_DETECTADO: "Sin indicios detectados" };
@@ -52,6 +54,8 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
   const [revisiones, setRevisiones] = useState<Record<string, Revision>>({});
   const [enviando, setEnviando] = useState<string | null>(null);
   const [aviso, setAviso] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
+  const [dialogo, setDialogo] = useState<Dialogo | null>(null);
+  const [comentario, setComentario] = useState("");
 
   const cargar = async () => {
     setCargando(true); setErrores([]);
@@ -114,14 +118,18 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
   const paginas = Math.max(1, Math.ceil(cola.length / PAGE));
   const pag = Math.min(pagina, paginas - 1);
 
-  const revisar = async (a: Alerta, aprobar: boolean) => {
-    if (!revisor.trim()) { setAviso({ kind: "error", text: "Escribe tu nombre en “Revisor”: la revisión humana queda firmada en la cadena de auditoría." }); return; }
+  const abrirRevision = (a: Alerta, aprobar: boolean) => {
     if (!a.auditId) { setAviso({ kind: "error", text: `${a.id} no tiene auditoría registrada; no se puede revisar.` }); return; }
-    const comentario = window.prompt(aprobar ? `Confirmar la alerta ${a.id}. Comentario (opcional):` : `Descartar ${a.id} como falso positivo. Motivo:`, "");
-    if (comentario === null) return;
+    setComentario(""); setDialogo({ alerta: a, aprobar });
+  };
+
+  const revisar = async () => {
+    if (!dialogo) return;
+    const { alerta: a, aprobar } = dialogo;
+    setDialogo(null);
     setEnviando(a.auditId);
     try {
-      const r = await api.reviewAudit(a.auditId, { reviewer: revisor.trim(), aprobar, comentario: comentario || null });
+      const r = await api.reviewAudit(a.auditId, { reviewer: revisor.trim(), aprobar, comentario: comentario.trim() || null });
       setRevisiones((prev) => ({ ...prev, [a.auditId]: { decision: r.decision, reviewer: r.reviewer, at: r.created_at } }));
       setAviso({ kind: "ok", text: `${a.id}: revisión “${r.decision}” registrada por ${r.reviewer} en la cadena de auditoría.` });
     } catch (e) { setAviso({ kind: "error", text: `No se pudo registrar la revisión de ${a.id}: ${(e as Error).message}` }); }
@@ -143,10 +151,12 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
     ["obligaciones", "Obligaciones (compliance)", obligaciones.length, "blue"],
   ];
 
+  const sinDatos = cargando && !expedientes.length;
+
   return <section className="page pr">
     <div className="pr-hero">
       <div>
-        <div className="pr-eyebrow"><span className="pr-badge red">SUPERVISIÓN ACTIVA</span><span className="pr-eyebrow-text">• Motor RAG local · política {health?.policy_version ?? "—"} · auditoría {health?.audit_mode ?? "—"}</span></div>
+        <div className="pr-eyebrow"><span className="pr-badge red"><i className="live-dot" />DASHBOARD · SUPERVISIÓN ACTIVA</span><span className="pr-eyebrow-text">• Motor RAG local · política {health?.policy_version ?? "—"} · auditoría {health?.audit_mode ?? "—"}</span></div>
         <h1>Centro de Alertas Inteligentes y Vigilancia de Plazos</h1>
         <p>Alertas de los expedientes evaluados por el agente (indicios normativos y atrasos internos) y obligaciones LA/FT validadas con plazo vencido o por vencer. Cada alerta es una hipótesis para revisión humana.</p>
       </div>
@@ -159,23 +169,24 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
     {errores.map((e) => <div className="notice error pr-inline-notice" key={e}>! {e}</div>)}
     {aviso && <div className={`notice ${aviso.kind === "ok" ? "success" : "error"} pr-inline-notice`} role="status">{aviso.kind === "ok" ? "✓" : "!"} {aviso.text}<button aria-label="Cerrar" onClick={() => setAviso(null)}>×</button></div>}
 
-    <div className="pr-kpis">
+    {sinDatos ? <div className="pr-kpis">{Array.from({ length: 5 }, (_, i) => <article className="pr-kpi" key={i}><Skeleton h={14} w="60%" /><Skeleton h={34} w="40%" /><Skeleton h={12} w="80%" /></article>)}</div> :
+    <div className="pr-kpis stagger">
       <article className="pr-kpi"><header><span>Total alertas activas</span><i className="red">●</i></header>
-        <div className="pr-kpi-main"><strong>{total}</strong></div><small>{evaluados} expedientes evaluados · {obligaciones.length} obligaciones</small>
+        <div className="pr-kpi-main"><strong><CountUp value={total} /></strong></div><small>{evaluados} expedientes evaluados · {obligaciones.length} obligaciones</small>
         {evaluados > 0 && <div className="pr-kpi-bar"><span style={{ width: `${Math.round((alertas.length / evaluados) * 100)}%` }} /></div>}</article>
       <article className="pr-kpi"><header><span>Incumplimiento normativo</span><i>⚖</i></header>
-        <div className="pr-kpi-main"><strong>{nNormativa}</strong><span className="pr-tag red">Posible incumplimiento</span></div>
+        <div className="pr-kpi-main"><strong><CountUp value={nNormativa} /></strong><span className="pr-tag red">Posible incumplimiento</span></div>
         <small>{alertas.length ? `${Math.round((nNormativa / alertas.length) * 100)}% de las alertas` : "Sin alertas"}</small></article>
       <article className="pr-kpi"><header><span>Vencimiento de plazos</span><i>⏰</i></header>
-        <div className="pr-kpi-main"><strong>{nPlazo}</strong><span className="pr-tag amber">Excedidos</span></div>
+        <div className="pr-kpi-main"><strong><CountUp value={nPlazo} /></strong><span className="pr-tag amber">Excedidos</span></div>
         <small>{promAtraso ? `Promedio: +${promAtraso} días calendario` : "Sin atrasos calculables"}</small></article>
       <article className="pr-kpi"><header><span>No publicables (auditoría)</span><i>⛨</i></header>
-        <div className="pr-kpi-main"><strong>{noPublicables}</strong></div>
+        <div className="pr-kpi-main"><strong><CountUp value={noPublicables} /></strong></div>
         <small>{Object.entries(decisiones).map(([d, n]) => `${d} ${n}`).join(" · ") || "Sin auditorías"}</small></article>
       <article className="pr-kpi"><header><span>Propuestas por validar</span><i>✎</i></header>
-        <div className="pr-kpi-main"><strong>{pendientes ?? "—"}</strong></div>
+        <div className="pr-kpi-main"><strong>{pendientes == null ? "—" : <CountUp value={pendientes} />}</strong></div>
         <small>Obligaciones, infracciones y enlaces de compliance pendientes de revisión humana</small></article>
-    </div>
+    </div>}
 
     <div className="pr-filters">
       <div className="pr-tabs">
@@ -190,10 +201,12 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
       </div>
     </div>
 
+    {sinDatos && [0, 1].map((i) => <article className="pr-card" key={i}><Skeleton h={18} w="45%" /><Skeleton h={12} w="70%" /><Skeleton h={90} /><Skeleton h={12} w="55%" /></article>)}
+
     {!cargando && !total && <div className="empty">No hay alertas. Importa expedientes en “Gestión de casos” o valida obligaciones de compliance para ver plazos.</div>}
 
     {destacadas.map((a) => <AlertaCard key={a.id} a={a} revision={revisiones[a.auditId]} enviando={enviando === a.auditId}
-      onAbrir={() => onOpenExpediente(a.id)} onRevisar={(ok) => void revisar(a, ok)} />)}
+      onAbrir={() => onOpenExpediente(a.id)} onRevisar={(ok) => abrirRevision(a, ok)} />)}
 
     {enObligaciones && (obligaciones.length ? <div className="pr-pair">{obligaciones.map((o) => <ObligacionCard key={o.obligacion.codigo} o={o} />)}</div>
       : <div className="empty">No hay obligaciones validadas con plazo vencido o por vencer. El reporte solo usa obligaciones VALIDADAS en compliance.</div>)}
@@ -204,7 +217,7 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
       <div className="pr-queue-head"><div><h2>Cola de vigilancia continua</h2><p>Resto de alertas filtradas, ordenadas por prioridad, tipo y días de atraso.</p></div><b>Mostrando {Math.min(PAGE, cola.length - pag * PAGE)} de {cola.length}</b></div>
       <div className="pr-table-wrap"><table>
         <thead><tr><th>Caso</th><th>Tipología</th><th>Normativa / plazo</th><th>Prioridad</th><th>Atraso interno</th><th>Auditoría</th><th>Revisión</th><th>Acción</th></tr></thead>
-        <tbody>{cola.slice(pag * PAGE, (pag + 1) * PAGE).map((a) => <tr key={a.id}>
+        <tbody className="stagger-rows" key={`${tab}-${pag}`}>{cola.slice(pag * PAGE, (pag + 1) * PAGE).map((a) => <tr key={a.id}>
           <td><code>{a.id}</code></td>
           <td><span className={`pr-dot ${tone(a.tipo)}`} /> {TIPO_LABEL[a.tipo]}</td>
           <td className="pr-muted">{a.fila.norma_a_consultar}{a.dias > 0 ? ` · +${a.dias} días` : ""}</td>
@@ -217,6 +230,16 @@ export default function ProposalPage({ health, onOpenExpediente }: { health: Hea
       </table></div>
       {paginas > 1 && <div className="pager"><button type="button" className="secondary small" disabled={pag === 0} onClick={() => setPagina(pag - 1)}>← Anterior</button><span>Página {pag + 1} de {paginas}</span><button type="button" className="secondary small" disabled={pag >= paginas - 1} onClick={() => setPagina(pag + 1)}>Siguiente →</button></div>}
     </article>}
+
+    {dialogo && <Modal title={dialogo.aprobar ? `Confirmar la alerta ${dialogo.alerta.id}` : `Descartar ${dialogo.alerta.id} como falso positivo`}
+      subtitle="La revisión humana queda firmada en la cadena de auditoría (append-only): no se puede editar ni borrar."
+      onClose={() => setDialogo(null)}
+      footer={<><button type="button" className="pr-btn ghost" onClick={() => setDialogo(null)}>Cancelar</button>
+        <button type="button" className={`pr-btn ${dialogo.aprobar ? "dark" : "danger"}`} disabled={!revisor.trim() || (!dialogo.aprobar && !comentario.trim())} onClick={() => void revisar()}>{dialogo.aprobar ? "⛨ Confirmar alerta" : "⊗ Descartar"}</button></>}>
+      <label className="modal-field">Revisor<input value={revisor} onChange={(e) => setRevisor(e.target.value)} placeholder="Tu nombre y apellido" /></label>
+      <label className="modal-field">{dialogo.aprobar ? "Comentario (opcional)" : "Motivo del descarte (obligatorio)"}<textarea rows={4} value={comentario} onChange={(e) => setComentario(e.target.value)} placeholder={dialogo.aprobar ? "Ej. se deriva al oficial de cumplimiento" : "Ej. los fondos están sustentados con contratos y declaraciones"} /></label>
+      <div className="modal-summary"><code>{dialogo.alerta.id}</code><span>{TIPO_LABEL[dialogo.alerta.tipo]}</span><span>Auditoría: {dialogo.alerta.fila.decision_auditoria || "—"}</span></div>
+    </Modal>}
 
     <p className="pr-note">Datos reales del backend. Las alertas son hipótesis de contraste para revisión humana: no determinan responsabilidad penal ni sanción. Los montos son <b>exposición potencial, no sanción determinada</b>.{reporte?.advertencias?.length ? ` ${reporte.advertencias.join(" ")}` : ""}</p>
   </section>;
