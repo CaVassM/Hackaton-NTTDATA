@@ -2,7 +2,7 @@ version: 1
 agents:
   auditor:
     name: auditor-normativo-aml
-    url: http://localhost:8100
+    url: http://127.0.0.1:8100
     capabilities:
     - audit_candidate_response
     description: Decide si una respuesta candidata del copiloto puede publicarse.

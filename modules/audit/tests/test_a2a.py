@@ -154,3 +154,23 @@ def test_t7_detalle_de_validacion_no_filtra_trazas(client):
     bad = ok_request(); bad["candidate"]["claims"][0]["type"] = "opinion"
     err = client.post("/a2a", json=send_message(bad), headers=auth()).json()["error"]
     assert err["data"][0]["loc"][-1] == "type" and "Traceback" not in str(err)
+
+
+# ------------------------------------------------- trazabilidad del intercambio
+def test_intercambio_a2a_queda_sellado_en_la_cadena(client, spy):
+    body = send_message(ok_request(), rpc_id="rpc-77")
+    body["params"]["message"]["metadata"] = {"from_agent": "copilot"}
+    msg = client.post("/a2a", json=body, headers=auth("copilot")).json()["result"]["message"]
+    audit_id = msg["metadata"]["audit_id"]
+
+    trace = spy.inner.trace(audit_id)
+    t = trace.transporte
+    assert trace.canal == "a2a" and trace.solicitado_por == "copilot"
+    assert t["protocolo"] == "A2A" and t["metodo"] == "SendMessage" and t["version"] == "1.0"
+    assert t["agente_autenticado"] == "copilot" and t["agente_declarado"] == "copilot" and t["jsonrpc_id"] == "rpc-77"
+    assert t["message_id"] == body["params"]["message"]["messageId"]
+    assert t["respuesta_message_id"] == msg["messageId"]  # la respuesta enlaza con lo sellado
+    (ev,) = trace.eventos
+    assert ev.action == "audit.evaluate" and ev.hash_verificado and ev.resultado_verificado
+    assert ev.payload["transporte"] == t
+    assert spy.inner.counts()["via_a2a"] == 1 and spy.inner.verify_chain().ok

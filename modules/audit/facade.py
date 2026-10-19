@@ -16,6 +16,7 @@ from modules.audit.domain import (
     AuditRecord,
     AuditRequest,
     AuditResult,
+    AuditTrace,
     ChainReport,
     Finding,
     FindingStatus,
@@ -68,9 +69,11 @@ class AuditFacade:
     def policy_version(self) -> str:
         return self._engine.policy.version
 
-    def evaluate(self, request: AuditRequest | dict[str, Any], *, requested_by: str | None = None) -> AuditResult:
+    def evaluate(self, request: AuditRequest | dict[str, Any], *, requested_by: str | None = None,
+                 transport: dict[str, Any] | None = None) -> AuditResult:
         """Audita afirmacion por afirmacion y decide. Lanza pydantic.ValidationError
-        si `request` es un dict que no cumple el contrato."""
+        si `request` es un dict que no cumple el contrato. `transport` son los
+        metadatos del canal (p. ej. el mensaje A2A) y se sellan en la cadena."""
         req = request if isinstance(request, AuditRequest) else AuditRequest.model_validate(request)
         if req.effective_date is None:
             req = req.model_copy(update={"effective_date": self._today()})
@@ -118,9 +121,10 @@ class AuditFacade:
                 "requested_by": requested_by, "user_id": req.user_id, "role": req.role,
                 "decision": result.decision, "score": result.score, "policy_version": result.policy_version,
                 "critical": [f.reason for f in findings if f.critical],
+                **({"transporte": transport} if transport else {}),
             })
         if self._repo is not None:
-            self._repo.save_evaluation(req, result, requested_by)
+            self._repo.save_evaluation(req, result, requested_by, transport)
         return result
 
     # ------------------------------------------------------- persistencia
@@ -138,6 +142,10 @@ class AuditFacade:
         if not reviewer or not reviewer.strip():
             raise ValueError("La revision humana requiere identificar al revisor")
         return self._r().add_review(audit_id, reviewer.strip(), "aprobada" if aprobar else "rechazada", comentario)
+
+    def trace(self, audit_id: str) -> AuditTrace:
+        """Quien pidio la auditoria, por que canal (A2A o en proceso), que envio y su eslabon en la cadena."""
+        return self._r().trace(audit_id)
 
     def verify_chain(self) -> ChainReport:
         return self._r().verify_chain()

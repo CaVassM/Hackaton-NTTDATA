@@ -108,6 +108,28 @@ class AuditEvent(BaseModel):
     hash: str
 
 
+class TraceEvent(AuditEvent):
+    """Evento de la cadena con su eslabon recalculado (hash propio y digest del resultado)."""
+
+    hash_verificado: bool
+    resultado_verificado: bool | None = None  # solo en audit.evaluate
+
+
+class AuditTrace(BaseModel):
+    """Trazabilidad de UNA auditoria: quien la pidio, por que canal, que envio,
+    que decidio el auditor y como quedo sellada en la cadena de hashes."""
+
+    audit_id: str
+    interaction_id: str
+    canal: str  # a2a | en_proceso | api
+    solicitado_por: str | None
+    transporte: dict[str, Any] | None = None  # metadatos del mensaje A2A (sellados en la cadena)
+    solicitado_en: str
+    request: dict[str, Any]
+    record: AuditRecord
+    eventos: list[TraceEvent]
+
+
 class ChainReport(BaseModel):
     ok: bool
     eventos: int

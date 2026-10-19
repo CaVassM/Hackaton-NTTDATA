@@ -86,8 +86,10 @@ Qué significa cada variable:
 | `RAG_RRF_K`, `RAG_CANDIDATES_K`, `USE_RERANKER` | `60`, `30`, `false` | No |
 | `A2A_AGENT_TOKENS` | `{"copilot": "cambia-este-token"}` | **Sí**: pon tu token |
 | `A2A_ALLOWED_AGENTS` | `["copilot"]` | No (agentes autorizados a pedir auditorías) |
-| `A2A_PUBLIC_URL` | `http://localhost:8100` | Solo si cambias el puerto del auditor |
+| `A2A_PUBLIC_URL` | `http://127.0.0.1:8100` | Solo si cambias el puerto del auditor |
 | `NANDA_AGENT_ID` / `NANDA_AGENT_TOKEN` | `copilot` / `cambia-este-token` | **Sí** el token: el mismo de arriba |
+| `NANDA_ENABLED` | `false` | `true` para que `start_backend.py` levante también el agente auditor A2A |
+| `CASES_AUDIT_MODE` | `direct` | `a2a` para que el copiloto pida cada auditoría al auditor por A2A |
 
 > Si no existe `.env`, todo usa los valores por defecto, salvo los tokens: quedan vacíos y el auditor rechaza todo con 401.
 > El `.env` se lee **al arrancar**. Si lo editas, reinicia el servidor.
@@ -120,13 +122,23 @@ Con el auditor corriendo (terminal 1), en otra terminal:
 
 ```powershell
 # a) Agent Card (también puedes abrir esta URL en el navegador)
-curl.exe http://localhost:8100/.well-known/agent-card.json
+curl.exe http://127.0.0.1:8100/.well-known/agent-card.json
 
 # b) Lo que hará el copiloto: pedir una auditoría con el cliente nanda (usa el .env)
 python scripts/demo_audit_client.py
 ```
 
 Lo esperado en (b): una respuesta correcta → `ALLOW`, y el caso demo de la UIF → `BLOCK`, con el motivo por afirmación. Para probar con curl, mira [modules/audit/README.md](modules/audit/README.md).
+
+### Ver a los dos agentes conversando (A2A)
+
+Con `NANDA_ENABLED=true` y `CASES_AUDIT_MODE=a2a` en `.env` (tokens reales, no los de ejemplo), `python scripts/start_backend.py` levanta el backend (8000) y el agente auditor (8100). Desde ese momento cada expediente o caso evaluado viaja así: el copiloto busca en el registro NANDA quién ofrece `audit_candidate_response`, lee la Agent Card, envía `SendMessage` (JSON-RPC 2.0 + Bearer) y recibe el `AuditResult`. El auditor sella en la cadena de hashes los metadatos del mensaje (messageId, contextId, id JSON-RPC, agente autenticado) junto con la decisión.
+
+- Pantalla **Flujo entre agentes** del front (o `/#agents`): arquitectura en vivo, conteo A2A vs en proceso y el diagrama de secuencia de cada interacción.
+- El detalle de cada expediente incluye su **Conversación entre agentes**.
+- API: `GET /agents` (registro + Agent Card viva) y `GET /audit/{audit_id}/trace` (canal, mensaje, decisión y eslabón de la cadena recalculado).
+
+Las auditorías hechas antes de activar el modo A2A aparecen como «en proceso»: no se reetiquetan.
 
 ### 7. Correr los tests
 

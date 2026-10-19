@@ -104,6 +104,10 @@ def _count(db: Path, sql: str) -> int | None:
 
 
 # ------------------------------------------------------------------ pasos
+# La salida va a logs/: en Windows no abrir una consola por cada proceso hijo.
+SIN_VENTANA = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+
+
 def paso1_python() -> None:
     paso(1, "Python, entorno y dependencias")
     if sys.version_info < (3, 11):
@@ -285,7 +289,7 @@ def paso6_compliance(dry: bool, reextract: bool) -> None:
     code = ("from shared.logging import configure_logging; configure_logging();"
             "from modules.compliance import ComplianceFacade as F; f=F.from_settings();"
             "print(f.extract_obligations()); print(f.extract_infractions())")
-    subprocess.Popen([PY, "-c", code], cwd=ROOT, stdout=open(log, "ab"), stderr=subprocess.STDOUT)
+    subprocess.Popen([PY, "-c", code], cwd=ROOT, stdout=open(log, "ab"), stderr=subprocess.STDOUT, creationflags=SIN_VENTANA)
     ok(f"extraccion lanzada en background; log: {log.relative_to(ROOT)}")
 
 
@@ -293,8 +297,8 @@ def paso7_servidores(vals: dict[str, str], port: int, dry: bool) -> list[subproc
     paso(7, "Servidores")
     procs: list[subprocess.Popen] = []
     nanda = _bool(vals.get("NANDA_ENABLED"))
-    a2a_port = int(re.search(r":(\d+)", vals.get("A2A_PUBLIC_URL", "http://localhost:8100").split("//")[-1]).group(1)) \
-        if re.search(r":(\d+)", vals.get("A2A_PUBLIC_URL", "http://localhost:8100").split("//")[-1]) else 8100
+    a2a_port = int(re.search(r":(\d+)", vals.get("A2A_PUBLIC_URL", "http://127.0.0.1:8100").split("//")[-1]).group(1)) \
+        if re.search(r":(\d+)", vals.get("A2A_PUBLIC_URL", "http://127.0.0.1:8100").split("//")[-1]) else 8100
     plan = [("backend", "app.main:app", port)] + ([("agente nanda (A2A)", "modules.audit.api.app:app", a2a_port)] if nanda else [])
     for nombre, target, p in plan:
         if dry:
@@ -313,7 +317,8 @@ def paso7_servidores(vals: dict[str, str], port: int, dry: bool) -> list[subproc
         LOGS.mkdir(exist_ok=True)
         log = LOGS / ("backend.log" if nombre == "backend" else "nanda.log")
         procs.append(subprocess.Popen([PY, "-m", "uvicorn", target, "--host", "127.0.0.1", "--port", str(p)],
-                                      cwd=ROOT, stdout=open(log, "ab"), stderr=subprocess.STDOUT))
+                                      cwd=ROOT, stdout=open(log, "ab"), stderr=subprocess.STDOUT,
+                                      creationflags=SIN_VENTANA))
         ok(f"{nombre} lanzado en el puerto {p} (log: {log.relative_to(ROOT)})")
     return procs
 

@@ -4,6 +4,7 @@
     GET  /audit/verify-chain        verifica la cadena de hashes
     GET  /audit/events?limit=       ultimos eventos de la cadena
     GET  /audit/{audit_id}          auditoria + revisiones humanas
+    GET  /audit/{audit_id}/trace    canal (A2A / en proceso), mensaje, decision y eslabon de la cadena
     POST /audit/{audit_id}/review   revision humana (append-only)
 Rutas fijas antes que /{audit_id} para que no las capture.
 """
@@ -18,6 +19,7 @@ from modules.audit.domain import (
     AuditRecord,
     AuditRequest,
     AuditResult,
+    AuditTrace,
     ChainReport,
     HumanReview,
     PersistenceNotConfigured,
@@ -63,6 +65,13 @@ def create_audit_router(get_facade: Callable[..., AuditFacade]) -> APIRouter:
     def get(audit_id: str, facade: AuditFacade = Depends(get_facade)):
         try:
             return facade.get(audit_id)
+        except (AuditNotFound, PersistenceNotConfigured) as exc:
+            raise _err(exc) from exc
+
+    @router.get("/{audit_id}/trace", response_model=AuditTrace)
+    def trace(audit_id: str, facade: AuditFacade = Depends(get_facade)):
+        try:
+            return facade.trace(audit_id)
         except (AuditNotFound, PersistenceNotConfigured) as exc:
             raise _err(exc) from exc
 

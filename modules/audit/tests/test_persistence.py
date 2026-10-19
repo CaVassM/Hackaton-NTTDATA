@@ -105,3 +105,16 @@ def test_router_de_audit(audit):
         assert [e["action"] for e in c.get("/audit/events?limit=5").json()] == ["audit.review", "audit.evaluate"]
         assert c.get("/audit/no-existe").status_code == 404
         assert c.post("/audit/evaluate", json={"query": "x"}).status_code == 422
+
+
+def test_trace_en_proceso_sin_transporte_y_con_revision(audit):
+    res = audit.evaluate(ok_request(), requested_by="cases")
+    audit.review(res.audit_id, "oficial.1", True, "ok")
+    trace = audit.trace(res.audit_id)
+    assert trace.canal == "en_proceso" and trace.transporte is None and trace.solicitado_por == "cases"
+    assert [e.action for e in trace.eventos] == ["audit.evaluate", "audit.review"]
+    assert all(e.hash_verificado for e in trace.eventos) and trace.record.revision_final == "aprobada"
+    assert trace.request["interaction_id"] == res.interaction_id
+    assert audit.counts()["por_solicitante"] == {"cases": 1} and audit.counts()["via_a2a"] == 0
+    with pytest.raises(AuditNotFound):
+        audit.trace("no-existe")

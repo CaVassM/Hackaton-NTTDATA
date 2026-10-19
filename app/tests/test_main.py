@@ -9,7 +9,7 @@ from modules.cases.tests.conftest import caso, make_cases, stack  # noqa: F401 -
 @pytest.fixture
 def client(stack, tmp_path):  # noqa: F811
     cases, _ = make_cases(stack, tmp_path, texto="Resumen sin cifras nuevas.")
-    container = Container(stack["rag"], stack["audit"], stack["compliance"], cases, AppSettings())
+    container = Container(stack["rag"], stack["audit"], stack["compliance"], cases, AppSettings(nanda_enabled=False))
     with TestClient(create_app(container), raise_server_exceptions=False) as c:
         c.container = container
         yield c
@@ -107,3 +107,16 @@ def test_expedientes_listado_con_detalle(client):
     (fila,) = [e["fila"] for e in client.get("/cases/expedientes?detalle=true").json() if e["id_caso"] == "EXP-DET-1"]
     assert fila["resultado_esperado"] == "POSIBLE_INCUMPLIMIENTO" and fila["tipo_alerta_esperada"] == "AMBAS"
     assert fila["dias_de_retraso_interno"] == "6" and fila["audit_id"]
+
+
+def test_agentes_y_traza_de_auditoria(client):
+    a = client.get("/agents").json()
+    assert a["copiloto"]["modulo"] == "cases" and a["copiloto"]["modo_auditoria"] in ("direct", "a2a")
+    auditor = next(x for x in a["registro"]["agentes"] if "audit_candidate_response" in x["capabilities"])
+    assert auditor["card_url"].endswith("/.well-known/agent-card.json")
+    assert "por_solicitante" in a["auditorias"]
+    caso_ok = client.post("/cases/evaluate", json=caso(case_id="TRZ-1")).json()
+    audit_id = caso_ok["audit_result"]["audit_id"]
+    t = client.get(f"/audit/{audit_id}/trace").json()
+    assert t["audit_id"] == audit_id and t["canal"] in ("en_proceso", "a2a") and t["eventos"][0]["hash_verificado"]
+    assert client.get("/audit/no-existe/trace").status_code == 404

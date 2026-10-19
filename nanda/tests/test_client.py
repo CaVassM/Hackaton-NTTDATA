@@ -65,3 +65,11 @@ def test_sin_auditor_registrado(tmp_path, server):
 def test_sin_token_no_construye():
     with pytest.raises(A2AClientError):
         AuditClient(token="", registry=None)
+
+
+def test_el_intercambio_del_cliente_real_queda_trazado(server, registry, spy):
+    req = ok_request()
+    result = AuditClient(token=TOKENS["copilot"], registry=registry, http=server).request_audit(req)
+    t = spy.inner.trace(result["audit_id"])
+    assert t.canal == "a2a" and t.transporte["agente_declarado"] == t.transporte["agente_autenticado"] == "copilot"
+    assert t.transporte["context_id"] == req["interaction_id"] and t.eventos[0].hash_verificado

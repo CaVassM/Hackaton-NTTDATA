@@ -1,6 +1,8 @@
 from modules.audit.domain.entities import (
     AuditEvent,
     AuditRecord,
+    AuditTrace,
+    TraceEvent,
     ChainReport,
     HumanReview,
     AuditRequest,
@@ -16,6 +18,8 @@ from modules.audit.domain.errors import AuditError, AuditNotFound, PersistenceNo
 
 __all__ = [
     "AuditEvent",
+    "AuditTrace",
+    "TraceEvent",
     "AuditNotFound",
     "AuditRecord",
     "ChainReport",

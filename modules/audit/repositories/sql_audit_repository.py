@@ -23,8 +23,10 @@ from modules.audit.domain import (
     AuditRecord,
     AuditRequest,
     AuditResult,
+    AuditTrace,
     ChainReport,
     HumanReview,
+    TraceEvent,
 )
 
 _SCHEMA = Path(__file__).with_name("schema.sql")
@@ -91,7 +93,8 @@ class SqlAuditRepository:
         return h
 
     # -------------------------------------------------------------- escritura
-    def save_evaluation(self, req: AuditRequest, result: AuditResult, requested_by: str | None) -> None:
+    def save_evaluation(self, req: AuditRequest, result: AuditResult, requested_by: str | None,
+                        transport: dict[str, Any] | None = None) -> None:
         result_json = result.model_dump_json()
         ts = _now()
         with self._tx() as c:
@@ -121,6 +124,8 @@ class SqlAuditRepository:
             self._append_event(c, requested_by or "desconocido", "audit.evaluate", {
                 "audit_id": result.audit_id, "interaction_id": req.interaction_id, "decision": result.decision.value,
                 "score": result.score, "policy_version": result.policy_version, "result_sha256": sha256(result_json),
+                # Metadatos del mensaje A2A: quedan sellados en el hash (no se pueden reescribir sin romper la cadena).
+                **({"transporte": transport} if transport else {}),
             })
 
     def add_review(self, audit_id: str, reviewer: str, decision: str, comment: str | None) -> HumanReview:
@@ -149,6 +154,32 @@ class SqlAuditRepository:
         return AuditRecord(result=AuditResult.model_validate_json(row[0]), reviews=reviews,
                            revision_final=reviews[-1].decision if reviews else None)
 
+    def trace(self, audit_id: str) -> AuditTrace:
+        c = self._conn
+        row = c.execute("SELECT interaction_id, requested_by, request_json, created_at FROM audit_interaction "
+                        "WHERE audit_id=?", (audit_id,)).fetchone()
+        if row is None:
+            raise AuditNotFound(audit_id)
+        record = self.get(audit_id)
+        result_digest = sha256(c.execute("SELECT result_json FROM policy_decision WHERE audit_id=?",
+                                         (audit_id,)).fetchone()[0])
+        eventos, transporte = [], None
+        for eid, ts, actor, action, pj, prev_hash, h in c.execute(
+                "SELECT id, ts, actor, action, payload_json, prev_hash, hash FROM audit_event "
+                "WHERE json_extract(payload_json, '$.audit_id') = ? ORDER BY id", (audit_id,)):
+            payload = json.loads(pj)
+            if action == "audit.evaluate":
+                transporte = payload.get("transporte")
+            eventos.append(TraceEvent(
+                id=eid, ts=ts, actor=actor, action=action, payload=payload, prev_hash=prev_hash, hash=h,
+                hash_verificado=event_hash(prev_hash, ts, actor, action, pj) == h,
+                resultado_verificado=payload.get("result_sha256") == result_digest if action == "audit.evaluate" else None,
+            ))
+        canal = "a2a" if transporte else "api" if row[1] == "api" else "en_proceso"
+        return AuditTrace(audit_id=audit_id, interaction_id=row[0], canal=canal, solicitado_por=row[1],
+                          transporte=transporte, solicitado_en=row[3], request=json.loads(row[2]),
+                          record=record, eventos=eventos)
+
     def events(self, limit: int = 100) -> list[AuditEvent]:
         rows = self._conn.execute(
             "SELECT id, ts, actor, action, payload_json, prev_hash, hash FROM audit_event ORDER BY id DESC LIMIT ?",
@@ -163,6 +194,10 @@ class SqlAuditRepository:
             "por_decision": dict(c.execute("SELECT decision, COUNT(*) FROM policy_decision GROUP BY decision").fetchall()),
             "revisiones": c.execute("SELECT COUNT(*) FROM human_review").fetchone()[0],
             "eventos": c.execute("SELECT COUNT(*) FROM audit_event").fetchone()[0],
+            "por_solicitante": dict(c.execute(
+                "SELECT COALESCE(requested_by, 'desconocido'), COUNT(*) FROM audit_interaction GROUP BY 1").fetchall()),
+            "via_a2a": c.execute("SELECT COUNT(*) FROM audit_event WHERE action='audit.evaluate' "
+                                 "AND json_extract(payload_json, '$.transporte.protocolo') = 'A2A'").fetchone()[0],
         }
 
     # ----------------------------------------------------------- verificacion

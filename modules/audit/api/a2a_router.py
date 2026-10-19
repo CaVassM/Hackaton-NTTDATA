@@ -123,15 +123,24 @@ def create_a2a_router(
             return _rpc_error(rpc_id, InvalidParamsError, "DataPart no cumple el esquema AuditRequest",
                               data=json.loads(exc.json(include_url=False)))
 
+        incoming = send.message
+        reply_id = str(uuid.uuid4())
+        # Trazabilidad del intercambio: se sella en la cadena de hashes junto con la decision.
+        transport = {
+            "protocolo": "A2A", "version": PROTOCOL_VERSION_CURRENT, "binding": "JSONRPC", "metodo": SEND_MESSAGE,
+            "skill": SKILL_ID, "autenticacion": "bearer", "agente_autenticado": caller,
+            "agente_declarado": (params["message"].get("metadata") or {}).get("from_agent"),
+            "jsonrpc_id": rpc_id, "message_id": incoming.message_id, "context_id": incoming.context_id or None,
+            "respuesta_message_id": reply_id,
+        }
         try:
-            result = await run_in_threadpool(facade.evaluate, audit_request, requested_by=caller)
+            result = await run_in_threadpool(facade.evaluate, audit_request, requested_by=caller, transport=transport)
         except Exception:  # noqa: BLE001 - nunca filtrar trazas al otro agente
             log.exception("Fallo evaluando interaction %s", audit_request.interaction_id)
             return _rpc_error(rpc_id, InternalError, "Error interno del auditor")
 
-        incoming = send.message
         reply = Message(
-            message_id=str(uuid.uuid4()),
+            message_id=reply_id,
             context_id=incoming.context_id or audit_request.interaction_id,
             role=Role.ROLE_AGENT,
             parts=[

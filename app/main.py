@@ -20,6 +20,7 @@ from modules.audit import AuditFacade, AuditSettings, create_audit_router
 from modules.cases import CasesFacade, CasesSettings, create_cases_router
 from modules.compliance import ComplianceFacade, ExtractionJobs, create_compliance_router
 from modules.rag import RagFacade, create_rag_router
+from nanda import AgentRegistry, NandaSettings, RegistryError
 from shared.config import BaseAppSettings
 from shared.llm import check_ollama
 from shared.logging import configure_logging, get_logger
@@ -33,7 +34,7 @@ class AppSettings(BaseAppSettings):
     api_port: int = 8000
     # Agente auditor A2A (proceso aparte, ver scripts/start_backend.py).
     nanda_enabled: bool = False
-    a2a_public_url: str = "http://localhost:8100"
+    a2a_public_url: str = "http://127.0.0.1:8100"
     frontend_allowed_origins: list[str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
@@ -102,6 +103,39 @@ def health(c: Container) -> dict[str, Any]:
     }
 
 
+def agents(c: Container) -> dict[str, Any]:
+    """Los dos agentes y como se hablan: registro NANDA, Agent Card servida por el
+    auditor (si responde) y cuantas auditorias llegaron por A2A vs en proceso."""
+    ns = NandaSettings()
+    registrados, error = [], None
+    try:
+        registry = AgentRegistry(ns.nanda_registry_path)
+    except RegistryError as exc:
+        registry, error = None, str(exc)
+    for rec in registry.list_agents() if registry else []:
+        card, motivo = None, None
+        try:
+            resp = httpx.get(rec.card_url, timeout=1.5)
+            resp.raise_for_status()
+            card = resp.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            motivo = f"{type(exc).__name__}: {exc}"[:200]
+        registrados.append({"agent_id": rec.agent_id, "name": rec.name, "url": rec.url, "card_url": rec.card_url,
+                            "capabilities": list(rec.capabilities), "description": rec.description,
+                            "card": card, "reachable": card is not None, "error": motivo})
+    try:
+        conteos = c.audit.counts()
+    except Exception as exc:  # noqa: BLE001
+        conteos = {"error": str(exc)}
+    return {
+        "copiloto": {"agent_id": ns.nanda_agent_id, "modulo": "cases", "modo_auditoria": c.cases.audit_mode,
+                     "token_configurado": bool(ns.nanda_agent_token)},
+        "registro": {"path": ns.nanda_registry_path.name, "agentes": registrados, "error": error},
+        "nanda_enabled": c.settings.nanda_enabled,
+        "auditorias": conteos,
+    }
+
+
 def create_app(container: Container | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -137,6 +171,11 @@ def create_app(container: Container | None = None) -> FastAPI:
     def get_health(request: Request):
         """Ollama, modelos, cada base y conteos (versiones, propuestas validadas, auditorias, casos)."""
         return health(request.app.state.container)
+
+    @app.get("/agents", tags=["agentes"])
+    def get_agents(request: Request):
+        """Agentes registrados (NANDA), su Agent Card A2A y el canal usado por las auditorias."""
+        return agents(request.app.state.container)
 
     app.include_router(create_rag_router(_dep("rag")))
     app.include_router(create_audit_router(_dep("audit")))

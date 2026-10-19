@@ -23,7 +23,7 @@ flowchart LR
 # .env (o variables de entorno). Sin tokens, todo se rechaza con 401.
 A2A_AGENT_TOKENS={"copilot": "cambia-este-token"}
 A2A_ALLOWED_AGENTS=["copilot"]
-A2A_PUBLIC_URL=http://localhost:8100
+A2A_PUBLIC_URL=http://127.0.0.1:8100
 
 python -m modules.rag.cli ingest data/raw/sinteticos     # el auditor verifica contra estos índices
 uvicorn modules.audit.api.app:app --port 8100
@@ -32,9 +32,9 @@ uvicorn modules.audit.api.app:app --port 8100
 ## Ejemplo con curl
 
 ```bash
-curl -s localhost:8100/.well-known/agent-card.json      # descubrimiento (público)
+curl -s 127.0.0.1:8100/.well-known/agent-card.json      # descubrimiento (público)
 
-curl -s -X POST localhost:8100/a2a \
+curl -s -X POST 127.0.0.1:8100/a2a \
   -H "Authorization: Bearer cambia-este-token" \
   -H "A2A-Version: 1.0" -H "Content-Type: application/json" \
   --data-binary @modules/audit/examples/send_message_demo.json

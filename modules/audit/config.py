@@ -14,7 +14,7 @@ class AuditSettings(BaseAppSettings):
 
     # --- A2A ---
     # URL publica con la que el auditor se anuncia en su Agent Card.
-    a2a_public_url: str = "http://localhost:8100"
+    a2a_public_url: str = "http://127.0.0.1:8100"
     # Autenticacion: token -> identidad. JSON en .env:
     #   A2A_AGENT_TOKENS='{"copilot": "token-largo-y-aleatorio"}'
     # Vacio = nadie entra (default seguro).

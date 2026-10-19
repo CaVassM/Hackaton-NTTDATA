@@ -108,7 +108,8 @@ def stack(tmp_path_factory):
 def make_cases(stack, tmp_path, *, texto="", json_responder=None) -> tuple[CasesFacade, FakeLLM]:
     llm = FakeLLM(texto, json_responder)
     f = CasesFacade.from_settings(
-        CasesSettings(cases_dir=tmp_path / "cases", eventos_path=stack["eventos"], log_dir=tmp_path / "logs"),
+        CasesSettings(cases_dir=tmp_path / "cases", eventos_path=stack["eventos"], log_dir=tmp_path / "logs",
+                      cases_audit_mode="direct"),  # aislado del .env local (que puede tener a2a)
         rag=stack["rag"], compliance=stack["compliance"], audit=stack["audit"], llm=llm)
     return f, llm
 
