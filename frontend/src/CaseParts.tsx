@@ -105,7 +105,7 @@ export function Tag({ children, tone = "neutral", mono = false }: { children: Re
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return <div className="kv-row"><span>{label}</span><div>{children}</div></div>;
 }
-function Callout({ tone = "info", title, children }: { tone?: Tone; title?: string; children: ReactNode }) {
+export function Callout({ tone = "info", title, children }: { tone?: Tone; title?: string; children: ReactNode }) {
   return <div className={`callout ${tone}`}>{title && <b>{title}</b>}<div>{children}</div></div>;
 }
 const shortId = (id: unknown) => { const v = String(id ?? ""); return v.length > 14 ? `${v.slice(0, 8)}…${v.slice(-4)}` : v; };
@@ -123,7 +123,7 @@ function DateTrack({ f }: { f: Record<string, unknown> }) {
 }
 
 type FindingLike = { validator: string; status: string; reason: string };
-function Findings({ findings }: { findings: FindingLike[] }) {
+export function Findings({ findings }: { findings: FindingLike[] }) {
   const groups = new Map<string, { item: FindingLike; n: number }>();
   findings.forEach((x) => { const k = `${x.status}|${x.validator}|${x.reason}`; const g = groups.get(k); if (g) g.n += 1; else groups.set(k, { item: x, n: 1 }); });
   const list = Array.from(groups.values()).sort((x, y) => (x.item.status === "PASS" ? 1 : 0) - (y.item.status === "PASS" ? 1 : 0));

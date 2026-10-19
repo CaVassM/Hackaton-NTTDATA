@@ -61,6 +61,29 @@ export type ReportItem = {
 export type ComplianceReport = { fecha_corte: string; items: ReportItem[]; propuestas_pendientes: Record<string, number>; advertencias: string[]; rotulo: string };
 export type ProposalsResponse = Record<string, Array<{ proposal_id: string }>>;
 
+export type AgentCardJson = {
+  name: string; description: string; version: string;
+  supportedInterfaces?: Array<{ url: string; protocolBinding: string; protocolVersion: string }>;
+  skills?: Array<{ id: string; name: string; description: string; tags?: string[] }>;
+  securitySchemes?: Record<string, unknown>;
+};
+export type RegisteredAgent = { agent_id: string; name: string; url: string; card_url: string; capabilities: string[]; description: string; card: AgentCardJson | null; reachable: boolean; error?: string | null };
+export type AgentsInfo = {
+  copiloto: { agent_id: string; modulo: string; modo_auditoria: string; token_configurado: boolean };
+  registro: { path: string; agentes: RegisteredAgent[]; error?: string | null };
+  nanda_enabled: boolean;
+  auditorias: { auditorias?: number; por_decision?: Record<string, number>; revisiones?: number; eventos?: number; por_solicitante?: Record<string, number>; via_a2a?: number; error?: string };
+};
+export type AuditEvent = { id: number; ts: string; actor: string; action: string; payload: Record<string, any>; prev_hash: string; hash: string };
+export type Transporte = { protocolo: string; version: string; binding: string; metodo: string; skill: string; autenticacion: string; agente_autenticado: string; agente_declarado?: string | null; jsonrpc_id?: string | number | null; message_id: string; context_id?: string | null; respuesta_message_id: string };
+export type AuditFinding = { validator: string; claim_id?: string | null; status: string; critical: boolean; reason: string };
+export type AuditTrace = {
+  audit_id: string; interaction_id: string; canal: "a2a" | "en_proceso" | "api"; solicitado_por: string | null; transporte: Transporte | null; solicitado_en: string;
+  request: { user_id: string; role: string; query: string; use_case: string; effective_date?: string | null; candidate: { text: string; claims: Array<{ claim_id: string; text: string; type: string; evidence_ids: number[] }> } };
+  record: { result: { audit_id: string; decision: string; score: number; risk_level: string; policy_version: string; effective_date: string; checks: Record<string, any>; findings: AuditFinding[]; safe_response: string }; reviews: AuditReview[]; revision_final: string | null };
+  eventos: Array<AuditEvent & { hash_verificado: boolean; resultado_verificado?: boolean | null }>;
+};
+
 export type SearchResult ={ query: string; fecha: string; fecha_por_defecto: boolean; fragmentos: Array<{ texto: string; cita: Citation }> };
 export type Health = { status: "ok" | "degradado"; version: string; ollama: { reachable: boolean; models: Record<string, boolean>; error?: string | null }; bases: { rag?: { versiones_sql?: number; [key: string]: unknown }; cases?: Record<string, unknown>; [key: string]: unknown }; audit_mode: string; policy_version: string };
 
@@ -101,6 +124,9 @@ export const api = {
   complianceReport: () => request<{ reporte: ComplianceReport }>("/compliance/report", { method: "POST", body: JSON.stringify({}) }),
   expedientesDetalle: () => request<ExpedienteDetalle[]>("/cases/expedientes?limit=1000&detalle=true"),
   pendingProposals: () => request<ProposalsResponse>("/compliance/proposals?estado=propuesta"),
+  agents: () => request<AgentsInfo>("/agents"),
+  auditEvents: (limit = 500) => request<AuditEvent[]>(`/audit/events?limit=${limit}`),
+  auditTrace: (auditId: string) => request<AuditTrace>(`/audit/${encodeURIComponent(auditId)}/trace`),
   auditRecord: (auditId: string) => request<AuditRecord>(`/audit/${encodeURIComponent(auditId)}`),
   reviewAudit: (auditId: string, body: { reviewer: string; aprobar: boolean; comentario?: string | null }) =>
     request<AuditReview>(`/audit/${encodeURIComponent(auditId)}/review`, { method: "POST", body: JSON.stringify(body) }),

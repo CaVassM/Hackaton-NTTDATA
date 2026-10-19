@@ -3,13 +3,14 @@ import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem
 import { ClampedText, FragmentCard } from "./ResultCards";
 import { AgentFlow, ExpedienteFlow, ExpedienteSections, ObligationList, pretty } from "./CaseParts";
 import ProposalPage from "./Proposal";
+import AgentsPage, { AgentConversation } from "./Agents";
 import { EVENTO, grupoEtiqueta } from "./event";
 import "./import.css";
 import "./results.css";
 import "./case.css";
 import "./proposal.css";
 
-type View = "dashboard" | "cases" | "rag" | "alerts" | "proposal" | "detail" | "expediente-detail";
+type View = "dashboard" | "cases" | "rag" | "alerts" | "proposal" | "agents" | "detail" | "expediente-detail";
 type Notice = { kind: "error" | "success"; text: string } | null;
 
 const menu: Array<{ id: View; icon: string; label: string }> = [
@@ -18,6 +19,7 @@ const menu: Array<{ id: View; icon: string; label: string }> = [
   { id: "rag", icon: "⌘", label: "Motor RAG y evaluación IA" },
   { id: "alerts", icon: "◉", label: "Centro de alertas" },
   { id: "proposal", icon: "★", label: "Propuesta" },
+  { id: "agents", icon: "⇄", label: "Flujo entre agentes" },
 ];
 
 const today = (() => {
@@ -123,7 +125,8 @@ function Empty({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
-  const [view, setView] = useState<View>("dashboard");
+  // Deep-link: /#agents abre directo esa pantalla (útil para compartir la demo).
+  const [view, setView] = useState<View>(() => { const h = window.location.hash.slice(1); return menu.some((m) => m.id === h) ? (h as View) : "dashboard"; });
   const [health, setHealth] = useState<Health | null>(null);
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [expedientes, setExpedientes] = useState<ExpedienteSummary[]>([]);
@@ -173,7 +176,7 @@ export default function App() {
     } catch (error) { setNotice({ kind: "error", text: `No se pudieron borrar los expedientes: ${(error as Error).message}` }); }
   };
 
-  const navigate = (next: View) => { setView(next); setNotice(null); };
+  const navigate = (next: View) => { setView(next); setNotice(null); if (menu.some((m) => m.id === next)) window.history.replaceState(null, "", `#${next}`); };
 
   return <div className="app-shell">
     <aside className="sidebar">
@@ -204,6 +207,7 @@ export default function App() {
         {view === "rag" && <RagPage />}
         {view === "alerts" && <AlertsPage />}
         {view === "proposal" && <ProposalPage health={health} onOpenExpediente={openExpediente} />}
+        {view === "agents" && <AgentsPage health={health} onOpenExpediente={openExpediente} />}
       </main>
     </div>
   </div>;
@@ -428,6 +432,7 @@ function ExpedienteDetail({ result, onBack }: { result: ExpedienteResult | null;
   return <section className="page"><button className="text-button back" onClick={onBack}>← Gestión de casos</button><div className="page-heading compact"><div><span className="eyebrow">EXPEDIENTE IMPORTADO</span><h1>{displayValue(row.id_caso) || "Sin identificador"}</h1><p>Resultado de revisión del CSV con evidencia, norma y trazabilidad.</p></div><div className="decision"><Pill value={label} tone={tone} /><Pill value={displayValue(row.decision_auditoria) || "SIN_AUDITORIA"} /><small>La clasificación requiere revisión humana.</small></div></div>
     <div className="detail-grid"><article className="panel highlight"><div className="panel-title"><h2>Conclusión</h2><Pill value={displayValue(row.revision_humana) || "PENDIENTE_REVISION"} /></div><p className="summary">{displayValue(row.por_que_si_o_no) || "No se guardó una explicación para este resultado."}</p>{displayValue(row.limitacion_de_la_evaluacion) && <p className="case-description">Limitación: {displayValue(row.limitacion_de_la_evaluacion)}</p>}</article><article className="panel"><div className="panel-title"><h2>Identificación</h2></div><ExpedienteFields row={row} fields={[["id_caso", "ID del expediente"], ["resultado_esperado", "Resultado"], ["prioridad", "Prioridad"], ["revision_humana", "Revisión humana"]]} /></article></div>
     <ExpedienteFlow result={result} />
+    {displayValue(row.audit_id) && <AgentConversation auditId={displayValue(row.audit_id)} />}
     <ExpedienteSections result={result} />
   </section>;
 }
