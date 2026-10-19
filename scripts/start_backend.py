@@ -34,6 +34,8 @@ LOGS = ROOT / "logs"
 PY = sys.executable
 TOTAL = 8
 PLACEHOLDER_TOKEN = "cambia-este-token"
+ENV_NAME = "hackaton-ntt"
+RELANZADO = "START_BACKEND_RELANZADO"
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True, write_through=True)
@@ -108,12 +110,45 @@ def _count(db: Path, sql: str) -> int | None:
 SIN_VENTANA = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 
+def python_del_env() -> Path | None:
+    """Python del env conda hackaton-ntt aunque no este activado (p. ej. boton Run de VS Code)."""
+    exe = "python.exe" if os.name == "nt" else "bin/python"
+    bases = []
+    if os.environ.get("CONDA_EXE"):
+        bases.append(Path(os.environ["CONDA_EXE"]).resolve().parent.parent)
+    bases += [Path.home() / n for n in ("anaconda3", "miniconda3", "miniforge3", "mambaforge")]
+    if os.name == "nt":
+        bases += [Path(os.environ.get("ProgramData", r"C:\ProgramData")) / n for n in ("anaconda3", "miniconda3")]
+    for base in bases:
+        candidato = base / "envs" / ENV_NAME / exe
+        if candidato.exists():
+            return candidato
+    return None
+
+
+def relanzar_en_env(argv: list[str]) -> int | None:
+    """Si este Python no es el del env, relanza el script con el del env y espera.
+    Devuelve el codigo de salida, o None si no hace falta (o no se encontro el env)."""
+    if Path(sys.prefix).name == ENV_NAME or os.environ.get(RELANZADO):
+        return None
+    py = python_del_env()
+    if py is None:
+        return None
+    print(f"Este Python ({sys.executable}) no es el env '{ENV_NAME}'.\nRelanzando con {py} ...", flush=True)
+    hijo = subprocess.Popen([str(py), str(Path(__file__).resolve()), *argv], env={**os.environ, RELANZADO: "1"})
+    while True:
+        try:
+            return hijo.wait()
+        except KeyboardInterrupt:
+            continue  # el hijo recibe el mismo Ctrl+C y detiene sus servicios; se espera a que termine
+
+
 def paso1_python() -> None:
     paso(1, "Python, entorno y dependencias")
     if sys.version_info < (3, 11):
         raise Falla(f"Python {sys.version.split()[0]}: se requiere 3.11+", "conda activate hackaton-ntt")
     env = os.environ.get("CONDA_DEFAULT_ENV") or Path(sys.prefix).name
-    ok(f"Python {sys.version.split()[0]} ({env})")
+    ok(f"Python {sys.version.split()[0]} ({env}) · {sys.executable}")
     if env != "hackaton-ntt":
         warn("no estas en el env 'hackaton-ntt' (conda activate hackaton-ntt)")
     faltan, distintas = [], []
@@ -395,6 +430,10 @@ def iniciar_cloudflare(port: int) -> tuple[subprocess.Popen, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    codigo = relanzar_en_env(argv)
+    if codigo is not None:
+        return codigo
     ap = argparse.ArgumentParser(description="Levanta el backend completo")
     ap.add_argument("--port", type=int, default=int(os.environ.get("API_PORT", 8000)))
     ap.add_argument("--reingest", action="store_true", help="volver a preparar e ingerir la normativa")

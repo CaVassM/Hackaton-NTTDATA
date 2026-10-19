@@ -53,3 +53,28 @@ def test_falla_con_nanda_y_token_de_ejemplo(tmp_path):
                    encoding="utf-8")
     r = _run(env)
     assert r.returncode == 1 and "token de ejemplo" in r.stdout
+
+
+def _modulo():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("start_backend", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_encuentra_el_env_aunque_no_este_activado(tmp_path, monkeypatch):
+    mod = _modulo()
+    conda = tmp_path / "conda"
+    py = conda / "envs" / "hackaton-ntt" / ("python.exe" if mod.os.name == "nt" else "bin/python")
+    py.parent.mkdir(parents=True)
+    py.write_text("")
+    (conda / "Scripts").mkdir()
+    monkeypatch.setenv("CONDA_EXE", str(conda / "Scripts" / "conda.exe"))
+    assert mod.python_del_env() == py
+
+
+def test_no_relanza_si_ya_esta_en_el_env_o_ya_fue_relanzado(monkeypatch):
+    mod = _modulo()
+    monkeypatch.setenv(mod.RELANZADO, "1")
+    assert mod.relanzar_en_env(["--dry-run"]) is None
