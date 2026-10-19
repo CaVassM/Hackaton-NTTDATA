@@ -99,3 +99,16 @@
 @media (max-width: 560px) { .pr-kpis, .pr-fields { grid-template-columns: 1fr; } .pr-hero-actions { width: 100%; } .pr-actions .pr-btn { flex: 1 1 auto; } }
 .pr, .pr .pr-queue { overflow-wrap: normal; word-break: normal; }
 .pr-state, .pr-link { white-space: nowrap; display: inline-block; }
+
+/* Centro de alertas con datos reales */
+.pr-inline-notice { margin: 0 0 14px; }
+.pr-fields .pr-reviewer { border-color: #4648d4; min-width: 170px; }
+.pr .pager { display: flex; gap: 12px; align-items: center; justify-content: flex-end; padding-top: 12px; font-size: 12px; }
+.pr-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Datos del evento (menu lateral) */
+.event-card { margin: 0 6px 14px; padding: 12px 12px 10px; border-radius: 10px; background: #0f2744; border: 1px solid #1d3a5f; color: #d4e3ff; }
+.event-card .event-eyebrow { display: block; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9fb6dc; }
+.event-card strong { display: block; color: #fff; font: 600 14px "Plus Jakarta Sans"; margin: 4px 0 6px; }
+.event-card ul { margin: 0; padding-left: 16px; font-size: 12px; line-height: 1.5; }
+@media (max-width: 800px) { .event-card { display: none; } }

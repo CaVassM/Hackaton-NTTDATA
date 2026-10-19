@@ -44,7 +44,24 @@ export type ExpedienteBatchItem = {
   result?: { fila: Record<string, unknown> } | null;
 };
 
-export type SearchResult = { query: string; fecha: string; fecha_por_defecto: boolean; fragmentos: Array<{ texto: string; cita: Citation }> };
+export type ExpedienteDetalle = ExpedienteSummary & { fila: Record<string, string> };
+
+export type AuditReview = { review_id: number; audit_id: string; reviewer: string; decision: string; comment?: string | null; created_at: string };
+export type AuditRecord = { result: { audit_id: string; decision: string; score: number; risk_level: string; policy_version: string }; reviews: AuditReview[]; revision_final: string | null };
+
+export type ReportItem = {
+  obligacion: { codigo: string; categoria: string; sujeto: string; accion_requerida: string; plazo_texto?: string | null; cita_textual: string; version_id: number; norma_codigo: string; articulo_numero: string };
+  estado: string;
+  dias_atraso: number;
+  casos: Array<{ sujeto_id: string | null; estado: string; fecha_evento?: string | null; fecha_limite?: string | null; fecha_referencia?: string | null; dias_atraso: number; dias_para_vencer?: number | null; detalle: string }>;
+  infracciones: Array<{ infraccion: { codigo_numeral?: string | null; descripcion: string; gravedad?: string | null; norma_codigo: string; version_id: number }; exposicion: { multa_min_uit?: number | null; multa_max_uit?: number | null; min_soles?: number | null; max_soles?: number | null; monto_determinado: boolean; nota: string; rotulo: string }; sintetica: boolean }>;
+  rango_uit: [number | null, number | null];
+  rango_soles: [number | null, number | null];
+};
+export type ComplianceReport = { fecha_corte: string; items: ReportItem[]; propuestas_pendientes: Record<string, number>; advertencias: string[]; rotulo: string };
+export type ProposalsResponse = Record<string, Array<{ proposal_id: string }>>;
+
+export type SearchResult ={ query: string; fecha: string; fecha_por_defecto: boolean; fragmentos: Array<{ texto: string; cita: Citation }> };
 export type Health = { status: "ok" | "degradado"; version: string; ollama: { reachable: boolean; models: Record<string, boolean>; error?: string | null }; bases: { rag?: { versiones_sql?: number; [key: string]: unknown }; cases?: Record<string, unknown>; [key: string]: unknown }; audit_mode: string; policy_version: string };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -81,4 +98,10 @@ export const api = {
   importExpedientesCsv: (file: File) => uploadCsv<ExpedienteBatchItem[]>("/cases/expedientes/batch?formato=json", file),
   search: (payload: { query: string; fecha?: string; top_k: number; incluir_proyectos: boolean }) => request<SearchResult>("/rag/search", { method: "POST", body: JSON.stringify(payload) }),
   report: () => request<{ reporte: Record<string, unknown> }>("/compliance/report", { method: "POST", body: JSON.stringify({}) }),
+  complianceReport: () => request<{ reporte: ComplianceReport }>("/compliance/report", { method: "POST", body: JSON.stringify({}) }),
+  expedientesDetalle: () => request<ExpedienteDetalle[]>("/cases/expedientes?limit=1000&detalle=true"),
+  pendingProposals: () => request<ProposalsResponse>("/compliance/proposals?estado=propuesta"),
+  auditRecord: (auditId: string) => request<AuditRecord>(`/audit/${encodeURIComponent(auditId)}`),
+  reviewAudit: (auditId: string, body: { reviewer: string; aprobar: boolean; comentario?: string | null }) =>
+    request<AuditReview>(`/audit/${encodeURIComponent(auditId)}/review`, { method: "POST", body: JSON.stringify(body) }),
 };

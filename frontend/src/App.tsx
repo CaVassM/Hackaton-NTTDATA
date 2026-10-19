@@ -3,6 +3,7 @@ import { api, CaseResult, CaseSchema, CaseSummary, Citation, ExpedienteBatchItem
 import { ClampedText, FragmentCard } from "./ResultCards";
 import { AgentFlow, ExpedienteFlow, ExpedienteSections, ObligationList, pretty } from "./CaseParts";
 import ProposalPage from "./Proposal";
+import { EVENTO, grupoEtiqueta } from "./event";
 import "./import.css";
 import "./results.css";
 import "./case.css";
@@ -182,12 +183,17 @@ export default function App() {
         {menu.map((item) => <button key={item.id} onClick={() => navigate(item.id)} className={view === item.id || (item.id === "cases" && (view === "detail" || view === "expediente-detail")) ? "nav-item active" : "nav-item"}><span>{item.icon}</span>{item.label}</button>)}
       </nav>
       <div className="sidebar-bottom">
+        <div className="event-card" aria-label="Datos del evento">
+          <span className="event-eyebrow">{EVENTO.hackaton}</span>
+          <strong>{grupoEtiqueta()}</strong>
+          <ul>{EVENTO.integrantes.map((nombre) => <li key={nombre}>{nombre}</li>)}</ul>
+        </div>
         <div className="side-status"><span className={health?.status === "ok" ? "online" : "offline"} />{health?.status === "ok" ? "Servicios operativos" : "Estado por verificar"}</div>
         <button className="nav-item" onClick={() => void refresh()}><span>↻</span>Actualizar datos</button>
       </div>
     </aside>
     <div className="main-area">
-      <header className="topbar"><div><span className="eyebrow">SUPERVISIÓN REGULATORIA</span><strong>Centro de cumplimiento LA/FT</strong></div><div className="topbar-actions"><span className="live"><i /> Motor RAG local</span><button className="icon-button" aria-label="Actualizar" onClick={() => void refresh()}>↻</button><div className="avatar">EV</div></div></header>
+      <header className="topbar"><div><span className="eyebrow">{EVENTO.hackaton.toUpperCase()} · {grupoEtiqueta().toUpperCase()}</span><strong>Centro de cumplimiento LA/FT · {EVENTO.integrantes.join(" y ")}</strong></div><div className="topbar-actions"><span className="live"><i /> Motor RAG local</span><button className="icon-button" aria-label="Actualizar" onClick={() => void refresh()}>↻</button><div className="avatar" title={`${grupoEtiqueta()} · ${EVENTO.integrantes.join(", ")}`}>G{EVENTO.grupoNumero}</div></div></header>
       <main>
         {notice && <div className={`notice ${notice.kind}`} role="status"><span>{notice.kind === "error" ? "!" : "✓"}</span>{notice.text}<button aria-label="Cerrar" onClick={() => setNotice(null)}>×</button></div>}
         {loading && <div className="loading-line" />}
@@ -197,7 +203,7 @@ export default function App() {
         {view === "expediente-detail" && <ExpedienteDetail result={selectedExpediente} onBack={() => setView("cases")} />}
         {view === "rag" && <RagPage />}
         {view === "alerts" && <AlertsPage />}
-        {view === "proposal" && <ProposalPage />}
+        {view === "proposal" && <ProposalPage health={health} onOpenExpediente={openExpediente} />}
       </main>
     </div>
   </div>;
