@@ -109,8 +109,10 @@ class ExpedienteService:
             explicacion = ("La entrada no trae fecha limite interna ni fecha de atencion: el atraso interno no se "
                            "puede calcular (no se asume que este en plazo).")
         alerta_norm = "SI" if resultado == "POSIBLE_INCUMPLIMIENTO" else "NO"
-        tipo = {("SI", "SI"): "AMBAS", ("SI", "NO"): "NORMATIVA", ("NO", "SI"): "PLAZO_INTERNO"}.get(
-            (alerta_norm, alerta_plazo), "NINGUNA")
+        # Un plazo NO_DETERMINABLE no anula la alerta normativa (antes caia en NINGUNA).
+        hay_plazo = alerta_plazo == "SI"
+        tipo = ("AMBAS" if alerta_norm == "SI" and hay_plazo else "NORMATIVA" if alerta_norm == "SI"
+                else "PLAZO_INTERNO" if hay_plazo else "NINGUNA")
 
         cita = self._cita(art)
         fuente_legal = (f"{cita.norma_codigo}, art. {cita.articulo_numero} (version {cita.version_id})" if cita

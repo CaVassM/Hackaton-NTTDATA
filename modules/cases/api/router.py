@@ -126,9 +126,10 @@ def create_cases_router(get_facade: Callable[..., CasesFacade]) -> APIRouter:
 
     @router.get("/expedientes")
     def listar_expedientes(limit: int = Query(1000, ge=1, le=1000),
+                           detalle: bool = Query(False, description="Incluir la fila completa (columnas del equipo) y el audit_id"),
                            facade: CasesFacade = Depends(get_facade)) -> list[dict]:
-        """Ultima evaluacion de cada expediente importado."""
-        return facade.listar_expedientes(limit)
+        """Ultima evaluacion de cada expediente importado (con detalle=true, la fila completa)."""
+        return facade.listar_expedientes(limit, detalle=detalle)
 
     @router.delete("/expedientes")
     def limpiar_expedientes(confirmar: bool = Query(False),

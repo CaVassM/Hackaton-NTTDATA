@@ -94,3 +94,16 @@ def test_error_no_controlado_devuelve_cuerpo(client, monkeypatch):
     monkeypatch.setattr(client.container.cases, "evaluate", lambda *_: (_ for _ in ()).throw(RuntimeError("boom")))
     r = client.post("/cases/evaluate", json=caso())
     assert r.status_code == 500 and r.json() == {"error": "RuntimeError", "detail": "boom"}
+
+
+def test_expedientes_listado_con_detalle(client):
+    texto = ("Transporte de dinero proveniente del tráfico ilícito de drogas (USD 237 000) en una mochila. "
+             "Registro del expediente: 2026-04-08. Fecha objetivo de atención interna: 2026-04-20. "
+             "Fecha de atención registrada: 2026-04-26.")
+    r = client.post("/cases/expedientes", json={"id_caso": "EXP-DET-1", "descripcion_caso": texto})
+    assert r.status_code == 200
+    resumen = client.get("/cases/expedientes").json()
+    assert "fila" not in resumen[0]
+    (fila,) = [e["fila"] for e in client.get("/cases/expedientes?detalle=true").json() if e["id_caso"] == "EXP-DET-1"]
+    assert fila["resultado_esperado"] == "POSIBLE_INCUMPLIMIENTO" and fila["tipo_alerta_esperada"] == "AMBAS"
+    assert fila["dias_de_retraso_interno"] == "6" and fila["audit_id"]

@@ -142,8 +142,17 @@ class CasesFacade:
             raise CaseNotFound(id_caso)
         return r
 
-    def listar_expedientes(self, limit: int = 1000) -> list[dict]:
-        return self._repo.list_expedientes(limit)
+    def listar_expedientes(self, limit: int = 1000, detalle: bool = False) -> list[dict]:
+        """Ultima evaluacion por id_caso. detalle=True agrega `fila` (columnas del equipo)."""
+        resumen = self._repo.list_expedientes(limit)
+        if not detalle:
+            return resumen
+        out = []
+        for r in resumen:
+            exp = self._repo.get_expediente(r["id_caso"])
+            if exp is not None:
+                out.append({**r, "fila": exp.as_row()})
+        return out
 
     def limpiar_expedientes(self) -> int:
         return self._repo.clear_expedientes()
